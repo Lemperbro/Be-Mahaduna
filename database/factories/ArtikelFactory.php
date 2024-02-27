@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Illuminate\Support\Facades\URL;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class ArtikelFactory extends Factory
     {
         return [
             'judul' => fake()->sentence(),
-            'bannerImage' => 'bg.jpg',
+            'bannerImage' => 'http://127.0.0.1:8000/uploads/artikelImage/bg.jpg',
             'isi' => fake()->paragraphs(10, true),
             'views' => fake()->numberBetween(100,1000)
         ];

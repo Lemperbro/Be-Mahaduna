@@ -32,6 +32,13 @@ return [
     ],
     'aplication' => [
         'AppName' => env('APP_NAME')
+    ],
+    'youtube' => [
+        'apiKey' => env('YOUTUBE_API_KEY'),
+        'channelId' => env('YOUTUBE_CHANNEL_ID'),
+        'urlPlaylist' => env('YOUTUBE_URL_PLAYLIST'),
+        'video_item' => env('YOUTUBE_URL_VIDEO_ITEM'),
+        'playlist_items' => env('YOUTUBE_URL_PLAYLIST_ITEMS'),
     ]
 
 ];

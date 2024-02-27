@@ -27,7 +27,4 @@ class UserRepositories implements UserInterface{
         
     }
 
-    public function coba($data){
-
-    }
 }

@@ -4,23 +4,24 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\Majalah;
 use App\Models\User;
 use App\Models\Wali;
+use App\Models\Store;
 use App\Models\Galeri;
+use App\Models\Jadwal;
 use App\Models\Santri;
 use App\Models\Artikel;
+use App\Models\Majalah;
 use App\Models\Tagihan;
 use App\Models\Transaksi;
 use App\Models\WaliRelasi;
 use App\Models\ArtikelRelasi;
+use App\Models\PlaylistVideo;
 use App\Models\MonitorBulanan;
 use App\Models\ArtikelKategori;
-use App\Models\Jadwal;
 use App\Models\MonitorMingguan;
-use App\Models\PlaylistVideo;
-use App\Models\Store;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 
 class DatabaseSeeder extends Seeder
@@ -30,6 +31,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        User::create([
+            'image' => 'defaultImage.jpg',
+            'username' => 'ryan yulianto',
+            'email' => 'sihdobleh@gmail.com',
+            'password' => Hash::make('12345678'),
+            'telp' => '082230736205',
+            'role' => 'super admin',
+        ]);
         User::factory(10)->create();
         Santri::factory(20)->create();
         Wali::factory(10)->create();

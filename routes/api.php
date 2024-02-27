@@ -1,7 +1,13 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Models\PlaylistVideo;
 use Illuminate\Support\Facades\Route;
+use App\Repositories\Interfaces\ArtikelInterface;
+use App\Repositories\Interfaces\YoutubeInterface;
+use App\Http\Requests\Youtube\UpdatePlaylistIdRequest;
+use App\Http\Controllers\Api\Youtube\YoutubeController;
+use App\Http\Controllers\Admin\Artikel\ArtikelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +20,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+
+Route::get('/coba', function(ArtikelInterface $ArtikelInterface){
+    $data = $ArtikelInterface;
+    return $data->getAllArtikel();
 });
+
+// Route::post('/cok', function(Request $request){
+//     return response()->json(request()->wantsJson());
+// });
+
+
+
+Route::get('/youtube/playlist/all', [YoutubeController::class, 'getAllPlaylist'])->name('youtube.playlist.getAll');

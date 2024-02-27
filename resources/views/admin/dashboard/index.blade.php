@@ -2,7 +2,7 @@
 
 @section('container')
     <section>
-                @include('admin.dashboard._header')
+                @include('admin.partials._header')
 
         {{-- isi --}}
         <div class="pt-24">

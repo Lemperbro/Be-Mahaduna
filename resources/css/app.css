@@ -21,4 +21,8 @@
     .scrollbar::-webkit-scrollbar-thumb:hover {
         background: #4a767d;
     }
+    html {
+        font-family: Helvetica,Arial, sans-serif;
+    }
+    
 }

@@ -16,4 +16,7 @@ class PlaylistVideo extends Model
     protected $guarded = [
         'playlist_video_id'
     ];
+
+
+
 }

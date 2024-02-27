@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('playlist_video', function (Blueprint $table) {
             $table->id('playlist_video_id');
-            $table->text('playlistId')->unique();
+            $table->text('playlistId');
             $table->integer('user_created')->nullable();
             $table->timestamps();
             $table->integer('user_updated')->nullable();
