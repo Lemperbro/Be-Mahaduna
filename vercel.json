@@ -18,6 +18,10 @@
             "dest": "public/galeri/"
         },
         {
+            "src": "/build/(.*)",
+            "dest": "public/build/"
+        },
+        {
             "src": "/defaultImage/(.*)",
             "dest": "public/defaultImage/"
         },
