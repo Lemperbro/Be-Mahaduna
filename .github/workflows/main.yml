@@ -11,7 +11,7 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
-        server: ftp.ryandev.biz.id
+        server: ftp.cipta-sejati.my.id
         username: mahaduna@ryandev.biz.id
         password: mahaduna123
         protocol: ftps
