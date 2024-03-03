@@ -51,7 +51,7 @@
         },
         {
             "src": "/froala/(.*)",
-            "dest": "public/vendor/"
+            "dest": "public/froala/"
         },
         {
             "src": "/(.*)",
