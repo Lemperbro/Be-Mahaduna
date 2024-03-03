@@ -1,17 +1,63 @@
 {
     "version": 2,
-      "framework": null,
+    "framework": null,
     "functions": {
-        "api/index.php": { "runtime": "vercel-php@0.3.1" }
+        "api/index.php": { "runtime": "vercel-php@0.5.4" }
     },
-    "routes": [{
-        "src": "/(.*)",
-        "dest": "/api/index.php"
-    }],
+    "routes": [
+        {
+            "src": "/img/(.*)",
+            "dest": "public/img/"
+        },
+        {
+            "src": "/icon/(.*)",
+            "dest": "public/icon/"
+        },
+        {
+            "src": "/galeri/(.*)",
+            "dest": "public/galeri/"
+        },
+        {
+            "src": "/defaultImage/(.*)",
+            "dest": "public/defaultImage/"
+        },
+        {
+            "src": "/img/(.*)",
+            "dest": "public/img/"
+        },
+        {
+            "src": "/css/(.*)",
+            "dest": "public/css/"
+        },
+        {
+            "src": "/adminBumbu/(.*)",
+            "dest": "public/adminBumbu/"
+        },
+        {
+            "src": "/uploads/(.*)",
+            "dest": "public/uploads/"
+        },
+        {
+            "src": "/js/(.*)",
+            "dest": "public/js/"
+        },
+        {
+            "src": "/vendor/(.*)",
+            "dest": "public/vendor/"
+        },
+        {
+            "src": "/froala/(.*)",
+            "dest": "public/vendor/"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/api/index.php"
+        }
+    ],
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "true",
-        "APP_URL": "https://yourproductionurl.com",
+        "APP_URL": "https://mahaduna.vercel.com",
 
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
@@ -23,5 +69,6 @@
         "CACHE_DRIVER": "array",
         "LOG_CHANNEL": "stderr",
         "SESSION_DRIVER": "cookie"
-    }
+    },
+    "outputDirectory": "public"
 }
