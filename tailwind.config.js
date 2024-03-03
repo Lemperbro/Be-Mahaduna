@@ -2,6 +2,7 @@
 export default {
   content: [
     "./resources/**/*.blade.php",
+    "./resources/views/admin/**/*.blade.php",
     "./resources/**/*.js",
     "./resources/**/*.vue",
     "./node_modules/flowbite/**/*.js"
@@ -29,9 +30,9 @@ export default {
     },
   },
   plugins: [
+    require('@tailwindcss/line-clamp'),
     require('flowbite/plugin'),
     require("daisyui"),
-    require('@tailwindcss/line-clamp'),
   ],
 }
 

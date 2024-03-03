@@ -66,7 +66,7 @@ class YoutubeRepository implements YoutubeInterface
      * 
      * @return [type]
      */
-    public function getAllPlaylistFrYoutube($maxResults = 50, $filter = false,$part = 'snippet')
+    public function getAllPlaylistFrYoutube($maxResults = 50, $filter = false, $part = 'snippet')
     {
         $get = Http::get($this->urlPlaylist, [
             'key' => $this->apiKey,
@@ -76,9 +76,6 @@ class YoutubeRepository implements YoutubeInterface
             'maxResults' => $maxResults,
             'pageToken' => request('ajaxPageToken') ?? null,
         ]);
-
-
-
 
         $statusCode = $this->cekStatusCodeApi($get);
         $responseData = $get->json();
@@ -98,25 +95,24 @@ class YoutubeRepository implements YoutubeInterface
     {
 
         $playlistData = array_map(function ($playlistId) {
-            // $validasi = $this->model->where('playlistId', $playlistId)->count();
-            // dd($validasi);
-            // if($validasi > 0){
-            //     throw ValidationException::withMessages([
-            //         'playlistId' => ['Playlist ID sudah tersimpan. Pilih Playlist ID lain.'], // Pesan kesalahan khusus
-            //     ]);
-            // }
             return [
                 'playlistId' => $playlistId,
-                'user_created' => auth()->user()->id,
+                'user_created' => auth()->user()->user_id,
                 'created_at' => now()
             ];
         }, $data->playlistId);
 
         $create = $this->model->insert($playlistData);
-        if (!$create) {
+        if ($create) {
+            $createdPlaylists = $this->model->whereIn('playlistId', $data->playlistId)->get();
+            if (request()->wantsJson()) {
+                return (PlaylistResource::collection($createdPlaylists))->response()->setStatusCode(201);
+            } else {
+                return true;
+            }
+        } else {
             return false;
         }
-        return true;
 
     }
 
@@ -152,11 +148,13 @@ class YoutubeRepository implements YoutubeInterface
      */
     public function deletePlaylist($data)
     {
-        $delete = $data->delete();
-        $data->update([
+        $delete = $data->update([
             'deleted' => true,
-            'user_deleted' => auth()->user()->id
+            'user_deleted' => auth()->user()->user_id,
+            'deleted_at' => now()
         ]);
+        $data->updated_at = null;
+        $data->save();
         if (!$delete) {
             return false;
         }
@@ -170,7 +168,12 @@ class YoutubeRepository implements YoutubeInterface
     public function getAllPlaylistId($paginate = null)
     {
         $data = $this->model->get();
-        return PlaylistResource::collection($data);
+        $response = PlaylistResource::collection($data);
+        if (request()->wantsJson()) {
+            return ($response)->response()->setStatusCode(200);
+        } else {
+            return $response;
+        }
     }
 
 
@@ -200,7 +203,7 @@ class YoutubeRepository implements YoutubeInterface
         return $response;
     }
 
-    
+
     /**
      * ambil semua data playlist dari api youtube, berdasarkan playlistId yang di simpan di db
      * @param int $maxResults
@@ -211,12 +214,20 @@ class YoutubeRepository implements YoutubeInterface
 
     public function getAllDataPlaylist($part = 'snippet')
     {
-        $playlistId = $this->getAllPlaylistId();
-        if (count($playlistId) <= 0) {
-            $message = 'playlist tidak tersedia';
-            return $this->responseError->ResponseException($message, 404);
+        if (request()->wantsJson()) {
+            $playlistIdData = $this->getAllPlaylistId()->getData()->data;
+            $playlistId = collect($playlistIdData);
+            $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
+        } else {
+            $playlistId = $this->getAllPlaylistId();
+            $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
         }
-        $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
+        if (request()->wantsJson()) {
+            if (count($playlistId) <= 0) {
+                $message = 'playlist tidak tersedia';
+                return $this->responseError->ResponseException($message, 404);
+            }
+        }
         $get = Http::get($this->urlPlaylist, [
             'key' => $this->apiKey,
             'id' => $playlistImplode,
@@ -224,6 +235,7 @@ class YoutubeRepository implements YoutubeInterface
             'part' => $part,
             'pageToken' => request('pageToken') ?? null
         ]);
+
 
         $statusCode = $this->cekStatusCodeApi($get);
         $responseData = $this->sortVideoLatest($get->json());

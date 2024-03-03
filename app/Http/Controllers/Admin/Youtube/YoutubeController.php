@@ -34,7 +34,7 @@ class YoutubeController extends Controller
         }
         $allPlaylist = cache()->remember('allPlaylist', now()->addHours(1), function () {
             // Jika tidak ada di cache, ambil data dari sumbernya (misal: YouTube API)
-            return $this->YoutubeInterface->getAllPlaylistFrYoutube(20, true, 'snippet')->getData();
+            return $this->YoutubeInterface->getAllPlaylistFrYoutube(20, false, 'snippet')->getData();
         });
         if (request('ajaxPageToken')) {
             cache()->forget('allPlaylist');

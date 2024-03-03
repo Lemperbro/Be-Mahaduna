@@ -6,8 +6,17 @@
             <div class="mt-4">
                 <label for="kategori">Kategori</label>
                 <div class="mt-1">
-                    <input type="text" name="kategori" id="kategori" class="w-full p-2 rounded-md bg-white border border-main3 focus:ring-0 focus:outline-none focus:border-main2" value="{{ $item->kategori }}">
+                    <input type="text" name="kategori" id="kategori"
+                        class="w-full p-2 rounded-md bg-white border border-main3 focus:ring-0 focus:outline-none focus:border-main2 @error('kategori')
+                            peer
+                        @enderror"
+                        value="{{ $item->kategori }}" required>
                 </div>
+                @error('kategori')
+                    <p class="peer-invalid:visible text-red-700 font-light">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="flex gap-2 mt-4 justify-end">
                 <label for="editModalBtlBtn{{ $key }}"
@@ -24,4 +33,3 @@
         </div>
     </div>
 </dialog>
-

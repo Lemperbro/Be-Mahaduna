@@ -22,7 +22,6 @@ class ArtikelUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'bannerImage' => 'image|mimes:png,jpg,jpeg|max:1024',
             'judul' => 'required',
             'kategori' => 'required',
             'isi' => 'required'
@@ -33,9 +32,6 @@ class ArtikelUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'bannerImage.image' => 'File yang diunggah harus berupa gambar.',
-            'bannerImage.mimes' => 'Format gambar harus berupa PNG, JPG, atau JPEG.',
-            'bannerImage.max' => 'Ukuran gambar tidak boleh melebihi 1024 kilobita.',
             'judul.required' => 'Judul wajib diisi.',
             'kategori.required' => 'Kategori wajib diisi.',
             'isi.required' => 'Isi wajib diisi.'

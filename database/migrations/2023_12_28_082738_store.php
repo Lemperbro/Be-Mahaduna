@@ -15,11 +15,9 @@ return new class extends Migration
             $table->id('store_id');
             $table->string('label');
             $table->text('slug');
-            $table->text('image');
             $table->integer('price');
             $table->integer('stock');
             $table->text('deskripsi');
-            $table->integer('views')->default(0);
             $table->integer('user_created')->nullable();
             $table->timestamps();
             $table->integer('user_updated')->nullable();

@@ -17,7 +17,9 @@ class ArtikelKategoriFactory extends Factory
     public function definition(): array
     {
         return [
-            'kategori' => fake()->unique()->randomElement(['Teknologi', 'Sosial','Pemerintahan','Ekonomi'])
+            'kategori' => fake()->unique()->randomElement(['Teknologi', 'Sosial', 'Pemerintahan', 'Ekonomi']),
+            'user_created' => 1,
+            'updated_at' => null
         ];
     }
 }

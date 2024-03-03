@@ -17,7 +17,7 @@ class YoutubeController extends Controller
     }
 
     public function getAllPlaylist(){
-        $data = $this->YoutubeInterface->getAllDataPlaylist(50);
+        $data = $this->YoutubeInterface->getAllDataPlaylist();
         return $data;
     }
 }

@@ -16,14 +16,8 @@ class PlaylistResource extends JsonResource
     {
         return [
             'playlistId' => $this->playlistId,
-            'channelId' => $this->channelId,
-            'channelTitle' => $this->channelTitle,
-            'title' => $this->title,
-            'deskripsi' => $this->deskripsi,
-            'thumbnail' => $this->thumbnail,
-            'videoCount' => $this->videoCount,
-            'embededHtml' => $this->embededHtml,
-            'publishedAt' => $this->publishedAt
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
         ];
     }
 }

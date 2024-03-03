@@ -32,19 +32,19 @@
                 </a>
             </li>
             <li>
-                <a href="/admin" class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive">
+                <a href="{{ route('majalah.index') }}" class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive {{ request()->routeIs('majalah.*') ? 'bg-SidebarActive' : '' }}">
                     <i class="ri-book-read-fill text-[20px] transition duration-75 text-gray-400"></i>
                     <span class="ml-3 font-semibold">Majalah Addiya</span>
                 </a>
             </li>
             <li>
-                <a href="/admin" class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive">
+                <a href="{{ route('store.index') }}" class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive {{ request()->routeIs('store.*') ? 'bg-SidebarActive' : '' }}">
                     <i class="ri-store-3-fill text-[20px] transition duration-75 text-gray-400"></i>
                     <span class="ml-3 font-semibold">Santri Store</span>
                 </a>
             </li>
             <li>
-                <a href="/admin" class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive">
+                <a href="{{ route('jadwal.index') }}" class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive {{ request()->routeIs('jadwal.*') ? 'bg-SidebarActive' : '' }}">
                     <i class="ri-calendar-schedule-fill text-[20px] transition duration-75 text-gray-400"></i>
                     <span class="ml-3 font-semibold">Jadwal Kegiatan</span>
                 </a>
@@ -125,8 +125,8 @@
                 <img src="{{ asset('img/myFoto.jpg') }}" alt=""
                     class="object-cover w-10 h-10 rounded-full my-auto">
                 <div class="my-auto">
-                    <h1 class="text-lg text-white">Ryan Yulianto</h1>
-                    <h1 class="text-sm text-gray-300">Admin</h1>
+                    <h1 class="text-lg text-white capitalize">{{ auth()->user()->username }}</h1>
+                    <h1 class="text-sm text-gray-300 capitalize">{{ auth()->user()->role }}</h1>
                 </div>
             </div>
         </div>

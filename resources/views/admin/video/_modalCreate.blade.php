@@ -12,7 +12,7 @@
             <div class="mt-10">
                 <label for="playlist">Pilih Playlist</label>
                 <div class="mt-2">
-                    <select class="playlistCreateValue  w-full" name="playlistId[]" multiple="multiple" id="playlist">
+                    <select class="playlistCreateValue  w-full" name="playlistId[]" multiple="multiple" id="playlist" required>
 
                         @foreach ($allPlaylist->data->items as $item)
                             <option value="{{ $item->id }}"

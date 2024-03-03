@@ -14,7 +14,6 @@ class ArtikelRelasi extends Model
     protected $table = 'artikel_relasi';
     protected $primaryKey = 'artikel_relasi_id';
     // Di dalam model ArtikelRelasi
-    public $timestamps = true;
 
 
 

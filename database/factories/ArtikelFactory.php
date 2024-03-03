@@ -21,7 +21,9 @@ class ArtikelFactory extends Factory
             'judul' => fake()->sentence(),
             'bannerImage' => 'http://127.0.0.1:8000/uploads/artikelImage/bg.jpg',
             'isi' => fake()->paragraphs(10, true),
-            'views' => fake()->numberBetween(100,1000)
+            'views' => fake()->numberBetween(100,1000),
+            'user_created' => 1,
+            'updated_at' => null
         ];
     }
 }

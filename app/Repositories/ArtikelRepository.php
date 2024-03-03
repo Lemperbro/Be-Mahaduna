@@ -7,19 +7,19 @@ use App\Models\ArtikelRelasi;
 use App\Models\ArtikelKategori;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Repositories\SaveImageRepository;
+use Illuminate\Support\Facades\File;
+use App\Repositories\SaveFileRepository;
 use App\Repositories\ResponseErrorRepository;
 use App\Http\Resources\Artikel\ArtikelResource;
 use App\Http\Resources\Artikel\KategoriResource;
 use App\Repositories\Interfaces\ArtikelInterface;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ArtikelRepository implements ArtikelInterface
 {
 
     private $artikelModel, $kategoriModel, $artikelRelasi;
     private $handleResponseError;
-    private $saveImageRepo;
+    private $saveFileRepo;
 
 
     public function __construct()
@@ -28,7 +28,7 @@ class ArtikelRepository implements ArtikelInterface
         $this->kategoriModel = new ArtikelKategori;
         $this->artikelRelasi = new ArtikelRelasi;
         $this->handleResponseError = new ResponseErrorRepository;
-        $this->saveImageRepo = new SaveImageRepository;
+        $this->saveFileRepo = new SaveFileRepository;
     }
 
 
@@ -82,25 +82,39 @@ class ArtikelRepository implements ArtikelInterface
      */
     public function createArtikel($data)
     {
-        if ($data->has('bannerImage')) {
-            $image = $this->saveImageRepo->saveImageSingle($data->bannerImage, 'uploads/artikelImage');
-        } else {
-            $image = null;
-        }
 
         try {
+            if ($data->bannerImage !== null) {
+                //validasi image ada ngak 
+                $storage = public_path('uploads/artikelImage/' . basename($data->bannerImage));
+                if (File::exists($storage)) {
+                    $image = $data->bannerImage;
+                } else {
+                    if (request()->wantsJson()) {
+                        return $this->handleResponseError->ResponseException('Gambar tidak ditemukan', 404);
+                    } else {
+                        return [
+                            'error' => true,
+                            'message' => 'Gambar tidak ditemukan'
+                        ];
+                    }
+                }
+            } else {
+                $image = null;
+            }
             $upArtikel = null;
             DB::beginTransaction();
             $upArtikel = $this->artikelModel->create([
                 'bannerImage' => $image,
                 'judul' => $data->judul,
                 'isi' => $data->isi,
-                'user_created' => auth()->user()->user_id
+                'user_created' => auth()->user()->user_id,
+                'updated_at' => null
             ]);
             $cekKategori = $this->kategoriModel->whereIn('artikel_kategori_id', $data->kategori)->count();
             if ($cekKategori <= 0) {
                 if (request()->wantsJson()) {
-                    return $this->handleResponseError->ResponseException('Kategori tidak ditemukan', 400);
+                    return $this->handleResponseError->ResponseException('Kategori tidak ditemukan', 404);
                 } else {
                     return [
                         'error' => true,
@@ -121,7 +135,7 @@ class ArtikelRepository implements ArtikelInterface
 
 
             if (request()->wantsJson()) {
-                $data = $upArtikel !== null ? $upArtikel->load('artikel_relasi.artikel_kategori') : null;
+                $data = $upArtikel !== null ? $upArtikel->fresh()->load('artikel_relasi.artikel_kategori') : null;
                 return $upArtikel !== null
                     ? (ArtikelResource::make($data))->response()->setStatusCode(201)
                     : $this->handleResponseError->ResponseException('Gagal menyimpan artikel', 400);
@@ -148,8 +162,24 @@ class ArtikelRepository implements ArtikelInterface
      */
     public function updateArtikel($data, $oldData)
     {
-        if ($data->has('bannerImage')) {
-            $image = $this->saveImageRepo->updateImageSingle($data->bannerImage, 'uploads/artikelImage', $oldData->bannerImage);
+        if ($data->bannerImage !== null && basename($data->bannerImage) !== basename($oldData->bannerImage)) {
+            $storage = public_path('uploads/artikelImage/' . basename($data->bannerImage));
+            $oldImageStorage = public_path('uploads/artikelImage/' . basename($oldData->bannerImage));
+            if (File::exists($storage)) {
+                if (File::exists($oldImageStorage)) {
+                    File::delete($oldImageStorage);
+                }
+                $image = $data->bannerImage;
+            } else {
+                if (request()->wantsJson()) {
+                    return $this->handleResponseError->ResponseException('Gambar tidak ditemukan', 404);
+                } else {
+                    return [
+                        'error' => true,
+                        'message' => 'Gambar tidak ditemukan'
+                    ];
+                }
+            }
         } else {
             $image = $oldData->bannerImage;
         }
@@ -170,7 +200,7 @@ class ArtikelRepository implements ArtikelInterface
             $cekKategori = $this->kategoriModel->whereIn('artikel_kategori_id', $data->kategori)->count();
             if ($cekKategori <= 0) {
                 if (request()->wantsJson()) {
-                    return $this->handleResponseError->ResponseException('Kategori tidak ditemukan', 400);
+                    return $this->handleResponseError->ResponseException('Kategori tidak ditemukan', 404);
                 } else {
                     return [
                         'error' => true,
@@ -182,15 +212,15 @@ class ArtikelRepository implements ArtikelInterface
                 return [
                     'artikel_id' => $oldData->artikel_id,
                     'artikel_kategori_id' => $kategoriId,
-                    'user_updated' => auth()->user()->user_id,
-                    'updated_at' => now()
+                    'user_created' => auth()->user()->user_id,
+                    'created_at' => now()
                 ];
             }, $data->kategori);
             $this->artikelRelasi->where('artikel_id', $oldData->artikel_id)->forceDelete();
             $this->artikelRelasi->insert($kategori);
             DB::commit();
             if (request()->wantsJson()) {
-                $data = $upArtikel !== null ? $upArtikel->load('artikel_relasi.artikel_kategori') : null;
+                $data = $upArtikel !== null ? $upArtikel->fresh()->load('artikel_relasi.artikel_kategori') : null;
                 return $upArtikel !== null
                     ? (ArtikelResource::make($data))->response()->setStatusCode(201)
                     : $this->handleResponseError->ResponseException('Gagal memperbarui artikel', 400);
@@ -219,14 +249,18 @@ class ArtikelRepository implements ArtikelInterface
         try {
             $delete = false;
             DB::beginTransaction();
-            $this->saveImageRepo->deleteImageSingle('uploads/artikelImage', $data->bannerImage);
-            $data->update([
+            // $this->saveFileRepo->deleteFileSingle('uploads/artikelImage', $data->bannerImage);
+            $delete = $data->update([
                 'user_deleted' => auth()->user()->user_id,
                 'deleted_at' => now(),
-                'deleted' => true
+                'deleted' => true,
             ]);
+            $data->updated_at = null;
+            $data->save();
+
             $updateRelasi = $this->artikelRelasi->where('artikel_id', $data->artikel_id)->update([
                 'user_deleted' => auth()->user()->user_id,
+                'updated_at' => null,
                 'deleted_at' => now(),
                 'deleted' => true
             ]);
@@ -261,13 +295,11 @@ class ArtikelRepository implements ArtikelInterface
     /**
      * Ambil semua data kategori artikel 
      * @param int|null $paginate untuk mempaginate data 
-     * @param bool $useForApi untuk switch , apakah di gunakan untuk api apa tidak , 
-     * jika trua maka akan di gunakan untuk apa dan return response, jika false maka tidak digunakan untuk api 
      * 
      * @return [JsonResponse]
      */
 
-    public function getAllKategori(int $paginate = null, bool $useForApi = true)
+    public function getAllKategori(int $paginate = null)
     {
         $data = $this->kategoriModel->latest();
         if ($paginate !== null) {
@@ -288,7 +320,7 @@ class ArtikelRepository implements ArtikelInterface
         }
 
         $resource = KategoriResource::collection($datas);
-        if ($useForApi) {
+        if (request()->wantsJson()) {
             return ($resource)->response()->setStatusCode(200);
         } else {
             return $resource;
@@ -315,11 +347,13 @@ class ArtikelRepository implements ArtikelInterface
                 }
             }
             $create = $this->kategoriModel->create([
-                'kategori' => $data->kategori
+                'kategori' => $data->kategori,
+                'updated_at' => null,
+                'user_created' => auth()->user()->user_id
             ]);
 
             if (request()->wantsJson()) {
-                return (KategoriResource::make($create))->response()->setStatusCode(201);
+                return (KategoriResource::make($create->fresh()))->response()->setStatusCode(201);
             } else {
                 return true;
             }
@@ -358,7 +392,7 @@ class ArtikelRepository implements ArtikelInterface
             ]);
 
             if (request()->wantsJson()) {
-                return (KategoriResource::make($oldData))->response()->setStatusCode(200);
+                return (KategoriResource::make($oldData->fresh()))->response()->setStatusCode(200);
             } else {
                 return true;
             }
@@ -369,6 +403,7 @@ class ArtikelRepository implements ArtikelInterface
                 return false;
             }
         }
+
     }
     /**
      * untuk menghapus data kategori
@@ -386,7 +421,14 @@ class ArtikelRepository implements ArtikelInterface
                 'deleted_at' => now(),
                 'user_deleted' => auth()->user()->user_id
             ]);
-            $this->artikelRelasi->where('artikel_kategori_id', $data->artikel_kategori_id)->delete();
+            $data->updated_at = null;
+            $data->save();
+            $this->artikelRelasi->where('artikel_kategori_id', $data->artikel_kategori_id)->update([
+                'user_deleted' => auth()->user()->user_id,
+                'deleted_at' => now(),
+                'updated_at' => null,
+                'deleted' => true
+            ]);
             DB::commit();
             if (request()->wantsJson()) {
                 if ($delete) {

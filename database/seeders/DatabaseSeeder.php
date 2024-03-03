@@ -14,6 +14,7 @@ use App\Models\Artikel;
 use App\Models\Majalah;
 use App\Models\Tagihan;
 use App\Models\Transaksi;
+use App\Models\StoreImage;
 use App\Models\WaliRelasi;
 use App\Models\ArtikelRelasi;
 use App\Models\PlaylistVideo;
@@ -52,8 +53,9 @@ class DatabaseSeeder extends Seeder
         ArtikelRelasi::factory(10)->create();
         Jadwal::factory(4)->create();
         Galeri::factory(20)->create();
-        Majalah::factory(4)->create();
+        Majalah::factory(20)->create();
         PlaylistVideo::factory(4)->create();
         Store::factory(5)->create();
+        StoreImage::factory(10)->create();
     }
 }

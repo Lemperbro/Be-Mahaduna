@@ -15,7 +15,6 @@ class Artikel extends Model
     use HasFactory, Sluggable, SoftDeletes;
     protected $table = 'artikel';
     protected $primaryKey = 'artikel_id';
-    public $timestamps = true;
 
 
     protected $guarded = [

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('wali_santri_relasi', function (Blueprint $table) {
             $table->id('wali_santri_relasi_id');
             $table->foreignId('wali_id')->constrained('wali')->references('wali_id');
-            $table->foreignId('santri_id')->constrained('santri')->references('santri_id')->unique();
+            $table->foreignId('santri_id')->constrained('santri')->references('santri_id'); //unique
             $table->integer('user_created')->nullable();
             $table->timestamps();
             $table->integer('user_updated')->nullable();

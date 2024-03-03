@@ -22,7 +22,7 @@ class ArtikelCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'bannerImage' => 'required|image|mimes:png,jpg,jpeg|max:1024',
+            'bannerImage' => 'required',
             'judul' => 'required',
             'kategori' => 'required',
             'isi' => 'required'
@@ -34,9 +34,6 @@ class ArtikelCreateRequest extends FormRequest
     {
         return [
             'bannerImage.required' => 'Gambar banner wajib diunggah.',
-            'bannerImage.image' => 'File yang diunggah harus berupa gambar.',
-            'bannerImage.mimes' => 'Format gambar harus berupa PNG, JPG, atau JPEG.',
-            'bannerImage.max' => 'Ukuran gambar tidak boleh melebihi 1024 kilobita.',
             'judul.required' => 'Judul wajib diisi.',
             'kategori.required' => 'Kategori wajib diisi.',
             'isi.required' => 'Isi wajib diisi.'

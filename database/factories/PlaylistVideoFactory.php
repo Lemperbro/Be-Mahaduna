@@ -25,7 +25,9 @@ class PlaylistVideoFactory extends Factory
             'PLyLuyxntIy4UX8pHs6Ftt5BzleNxpLfMi'
         ];
         return [
-            'playlistId' => $playlistId[self::$index]
+            'playlistId' => $playlistId[self::$index],
+            'user_created' => 1,
+            'updated_at' => null
         ];
     }
 }

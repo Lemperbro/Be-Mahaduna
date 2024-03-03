@@ -13,7 +13,6 @@ class ArtikelKategori extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'artikel_kategori';
     protected $primaryKey = 'artikel_kategori_id';
-    public $timestamps = true;
 
     protected $guarded = [
         'artikel_kategori_id'
@@ -23,6 +22,6 @@ class ArtikelKategori extends Model
         return $this->hasMany(Artikel::class,'artikel_id');
     }
     public function artikel_relasi(){
-        return $this->hasMany(ArtikelRelasi::class, 'artikel_relasi_id');
+        return $this->hasMany(ArtikelRelasi::class, 'artikel_kategori_id');
     }
 }

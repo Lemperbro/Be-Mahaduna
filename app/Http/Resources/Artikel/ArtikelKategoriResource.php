@@ -23,7 +23,7 @@ class ArtikelKategoriResource extends JsonResource
             'user_updated' => $this->artikel_kategori->user_updated,
             'deleted_at' => $this->artikel_kategori->deleted_at ?? null,
             'user_deleted' => $this->artikel_kategori->user_deleted ?? null,
-            'deleted' => $this->artikel_kategori->deleted ?? null
+            'deleted' => $this->artikel_kategori->deleted ?? null 
         ];
     }
 }

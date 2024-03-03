@@ -38,13 +38,12 @@ class ArtikelController extends Controller
     public function artikelCreateIndex()
     {
         $headerTitle = 'Buat Artikel';
-        $kategori = $this->ArtikelInterface->getAllKategori(null, false);
+        $kategori = $this->ArtikelInterface->getAllKategori(null);
         return view('admin.artikel.create', compact('headerTitle', 'kategori'));
     }
 
     public function artikelCreate(ArtikelCreateRequest $request)
     {
-
         $create = $this->ArtikelInterface->createArtikel($request);
         if (isset($create['error']) && $create['error'] == true) {
             return redirect()->back()->with('toast_error', $create['message']);
@@ -57,9 +56,8 @@ class ArtikelController extends Controller
 
     public function artikelEdit(Artikel $id)
     {
-
         $data = $id->load('artikel_relasi.artikel_kategori');
-        $kategori = $this->ArtikelInterface->getAllKategori(null, false);
+        $kategori = $this->ArtikelInterface->getAllKategori(null);
         return view('admin.artikel.edit', compact('data', 'kategori'));
     }
     public function artikelUpdate(ArtikelUpdateRequest $request, Artikel $id)
@@ -79,7 +77,7 @@ class ArtikelController extends Controller
     {
         $delete = $this->ArtikelInterface->deleteArtikel($id);
         if (isset($delete['error']) && $delete['error'] == true) {
-
+            return redirect()->back()->with('toast_error', $delete['message']);
         } else if ($delete) {
             return redirect(route('artikel.index'))->with('toast_success', 'Berhasil Menghapus Artikel');
         } else {
@@ -92,7 +90,7 @@ class ArtikelController extends Controller
     public function kategoriIndex()
     {
         $headerTitle = 'Kelola Kategori Artikel';
-        $allKategori = $this->ArtikelInterface->getAllKategori(15, false);
+        $allKategori = $this->ArtikelInterface->getAllKategori(15);
         return view('admin.artikel.kategori.index', compact('headerTitle', 'allKategori'));
     }
     public function kategoriCreate(KategoriCreateRequest $request)
@@ -118,7 +116,8 @@ class ArtikelController extends Controller
         }
     }
 
-    public function deleteKategori(ArtikelKategori $id, Request $request){
+    public function deleteKategori(ArtikelKategori $id)
+    {
         $delete = $this->ArtikelInterface->deleteKategori($id);
         if (isset($delete['error']) && $delete['error'] == true) {
             return redirect()->back()->with('toast_error', $delete['message']);

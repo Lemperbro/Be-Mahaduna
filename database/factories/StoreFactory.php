@@ -18,11 +18,9 @@ class StoreFactory extends Factory
     {
         return [
             'label' => 'produk '.fake()->numberBetween(1,20),
-            'image' => 'bg1.jpg',
             'price' => fake()->numberBetween(10000,200000),
             'stock' => fake()->numberBetween(1,20),
             'deskripsi' => fake()->paragraphs(10, true),
-            'views' => fake()->numberBetween(100,1000)
         ];
     }
 }

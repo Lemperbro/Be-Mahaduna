@@ -13,4 +13,5 @@ class DashboardController extends Controller
         $headerTitle = 'Dashboard';
         return view('admin.dashboard.index', compact('headerTitle'));
     }
+    
 }

@@ -5,9 +5,13 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FroalaController;
 use App\Http\Controllers\Admin\Auth\AuthController;
+use App\Http\Controllers\Admin\Store\StoreController;
+use App\Http\Controllers\FilePond\FilePondController;
 use App\Http\Controllers\Admin\Artikel\ArtikelController;
+use App\Http\Controllers\Admin\Majalah\MajalahController;
 use App\Http\Controllers\Admin\Youtube\YoutubeController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
+use App\Http\Controllers\Jadwal\JadwalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,8 +73,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/froala-delete-image', [FroalaController::class, 'deleteImage'])->name('froala.delete.image');
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
-    
+
+
     // video kajian
     Route::get('/video-kajian', [YoutubeController::class, 'index'])->name('playlist.index');
     Route::get('/video-kajian/create', [YoutubeController::class, 'createPlaylist'])->name('playlist.create');
@@ -89,4 +93,27 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/kategori/edit/{id}', [ArtikelController::class, 'kategoriUpdate'])->name('artikel.kategori.update');
     Route::post('/kategori/delete/{id}', [ArtikelController::class, 'deleteKategori'])->name('artikel.kategori.delete');
 
+    // majalah
+    Route::get('/kelola-majalah', [MajalahController::class, 'index'])->name('majalah.index');
+    Route::get('/kelola-majalah/create', [MajalahController::class, 'create'])->name('majalah.create');
+    Route::post('/kelola-majalah/create', [MajalahController::class, 'store'])->name('majalah.store');
+    Route::get('/kelola-majalah/edit/{id:slug}', [MajalahController::class, 'edit'])->name('majalah.edit');
+    Route::post('/kelola-majalah/update/{id:slug}', [MajalahController::class, 'update'])->name('majalah.update');
+    Route::post('/kelola-majalah/delete/{id:slug}', [MajalahController::class, 'delete'])->name('majalah.delete');
+
+    //store
+    Route::get('/store', [StoreController::class, 'index'])->name('store.index');
+    Route::get('/store/create', [StoreController::class, 'create'])->name('store.create');
+    Route::post('/store/create', [StoreController::class, 'store'])->name('store.create.store');
+    Route::get('/store/edit/{id:slug}', [StoreController::class, 'edit'])->name('store.edit');
+    Route::post('/store/edit/{id:slug}', [StoreController::class, 'update'])->name('store.update');
+    Route::post('/store/delete/{id:slug}', [StoreController::class, 'delete'])->name('store.delete');
+    Route::post('/store/image/delete/filepond/{folder}', [StoreController::class, 'filePondImageDelete'])->name('store.image.delete.filepond');
+
+    //jadwal santri
+    Route::get('/jadwal-santri', [JadwalController::class, 'index'])->name('jadwal.index');
+
+    //filepond
+    Route::post('/filePond/post/{folder}', [FilePondController::class, 'postImage'])->name('filePond.post');
+    Route::post('/filePond/delete/{folder}', [FilePondController::class, 'deleteImage'])->name('filePond.delete');
 });

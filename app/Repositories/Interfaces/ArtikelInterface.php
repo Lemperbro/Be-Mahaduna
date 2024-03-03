@@ -41,12 +41,10 @@ interface ArtikelInterface
     /**
      * Ambil semua data kategori artikel 
      * @param int|null $paginate untuk mempaginate data 
-     * @param bool $useForApi untuk switch , apakah di gunakan untuk api apa tidak , 
-     * jika trua maka akan di gunakan untuk apa dan return response, jika false maka tidak digunakan untuk api 
      * 
      * @return [JsonResponse]
      */
-    public function getAllKategori(int $paginate = null, bool $useForApi = true);
+    public function getAllKategori(int $paginate = null);
     /**
      * untuk menambah kategori
      * @param mixed $data data inputan

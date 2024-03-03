@@ -45,10 +45,10 @@ class FroalaController extends Controller
         try {
             if ($request->has('image_url')) {
                 $imageUrl = $request->input('image_url');
-                $explode = explode('/',$imageUrl);
+                $explode = explode('/', $imageUrl);
                 $index = count($explode) - 1;
                 $fileName = $explode[$index];
-                $imagePath = public_path('/uploads/imagesFroala/'.$fileName);
+                $imagePath = public_path('/uploads/imagesFroala/' . $fileName);
                 if (file_exists($imagePath)) {
                     unlink($imagePath);
 

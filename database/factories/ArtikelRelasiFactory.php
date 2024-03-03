@@ -18,7 +18,9 @@ class ArtikelRelasiFactory extends Factory
     {
         return [
             'artikel_id' => fake()->numberBetween(1,10),
-            'artikel_kategori_id' => fake()->numberBetween(1,4)
+            'artikel_kategori_id' => fake()->numberBetween(1,4),
+            'user_created' => 1,
+            'updated_at' => null
         ];
     }
 }

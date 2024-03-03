@@ -29,7 +29,6 @@ class ArtikelResource extends JsonResource
             'deleted_at' => $this->deleted_at ?? null,
             'user_deleted' => $this->user_deleted ?? null,
             'deleted' => $this->deleted ?? null
-            
         ];
     }
 }

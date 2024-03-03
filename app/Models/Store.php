@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\StoreImage;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Store extends Model
 {
@@ -26,6 +28,13 @@ class Store extends Model
                 'source' => 'label'
             ]
         ];
+    }
+    public function generateSlugOnUpdate()
+    {
+        $this->slug = SlugService::createSlug($this, 'slug', $this->label);
+    }
+    public function store_image(){
+        return $this->hasMany(StoreImage::class, 'store_id','store_id');
     }
 
 }

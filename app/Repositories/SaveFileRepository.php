@@ -4,30 +4,29 @@ namespace App\Repositories;
 use Illuminate\Support\Facades\File;
 
 
-class SaveImageRepository
+class SaveFileRepository
 {
 
-    public function saveImageSingle($imageData, $lokasiSave)
+    public function saveFileSingle($fileData, $lokasiSave)
     {
         $lokasi = trim($lokasiSave, '/');
-        $extension = $imageData->getClientOriginalExtension();
+        $extension = $fileData->getClientOriginalExtension();
         $name = uniqid() . '-' . now()->timestamp . '.' . $extension;
-        $imageData->move($lokasi, $name);
+        $fileData->move($lokasi, $name);
         $response = url('/') . '/' . $lokasi . '/' . $name;
         return $response;
-
     }
 
 
-    public function updateImageSingle($imageData, $lokasiSave, $oldImage)
+    public function updateFileSingle($fileData, $lokasiSave, $oldFile)
     {
         $lokasi = trim($lokasiSave, '/');
-        $extension = $imageData->getClientOriginalExtension();
+        $extension = $fileData->getClientOriginalExtension();
         $name = uniqid() . '-' . now()->timestamp . '.' . $extension;
-        $up = $imageData->move($lokasi, $name);
+        $up = $fileData->move($lokasi, $name);
 
         if ($up) {
-            $storage = public_path($lokasi . '/' . basename($oldImage));
+            $storage = public_path($lokasi . '/' . basename($oldFile));
             if (File::exists($storage)) {
                 unlink($storage);
             }
@@ -37,9 +36,9 @@ class SaveImageRepository
 
     }
 
-    public function deleteImageSingle($lokasi, $image){
-        $imageName = basename($image);
-        $storage = public_path($lokasi.'/'.$imageName);
+    public function deleteFileSingle($lokasi, $file){
+        $fileName = basename($file);
+        $storage = public_path($lokasi.'/'.$fileName);
         if(File::exists($storage)){
             unlink($storage);
         }

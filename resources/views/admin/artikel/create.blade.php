@@ -10,42 +10,74 @@
                 enctype="multipart/form-data">
                 @csrf
                 <div>
-                    <label for="bannerImage">Banner Image </label>
-                    <input type="file" name="bannerImage" id="bannerImage"
-                        class="w-full bg-white border border-main3 focus:ring-0 focus:outline-none focus:border-main2 rounded-md mt-1">
+                    <label for="">Banner Image (JPEG,PNG,JPG)</label>
+                    <input type="text" name="bannerImage" id="bannerImage" class="hidden">
+                    <input type="file" id="bannerImageUploader"
+                        class="w-full bg-white border border-main3 focus:ring-0 focus:outline-none focus:border-main2 rounded-md mt-1 @error('bannerImage')
+                            peer
+                        @enderror"
+                        required >
+                    @error('bannerImage')
+                        <p class="peer-invalid:visible text-red-700 font-light">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
                 <div class="mt-4">
                     <label for="judul">Judul</label>
                     <input type="text" name="judul" id="judul"
-                        class="w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 mt-1">
+                        class="w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 mt-1 @error('judul')
+                            peer
+                        @enderror"
+                        value="{{ old('judul') }}" required>
+                    @error('judul')
+                        <p class="peer-invalid:visible text-red-700 font-light">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
                 <div class="mt-4">
                     <label for="kategori">Kategori</label>
                     <div class="mt-1">
                         <select name="kategori[]" id="kategori"
-                            class="kategoriSelect w-full border border-main3 focus:ring-0 focus:outline-none focus:border-main2"
-                            multiple>
+                            class="kategoriSelect w-full border border-main3 focus:ring-0 focus:outline-none focus:border-main2 @error('kategori')
+                                peer
+                            @enderror"
+                            multiple required>
                             @foreach ($kategori as $item)
                                 <option value="{{ $item->artikel_kategori_id }}">{{ $item->kategori }}</option>
                             @endforeach
                         </select>
                     </div>
+                    @error('kategori')
+                        <p class="peer-invalid:visible text-red-700 font-light">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
                 <div class="mt-4">
                     <label for="isi">Isi Artikel</label>
                     <div class="mt-1">
                         <textarea name="isi" id="isi" cols="30" rows="10"
-                            class="mt-1 border-main3 focus:ring-0 focus:outline-none focus:border-main2">
+                            class="mt-1 border-main3 focus:ring-0 focus:outline-none focus:border-main2 @error('isi')
+                                peer
+                            @enderror"
+                            required>
                             
                         </textarea>
                     </div>
+                    @error('isi')
+                        <p class="peer-invalid:visible text-red-700 font-light">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div class="flex gap-2 mt-7">
                     <a href="{{ route('artikel.index') }}"
                         class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md">Batal</a>
                     <button type="submit"
-                        class="bg-SidebarActive hover:bg-Sidebar py-2 px-4 text-white rounded-md">Simpan</button>
+                        class="bg-SidebarActive hover:bg-Sidebar py-2 px-4 text-white rounded-md" id="submitBtn">Simpan</button>
                 </div>
             </form>
         </div>
@@ -56,7 +88,23 @@
     <link rel="stylesheet" href="{{ asset('froala/css/froala_editor.pkgd.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/listFroala.css') }}">
 
+
+    {{-- plugin filepond --}}
+    <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
+
+
     <style>
+        /* filepond start */
+        .filepond--credits {
+            display: none;
+        }
+
+        .filepond--panel-root {
+            background-color: transparent;
+        }
+
+        /* filepond end */
         .select2-selection.select2-selection--multiple {
             min-height: 50px;
             padding-top: 7px;
@@ -66,13 +114,38 @@
 @endpush
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    {{-- <script src="https://cdn.tiny.cloud/1/4jfwg3ggzlzizqiuux4vs8zext690fbffche2l6rcz3j34do/tinymce/6/tinymce.min.js"
-        referrerpolicy="origin"></script> --}}
+    <!-- include FilePond library -->
+    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+
+    <!-- include FilePond plugins -->
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+
+    <!-- include FilePond jQuery adapter -->
+    <script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
+
+    {{-- plugin filepond --}}
+    <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+    <script src="{{ asset('js/filePondSingleConfig.js') }}"></script>
 
     <script src="{{ asset('froala/js/froala_editor.pkgd.min.js') }}"></script>
 
     <script>
         $(document).ready(function() {
+            // filepond start
+            FilePond.registerPlugin(FilePondPluginFileEncode, FilePondPluginImagePreview,FilePondPluginFileValidateType,FilePondPluginFileValidateSize);
+            $('#bannerImageUploader').filepond({
+                allowMultiple: false,
+                acceptedFileTypes: ['image/jpeg', 'image/png', 'image/jpg'],
+                labelFileTypeNotAllowed: 'Hanya diperbolehkan file JPG,PNG dan JPEG',
+                maxFileSize: '1MB',
+                labelMaxFileSizeExceeded: 'Ukuran file melebihi batas maksimum (1MB)',
+                name: 'imageName',
+            });
+            filePondConfig('artikelImage', '{{ csrf_token() }}', '#bannerImage', '#submitBtn');
+            // filepond end
             var editor = new FroalaEditor('#isi', {
                 contentStyles: {
                     'ol': 'list-style-type: decimal;',

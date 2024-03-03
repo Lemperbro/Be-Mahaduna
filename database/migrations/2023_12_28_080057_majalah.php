@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('majalah', function (Blueprint $table) {
             $table->id('majalah_id');
             $table->string('judul');
+            $table->text('bannerImage');
             $table->integer('views')->default(0);
             $table->text('slug');
             $table->text('source');

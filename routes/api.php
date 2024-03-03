@@ -8,6 +8,7 @@ use App\Repositories\Interfaces\YoutubeInterface;
 use App\Http\Requests\Youtube\UpdatePlaylistIdRequest;
 use App\Http\Controllers\Api\Youtube\YoutubeController;
 use App\Http\Controllers\Admin\Artikel\ArtikelController;
+use App\Http\Controllers\Admin\Majalah\MajalahController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,14 +26,15 @@ use App\Http\Controllers\Admin\Artikel\ArtikelController;
 // });
 
 
-Route::get('/coba', function(ArtikelInterface $ArtikelInterface){
-    $data = $ArtikelInterface;
-    return $data->getAllArtikel();
+Route::get('/coba', function(YoutubeInterface $YoutubeInterface){
+    $data = $YoutubeInterface;
+    return $data->getAllDataPlaylist();
 });
 
 // Route::post('/cok', function(Request $request){
 //     return response()->json(request()->wantsJson());
 // });
+
 
 
 
