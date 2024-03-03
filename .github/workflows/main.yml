@@ -12,7 +12,7 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: ftp.ryandev.biz.id
-        username:  mahaduna@ryandev.biz.id
+        username: mahaduna@ryandev.biz.id
         password: mahaduna123
         protocol: ftps
         port: 21 # todo replace with your web hosts ftps port
