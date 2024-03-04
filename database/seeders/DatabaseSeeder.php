@@ -40,22 +40,22 @@ class DatabaseSeeder extends Seeder
             'telp' => '082230736205',
             'role' => 'super admin',
         ]);
-        // User::factory(10)->create();
-        // Santri::factory(20)->create();
-        // Wali::factory(10)->create();
-        // WaliRelasi::factory(20)->create();
-        // Tagihan::factory(10)->create();
-        // Transaksi::factory(10)->create();
-        // MonitorBulanan::factory(10)->create();
-        // MonitorMingguan::factory(10)->create();
-        // ArtikelKategori::factory(4)->create();
-        // Artikel::factory(10)->create();
-        // ArtikelRelasi::factory(10)->create();
-        // Jadwal::factory(4)->create();
-        // Galeri::factory(20)->create();
-        // Majalah::factory(20)->create();
-        // PlaylistVideo::factory(4)->create();
-        // Store::factory(5)->create();
-        // StoreImage::factory(10)->create();
+        User::factory(10)->create();
+        Santri::factory(20)->create();
+        Wali::factory(10)->create();
+        WaliRelasi::factory(20)->create();
+        Tagihan::factory(10)->create();
+        Transaksi::factory(10)->create();
+        MonitorBulanan::factory(10)->create();
+        MonitorMingguan::factory(10)->create();
+        ArtikelKategori::factory(4)->create();
+        Artikel::factory(10)->create();
+        ArtikelRelasi::factory(10)->create();
+        Jadwal::factory(4)->create();
+        Galeri::factory(20)->create();
+        Majalah::factory(20)->create();
+        PlaylistVideo::factory(4)->create();
+        Store::factory(5)->create();
+        StoreImage::factory(10)->create();
     }
 }

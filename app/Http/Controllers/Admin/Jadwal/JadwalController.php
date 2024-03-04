@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Jadwal;
+namespace App\Http\Controllers\Admin\Jadwal;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\JadwalInterface;
-use Illuminate\Http\Request;
 
 class JadwalController extends Controller
 {
-    //
+    
     private $JadwalInterface;
 
     public function __construct(JadwalInterface $JadwalInterface){

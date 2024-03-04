@@ -1,17 +1,18 @@
 <?php
 
 
+use DateInterval;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FroalaController;
 use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\Store\StoreController;
 use App\Http\Controllers\FilePond\FilePondController;
+use App\Http\Controllers\Admin\Jadwal\JadwalController;
 use App\Http\Controllers\Admin\Artikel\ArtikelController;
 use App\Http\Controllers\Admin\Majalah\MajalahController;
 use App\Http\Controllers\Admin\Youtube\YoutubeController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
-use App\Http\Controllers\Jadwal\JadwalController;
 
 /*
 |--------------------------------------------------------------------------
