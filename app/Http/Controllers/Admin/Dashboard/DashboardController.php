@@ -10,7 +10,7 @@ class DashboardController extends Controller
     //
 
     public function index(){
-        $headerTitle = 'Dashboardd';
+        $headerTitle = 'Dashboard';
         return view('admin.dashboard.index', compact('headerTitle'));
     }
     
