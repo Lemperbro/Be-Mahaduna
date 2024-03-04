@@ -75,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
-    // video kajian
+    // video kajian test
     Route::get('/video-kajian', [YoutubeController::class, 'index'])->name('playlist.index');
     Route::get('/video-kajian/create', [YoutubeController::class, 'createPlaylist'])->name('playlist.create');
     Route::post('/video-kajian/create', [YoutubeController::class, 'create'])->name('playlist.create.post');
