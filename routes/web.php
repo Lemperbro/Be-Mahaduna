@@ -1,8 +1,7 @@
 <?php
 
 
-use DateInterval;
-use Illuminate\Support\Facades\Http;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FroalaController;
 use App\Http\Controllers\Admin\Auth\AuthController;
