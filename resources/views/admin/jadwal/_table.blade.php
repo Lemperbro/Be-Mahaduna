@@ -23,7 +23,7 @@
                         {{ Carbon::parse($item->end_time)->format('H:i') }}
                     </td>
                     <td class="px-2 md:px-6 py-2 md:py-4">
-                        {{ $item->jadwal }} Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquam
+                        {{ $item->jadwal }} 
                     </td>
                     <td class="px-2 md:px-6 py-2 md:py-4 flex gap-2 items-center justify-center h-full">
                         <button type="button" class="bg-red-600 rounded-md justify-center w-8 h-8 flex items-center">
