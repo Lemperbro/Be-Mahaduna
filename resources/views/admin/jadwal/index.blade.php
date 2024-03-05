@@ -1,10 +1,11 @@
 @extends('admin.layouts.main')
 
 @section('container')
+    @include('admin.jadwal.modalCreate')
     <section>
         @include('admin.partials._header')
         <div class="pt-24 min-h-screen">
-            <a href=""
+            <button type="button" id="createJadwalBtn" onclick="createJadwal.showModal()"
                 class="bg-Sidebar h-16 w-16 hover:w-[214px] flex justify-between items-center overflow-hidden rounded-full transition-all ease-linear duration-200 group fixed z-20 bottom-8 right-8 lg:bottom-10 lg:right-10">
                 <div
                     class="text-white w-16 group-hover:w-[214px] absolute h-16 rounded-full justify-start bg-Sidebar -z-10 flex  items-center">
@@ -17,7 +18,7 @@
                     <i
                         class="ri-add-fill text-white text-[30px] w-16 text-center group-hover:rotate-90 transition-all duration-500"></i>
                 </div>
-            </a>
+            </button>
             <div class="mt-40">
                 @include('admin.jadwal._table')
             </div>

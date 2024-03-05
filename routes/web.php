@@ -112,6 +112,7 @@ Route::middleware(['auth'])->group(function () {
 
     //jadwal santri
     Route::get('/jadwal-santri', [JadwalController::class, 'index'])->name('jadwal.index');
+    Route::post('/jadwal-santri/create', [JadwalController::class, 'store'])->name('jadwal.store');
 
     //filepond
     Route::post('/filePond/post/{folder}', [FilePondController::class, 'postImage'])->name('filePond.post');
