@@ -6,33 +6,35 @@
             <h3 class="font-bold text-lg">Update Jadwal!</h3>
             <div class="mt-4">
                 <label>Jam Mulai</label>
-                <div class="relative flex flex-col mt-1">
-                    <input type="time" id="startTimeUpdate{{ $key }}" name="startTime"
-                        class="w-full py-2 pr-2 pl-8 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 mt-1 hidden"
+                <div class="relative flex flex-col">
+                    <input type="text" name="startTime" id="startTime{{ $key }}" class="hidden">
+                    <input type="text" id="startTimeUpdate{{ $key }}"
+                        class="w-full py-2 pr-2 pl-8 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 mt-1"
                         placeholder="Pilih Jam Mulai" value="{{ Carbon::parse($item->start_time)->format('H:i') }}">
-                    <i class="ri-time-line text-[20px] text-gray-500 absolute top-[60%] -translate-y-[60%] left-2 hidden"></i>
+                    <i class="ri-time-line text-[20px] text-gray-500 absolute top-[60%] -translate-y-[60%] left-2"></i>
                 </div>
             </div>
             <div class="mt-4">
                 <label>Jam Selesai</label>
-                <div class="relative flex flex-col mt-1">
+                <div class="relative flex flex-col">
+                    <input type="text" name="endTime" id="endTime{{ $key }}" class="hidden">
                     <input type="text" id="endTimeUpdate{{ $key }}" name="endTime"
-                        class="w-full py-2 pr-2 pl-8 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 mt-1 hidden"
+                        class="w-full py-2 pr-2 pl-8 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 mt-1"
                         placeholder="Pilih Jam Selesai" value="{{ Carbon::parse($item->end_time)->format('H:i') }}">
-                    <i class="ri-time-line text-[20px] text-gray-500 absolute top-[60%] -translate-y-[60%] left-2 hidden"></i>
+                    <i class="ri-time-line text-[20px] text-gray-500 absolute top-[60%] -translate-y-[60%] left-2"></i>
                 </div>
             </div>
             <div class="mt-4">
                 <label for="keterangan">Keterangan</label>
-                <input type="text" name="keterangan"
+                <input type="text" name="keterangan" id="keterangan{{ $key }}"
                     class="w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 mt-1"
                     placeholder="Keterangan" value="{{ $item->jadwal }}">
             </div>
             <div class="flex gap-2 mt-4 justify-end">
                 <label for="closeModalUpdateJadwal{{ $key }}"
                     class="btn bg-red-700 text-white border-none hover:bg-red-600">Batal</label>
-                <button type="submit"
-                    class="btn bg-Sidebar text-white border-none hover:bg-SidebarActive">Simpan</button>
+                <button type="submit" class="btn bg-Sidebar text-white border-none hover:bg-SidebarActive"
+                    id="btnSimpanUpdateJadwal{{ $key }}">Simpan</button>
             </div>
         </form>
         <div class="modal-action hidden">
@@ -43,63 +45,38 @@
         </div>
     </div>
 </dialog>
-@push('head')
-    <link href="
-https://cdn.jsdelivr.net/npm/air-datepicker@3.4.0/air-datepicker.min.css
-" rel="stylesheet">
-    <style>
-        .air-datepicker--time {
-            width: 100%;
-        }
-    </style>
-@endpush
+
 @push('scripts')
-    <script src="
-                https://cdn.jsdelivr.net/npm/air-datepicker@3.4.0/air-datepicker.min.js
-                "></script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> --}}
-    <style>
-        .air-datepicker {
-            width: 100%;
-        }
-        /* .air-datepicker-time--row input[type="range"]::-webkit-slider-thumb{
-            background: black;
-        } */
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
         $(document).ready(function() {
             const key = @json($key);
-            // var timepickerUpdate = {
-            //     enableTime: true,
-            //     static: true,
-            //     noCalendar: true,
-            //     dateFormat: "H:i",
-            //     placeholder: "Pilih Waktu",
-            //     time_24hr: true,
-            //     theme: "light"
-            // }
-
-            // var endTimeUpdate = flatpickr('#endTimeUpdate' + key, timepickerUpdate);
-            // var startTimeUpdate = flatpickr('#startTimeUpdate' + key, timepickerUpdate);
-            // var updateBtn = '#updateJadwalBtn' + key;
-            // $(updateBtn).on('click', function() {
-            //     startTimeUpdate.close();
-            //     endTimeUpdate.close();
-            // });
+            const data = @json($data);
             var timepickerUpdate = {
-                timepicker: true,
-                inline: true,
-                dateFormat: 'HH:mm',
-                appendTo: '#createJadwal',
-                onlyTimepicker: true,
-                language: 'id',
+                enableTime: true,
+                static: true,
                 noCalendar: true,
-                autoClose: true,
-
+                dateFormat: "H:i",
+                placeholder: "Pilih Waktu",
+                time_24hr: true,
+                theme: "light"
             }
-            var endTimeUpdate = new AirDatepicker('#endTimeUpdate' + key, timepickerUpdate);
-            var startTimeUpdate = new AirDatepicker('#startTimeUpdate' + key, timepickerUpdate);
+
+            var endTimeUpdate = flatpickr('#endTimeUpdate' + key, timepickerUpdate);
+            var startTimeUpdate = flatpickr('#startTimeUpdate' + key, timepickerUpdate);
+            var updateBtn = '#updateJadwalBtn' + key;
+            $(updateBtn).on('click', function() {
+                startTimeUpdate.close();
+                endTimeUpdate.close();
+            });
+
+            $('#btnSimpanUpdateJadwal' + key).on('click', function() {
+                var endVal = $('#endTimeUpdate' + key).val();
+                var startVal = $('#startTimeUpdate' + key).val();
+                $('#startTime' + key).val(startVal);
+                $('#endTime' + key).val(endVal);
+            });
 
         });
     </script>

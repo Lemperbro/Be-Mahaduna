@@ -25,7 +25,7 @@ class JadwalController extends Controller
         $data = $this->JadwalInterface->getAll();
         return view('admin.jadwal.index', compact('headerTitle', 'data'));
     }
-    public function store(Request $request)
+    public function store(JadwalCreateRequest $request)
     {
         $create = $this->JadwalInterface->create($request);
         if (isset($create['error']) && $create['error'] == true) {
@@ -36,9 +36,8 @@ class JadwalController extends Controller
             return redirect()->back()->with('toast_error', 'Tidak berhasil Menambah Jadwal');
         }
     }
-    public function update(Request $request, Jadwal $id)
+    public function update(JadwalUpdateRequest $request, Jadwal $id)
     {
-        dd($request->all());
         $update = $this->JadwalInterface->update($request, $id);
         if (isset($update['error']) && $update['error'] == true) {
             return redirect()->back()->with('toast_error', $update['message']);
