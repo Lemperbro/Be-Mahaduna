@@ -15,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($data as $item)
+            @foreach ($data as $key => $item)
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <td
                         class="px-2 md:px-6 py-2 md:py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white ">
@@ -26,14 +26,16 @@
                         {{ $item->jadwal }} 
                     </td>
                     <td class="px-2 md:px-6 py-2 md:py-4 flex gap-2 items-center justify-center h-full">
-                        <button type="button" class="bg-red-600 rounded-md justify-center w-8 h-8 flex items-center">
+                        <button type="button" onclick="deleteJadwal{{ $key }}.showModal()" class="bg-red-600 rounded-md justify-center w-8 h-8 flex items-center">
                             <i class="ri-delete-bin-5-fill text-white text-[20px] "></i>
                         </button>
-                        <a href="" class="bg-Sidebar rounded-md justify-center w-8 h-8 flex items-center">
+                        <button type="button" onclick="updateJadwal{{ $key }}.showModal()" id="updateJadwalBtn{{ $key }}" class="bg-Sidebar rounded-md justify-center w-8 h-8 flex items-center">
                             <i class="ri-edit-2-fill text-white text-[20px]"></i>
-                        </a>
+                        </button>
                     </td>
                 </tr>
+                @include('admin.jadwal._modalUpdate')
+                @include('admin.jadwal._modalDelete')
             @endforeach
         </tbody>
     </table>

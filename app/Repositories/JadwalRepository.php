@@ -17,8 +17,6 @@ class JadwalRepository implements JadwalInterface
     {
         $this->jadwalModal = new Jadwal;
         $this->handleResponseError = new ResponseErrorRepository;
-
-
     }
     /**
      * untuk mengambil semua data jadwal
@@ -33,6 +31,12 @@ class JadwalRepository implements JadwalInterface
             return $data;
         }
     }
+    public function jadwalTerisiErrorMessage($startTime, $endTime)
+    {
+        $startTimeMessage = Carbon::parse($startTime)->format('H:i');
+        $endTimeMessage = Carbon::parse($endTime)->format('H:i');
+        return 'Jadwal dengan waktu ' . $startTimeMessage . ' - ' . $endTimeMessage . ' sudah terisi. Pilih waktu lain.';
+    }
     /**
      * untuk menambah data jadwal
      * @param mixed $data data yang akan disimpan ke database
@@ -46,12 +50,10 @@ class JadwalRepository implements JadwalInterface
             $cekData = $this->jadwalModal->where('start_time', '<=', $data->endTime)->where('end_time', '>=', $data->startTime)->count();
             // dd($cekData);
             if ($cekData > 0) {
-                $startTimeMessage = Carbon::parse($data->startTime)->format('H:i');
-                $endTimeMessage = Carbon::parse($data->endTime)->format('H:i');
-                $message = 'Jadwal Dengan Jam ' . $startTimeMessage . ' sampai ' . $endTimeMessage . ' Sudah Ada';
-                if(request()->wantsJson()){
+                $message = $this->jadwalTerisiErrorMessage($data->startTime, $data->endTime);
+                if (request()->wantsJson()) {
                     return $this->handleResponseError->ResponseException($message, 400);
-                }else{
+                } else {
                     return [
                         'error' => true,
                         'message' => $message
@@ -61,7 +63,9 @@ class JadwalRepository implements JadwalInterface
             $create = $this->jadwalModal->create([
                 'start_time' => $data->startTime,
                 'end_time' => $data->endTime,
-                'jadwal' => $data->keterangan
+                'jadwal' => $data->keterangan,
+                'user_created' => auth()->user()->user_id,
+                'updated_at' => null
             ]);
             if ($create) {
                 if (request()->wantsJson()) {
@@ -69,7 +73,7 @@ class JadwalRepository implements JadwalInterface
                 } else {
                     return true;
                 }
-            }else{
+            } else {
                 return $this->handleResponseError->ResponseException('Tidak berhasil menambah jadwal', 400);
             }
         } catch (Exception $e) {
@@ -80,5 +84,92 @@ class JadwalRepository implements JadwalInterface
             }
         }
     }
+    /**
+     * untuk update data jadwal
+     * @param mixed $data data baru untuk update
+     * @param mixed $oldData data yang akan di update
+     * 
+     * @return [type]
+     */
+    public function update($data, $oldData)
+    {
+        try {
+            $cekData = $this->jadwalModal->where('start_time', '<=', $data->endTime)->where('end_time', '>=', $data->startTime)->whereNotIn('jadwal_id', [$oldData->jadwal_id])->count();
+            if ($cekData > 0) {
+                $message = $this->jadwalTerisiErrorMessage($data->startTime, $data->endTime);
+                if (request()->wantsJson()) {
+                    return $this->handleResponseError->ResponseException($message, 400);
+                } else {
+                    return [
+                        'error' => true,
+                        'message' => $message
+                    ];
+                }
+            }
+            $update = $oldData->update([
+                'start_time' => $data->startTime,
+                'end_time' => $data->endTime,
+                'jadwal' => $data->keterangan,
+                'user_updated' => auth()->user()->user_id,
+            ]);
+            if ($update) {
+                if (request()->wantsJson()) {
+                    return(JadwalResource::make($oldData->fresh()))->response()->setStatusCode(201);
+                } else {
+                    return true;
+                }
+            } else {
+                return $this->handleResponseError->ResponseException('Tidak berhasil memperbarui jadwal', 400);
+            }
+
+        } catch (Exception $e) {
+            if (request()->wantsJson()) {
+                return $this->handleResponseError->responseError($e);
+            } else {
+                return false;
+            }
+        }
+    }
+    /**
+     * untuk menhapus data jadwal
+     * @param mixed $data data yang akan di hapus
+     * 
+     * @return [type]
+     */
+    public function delete($data)
+    {
+        try {
+            $delete = $data->update([
+                'deleted_at' => now(),
+                'user_deleted' => auth()->user()->user_id,
+                'deleted' => true
+            ]);
+            if ($delete) {
+                $data->updated_at = null;
+                $data->save();
+
+                if (request()->wantsJson()) {
+                    response()->json([
+                        'success' => true,
+                        'code' => 204,
+                        'message' => 'Berhasil menghapus jadwal'
+                    ]);
+                } else {
+                    return true;
+                }
+            } else {
+                return $this->handleResponseError->ResponseException('Tidak berhasil menghapus jadwal', 400);
+            }
+
+        } catch (Exception $e) {
+            if (request()->wantsJson()) {
+                return $this->handleResponseError->responseError($e);
+            } else {
+                return false;
+            }
+        }
+    }
+
+
 
 }

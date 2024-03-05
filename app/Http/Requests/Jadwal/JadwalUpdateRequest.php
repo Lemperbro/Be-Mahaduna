@@ -4,14 +4,14 @@ namespace App\Http\Requests\Jadwal;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class JadwalCreateRequest extends FormRequest
+class JadwalUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return $this->user() !== null;
+        return $this->user() !==  null;
     }
 
     /**

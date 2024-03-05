@@ -1,7 +1,10 @@
 @extends('admin.layouts.main')
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 
 @section('container')
-    @include('admin.jadwal.modalCreate')
+    @include('admin.jadwal._modalCreate')
     <section>
         @include('admin.partials._header')
         <div class="pt-24 min-h-screen">
