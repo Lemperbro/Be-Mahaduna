@@ -7,7 +7,7 @@
                     Jam
                 </th>
                 <th scope="col" class="px-4 md:px-6 py-3 md:py-4 text-sm">
-                    Katerangan
+                    Keterangan
                 </th>
                 <th scope="col" class="px-4 md:px-6 py-3 md:py-4 text-sm w-16">
                     Action
