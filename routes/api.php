@@ -27,4 +27,4 @@ use App\Http\Controllers\Api\Transaksi\TransaksiController;
 
 
 Route::post('/tagihan/callback/xendit', [TransaksiController::class, 'webhooksXendit']);
-Route::post('/tagihan/create-billing/{id}', [TransaksiController::class, 'createTransaksiByXendit']);
+Route::post('/tagihan/create-billing/{id}', [TransaksiController::class, 'createTransaksiByXendit'])->name('tagihan.create.billing');
