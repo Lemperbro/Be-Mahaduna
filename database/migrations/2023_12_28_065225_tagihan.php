@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('tagihan', function (Blueprint $table) {
             $table->id('tagihan_id');
             $table->foreignId('santri_id')->constrained('santri')->references('santri_id');
-            $table->foreignId('admin_id')->constrained('users')->references('user_id');
             $table->string('label', 200);
-            $table->integer('price');
-            $table->date('date')->unique();
-            $table->enum('status', ['belum dibayar', 'sudah dibayar']);
+            $table->bigInteger('price');
+            $table->date('date');
+            $table->enum('status', ['belum dibayar', 'sudah dibayar', 'menunggu dibayar']);
             $table->enum('payment_type', ['cash', 'transfer'])->nullable();
             $table->integer('user_created')->nullable();
             $table->timestamps();

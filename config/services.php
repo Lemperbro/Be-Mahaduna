@@ -39,6 +39,20 @@ return [
         'urlPlaylist' => env('YOUTUBE_URL_PLAYLIST'),
         'video_item' => env('YOUTUBE_URL_VIDEO_ITEM'),
         'playlist_items' => env('YOUTUBE_URL_PLAYLIST_ITEMS'),
+    ],
+    'bulan' => [
+        'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
     ]
 
 ];

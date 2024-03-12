@@ -20,6 +20,7 @@ use App\Models\ArtikelRelasi;
 use App\Models\PlaylistVideo;
 use App\Models\MonitorBulanan;
 use App\Models\ArtikelKategori;
+use App\Models\Jenjang;
 use App\Models\MonitorMingguan;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -41,6 +42,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'super admin',
         ]);
         User::factory(10)->create();
+        Jenjang::factory(2)->create();
         Santri::factory(20)->create();
         Wali::factory(10)->create();
         WaliRelasi::factory(20)->create();

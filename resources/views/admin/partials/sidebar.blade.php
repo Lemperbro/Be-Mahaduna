@@ -1,5 +1,5 @@
 <aside id="logo-sidebar"
-    class="fixed top-0 left-0 z-50 w-64 h-screen -translate-x-full bg-Sidebar md:translate-x-0 transition-all duration-500"
+    class="fixed top-0 left-0 z-50 w-80 h-screen -translate-x-full bg-Sidebar lg:translate-x-0 transition-all duration-500"
     aria-label="Sidebar">
     {{-- logo area --}}
     <div class="h-20 mb-2 border-b-[1px] border-main2 px-3 relative">
@@ -8,7 +8,7 @@
             <h1 class="font-semibold text-white text-[21px] my-auto">{{ config('services.aplication.AppName') }}</h1>
         </div>
     </div>
-    <div class="h-full px-3 pb-[290px] overflow-y-auto bg-Sidebar relative w-64 scrollbar">
+    <div class="h-full px-3 pb-[290px] overflow-y-auto bg-Sidebar relative w-80 scrollbar">
         <ul class="space-y-2 font-medium">
             <h1 class="text-gray-400 text-sm">MENU</h1>
             <li>
@@ -50,7 +50,7 @@
                 </a>
             </li>
             <li>
-                <a href="/admin" class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive">
+                <a href="{{ route('kelola-pembayaran.index') }}" class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive {{ request()->routeIs('kelola-pembayaran.*') ? 'bg-SidebarActive' : '' }}">
                     <i class="ri-bank-card-fill text-[20px] transition duration-75 text-gray-400"></i>
                     <span class="ml-3 font-semibold">Pembayaran SPP</span>
                 </a>

@@ -220,7 +220,7 @@ class ArtikelRepository implements ArtikelInterface
             $this->artikelRelasi->insert($kategori);
             DB::commit();
             if (request()->wantsJson()) {
-                $data = $upArtikel !== null ? $upArtikel->fresh()->load('artikel_relasi.artikel_kategori') : null;
+                $data = $upArtikel !== null ? $oldData->fresh()->load('artikel_relasi.artikel_kategori') : null;
                 return $upArtikel !== null
                     ? (ArtikelResource::make($data))->response()->setStatusCode(201)
                     : $this->handleResponseError->ResponseException('Gagal memperbarui artikel', 400);
@@ -229,7 +229,6 @@ class ArtikelRepository implements ArtikelInterface
             }
 
         } catch (Exception $e) {
-            // Log::error($e);
             DB::rollBack();
             if (request()->wantsJson()) {
                 return $this->handleResponseError->responseError($e);

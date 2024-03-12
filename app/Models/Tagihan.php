@@ -18,10 +18,10 @@ class Tagihan extends Model
     ];
 
     public function transaksi(){
-        return $this->hasMany(Transaksi::class);
+        return $this->belongsTo(Transaksi::class,'tagihan_id', 'tagihan_id');
     }
 
     public function santri(){
-        return $this->belongsTo(Santri::class);
+        return $this->belongsTo(Santri::class, 'santri_id', 'santri_id');
     }
 }

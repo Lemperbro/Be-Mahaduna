@@ -1,11 +1,11 @@
 <div class="fixed w-full top-0 left-0 px-4 border-b-[1px] border-main3 bg-main z-40">
-    <div class="h-20 relative md:ml-64">
+    <div class="h-20 relative lg:ml-80">
         <div class="absolute top-[50%] -translate-y-[50%] w-full overflow-hidden">
             <div class="flex flex-row  justify-between">
                 <div class="flex gap-x-2">
                     <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar"
                         aria-controls="logo-sidebar" type="button"
-                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+                        class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                         <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
                             <path clip-rule="evenodd" fill-rule="evenodd"

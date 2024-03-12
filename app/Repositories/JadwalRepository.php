@@ -11,11 +11,11 @@ use App\Repositories\Interfaces\JadwalInterface;
 class JadwalRepository implements JadwalInterface
 {
 
-    private $jadwalModal;
+    private $jadwalModel;
     private $handleResponseError;
     public function __construct()
     {
-        $this->jadwalModal = new Jadwal;
+        $this->jadwalModel = new Jadwal;
         $this->handleResponseError = new ResponseErrorRepository;
     }
     /**
@@ -24,7 +24,7 @@ class JadwalRepository implements JadwalInterface
      */
     public function getAll()
     {
-        $data = $this->jadwalModal->orderBy('start_time', 'asc')->get();
+        $data = $this->jadwalModel->orderBy('start_time', 'asc')->get();
         if (request()->wantsJson()) {
             return(JadwalResource::collection($data))->response()->setStatusCode(200);
         } else {
@@ -47,7 +47,7 @@ class JadwalRepository implements JadwalInterface
     {
         try {
             //cek data jadwal dengan jam tersebut sudah terisi apa belum
-            $cekData = $this->jadwalModal->where('start_time', '<=', $data->endTime)->where('end_time', '>=', $data->startTime)->count();
+            $cekData = $this->jadwalModel->where('start_time', '<=', $data->endTime)->where('end_time', '>=', $data->startTime)->count();
             // dd($cekData);
             if ($cekData > 0) {
                 $message = $this->jadwalTerisiErrorMessage($data->startTime, $data->endTime);
@@ -60,7 +60,7 @@ class JadwalRepository implements JadwalInterface
                     ];
                 }
             }
-            $create = $this->jadwalModal->create([
+            $create = $this->jadwalModel->create([
                 'start_time' => $data->startTime,
                 'end_time' => $data->endTime,
                 'jadwal' => $data->keterangan,
@@ -94,7 +94,7 @@ class JadwalRepository implements JadwalInterface
     public function update($data, $oldData)
     {
         try {
-            $cekData = $this->jadwalModal->where('start_time', '<=', $data->endTime)->where('end_time', '>=', $data->startTime)->whereNotIn('jadwal_id', [$oldData->jadwal_id])->count();
+            $cekData = $this->jadwalModel->where('start_time', '<=', $data->endTime)->where('end_time', '>=', $data->startTime)->whereNotIn('jadwal_id', [$oldData->jadwal_id])->count();
             if ($cekData > 0) {
                 $message = $this->jadwalTerisiErrorMessage($data->startTime, $data->endTime);
                 if (request()->wantsJson()) {

@@ -16,7 +16,12 @@ class Santri extends Model
         'santri_id'
     ];
 
-    public function waliRelasi(){
+    public function waliRelasi()
+    {
         return $this->belongsTo(WaliRelasi::class);
+    }
+    public function jenjang()
+    {
+        return $this->belongsTo(Jenjang::class, 'jenjang_id', 'jenjang_id');
     }
 }

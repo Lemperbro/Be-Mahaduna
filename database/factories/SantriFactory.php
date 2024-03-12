@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class SantriFactory extends Factory
 {
+    public static $counter = 0;
+
     /**
      * Define the model's default state.
      *
@@ -17,10 +19,13 @@ class SantriFactory extends Factory
      */
     public function definition(): array
     {
+        $this::$counter += 1;
         return [
             'nama' => fake()->unique()->name,
-            'nisn' => fake()->unique()->numberBetween(100000,999999),
-            'jenjang' => 'Senior',
+            'nisn' => fake()->unique()->numberBetween(100000, 999999),
+            'jenjang_id' => fake()->randomElement([1,2]),
+            'status' => $this::$counter % 2 == 0 ? 'lulus' : 'aktif',
+            'jenis_kelamin' => fake()->randomElement(['laki-laki', 'perempuan']),
             'tgl_masuk' => fake()->date('Y-m-d'),
         ];
     }

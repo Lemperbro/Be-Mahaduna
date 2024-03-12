@@ -1,9 +1,5 @@
 <?php
 
-
-
-use DateInterval;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FroalaController;
 use App\Http\Controllers\Admin\Auth\AuthController;
@@ -14,6 +10,7 @@ use App\Http\Controllers\Admin\Artikel\ArtikelController;
 use App\Http\Controllers\Admin\Majalah\MajalahController;
 use App\Http\Controllers\Admin\Youtube\YoutubeController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
+use App\Http\Controllers\Admin\Pembayaran\PembayaranController;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,6 +114,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/jadwal-santri/create', [JadwalController::class, 'store'])->name('jadwal.store');
     Route::post('/jadwa-santri/update/{id}', [JadwalController::class, 'update'])->name('jadwal.update');
     Route::post('/jadwal-santri/delete/{id}', [JadwalController::class, 'delete'])->name('jadwal.delete');
+
+    //kelola pembayaran
+    Route::get('/kelola-pembayaran', [PembayaranController::class, 'index'])->name('kelola-pembayaran.index');
+    Route::get('/kelola-pembayaran/buat-tagihan', [PembayaranController::class, 'createTagihan'])->name('kelola-pembayaran.create.tagihan');
+    Route::post('/kelola-pembayaran/buat-tagihan', [PembayaranController::class, 'storeTagihan'])->name('kelola-pembayaran.store.tagihan');
+    Route::post('/kelola-pembayaran/konfirmasi/{id}', [PembayaranController::class, 'konfirmasiTagihan'])->name('kelola-pembayaran.konfirmasi');
+    Route::get('/kelola-pembayaran/edit/{id}', [PembayaranController::class, 'edit'])->name('kelola-pembayaran.edit');
+    Route::post('/kelola-pembayaran/edit/{id}', [PembayaranController::class, 'updateTagihan'])->name('kelola-pembayaran.update');
+    Route::post('/kelola-pembayaran/tagihan/delete/{id}', [PembayaranController::class, 'deleteTagihan'])->name('kelola-pembayaran.delete.tagihan');
+    Route::post('/kelola-pembayaran/delete/multiple', [PembayaranController::class, 'deleteTagihanMultiple'])->name('kelola-pembayaran.delete.tagihan.multiple');
+
+
 
     //filepond
     Route::post('/filePond/post/{folder}', [FilePondController::class, 'postImage'])->name('filePond.post');

@@ -11,6 +11,8 @@ class TagihanFactory extends Factory
 {
 
     public static $counter = 0;
+    public static $index = 0;
+
     /**
      * Define the model's default state.
      *
@@ -18,15 +20,23 @@ class TagihanFactory extends Factory
      */
     public function definition(): array
     {
-        $this::$counter += 1;   
-            return [
-                'santri_id' => fake()->unique(true)->numberBetween(1, 20),
-                'admin_id' => fake()->numberBetween(1, 4),
-                'label' => 'Tagihan Pembayaran Bulan Februari',
-                'price' => 250000,
-                'date' => fake()->unique(true)->date(),
-                'status' => $this::$counter % 2 == 0 ? 'sudah dibayar' : 'belum dibayar' ,
-                'payment_type' => $this::$counter % 2 ==0 ? fake()->unique()->randomElement(['cash', 'transfer']) : null,
-            ];
+        $this::$counter += 1;
+        $paymentStatusOptions = ['belum dibayar', 'menunggu dibayar'];
+        if ($this::$counter % 2 == 1) {
+            if ($this::$index > 1) {
+                $this::$index = 0;
+            }
+            $index = $this::$index;
+            $this::$index += 1;
+        }
+
+        return [
+            'santri_id' => fake()->unique(true)->numberBetween(1, 20),
+            'label' => 'Tagihan Pembayaran Bulan Februari',
+            'price' => $this::$counter % 2 == 0 ? 2500000 : 10000,
+            'date' => fake()->unique(true)->date(),
+            'status' => $this::$counter % 2 == 0 ? 'sudah dibayar' : $paymentStatusOptions[$index],
+            'payment_type' => $this::$counter % 2 == 0 ? fake()->unique()->randomElement(['cash', 'transfer']) : null,
+        ];
     }
 }
