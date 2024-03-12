@@ -25,11 +25,11 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->renderable(function (NotFoundHttpException $e, $request) {
-            if ($request->is('api/tagihan/create-billing/*')) {
+            if ($request->is('api/*')) {
                 return response()->json([
                     'error' => true,
-                    'message' => 'Data tidak ditemukan',
-                    'code' => 404
+                    'code' => 404,
+                    'message' => 'Maaf, data yang Anda cari tidak ditemukan.'
                 ],404);
             }
         });
