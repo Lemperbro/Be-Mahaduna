@@ -32,13 +32,13 @@
 
                 </div>
             </div>
-            <div class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4 flex flex-wrap gap-4 items-center">
+            <div class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4 flex flex-col sm:flex-row gap-4 items-center">
                 <a href="{{ route('kelola-pembayaran.create.tagihan') }}"
-                    class="flex gap-2 items-center bg-Sidebar py-1 px-4 rounded-md">
+                    class="flex gap-2 items-center bg-Sidebar py-1 px-4 rounded-md w-full sm:w-auto justify-center">
                     <i class="ri-add-box-fill text-white text-[20px]"></i>
                     <p class="mt-[2px] text-white whitespace-nowrap">Buat Tagihan</p>
                 </a>
-                <button class="flex gap-2 items-center justify-center bg-green-600 py-1 px-4 rounded-md">
+                <button class="flex gap-2 items-center justify-center bg-green-600 py-1 px-4 rounded-md w-full sm:w-auto">
                     <i class="ri-download-2-fill text-white text-[20px]"></i>
                     <p class="text-white mt-[2px] whitespace-nowrap">Download Data</p>
                 </button>
