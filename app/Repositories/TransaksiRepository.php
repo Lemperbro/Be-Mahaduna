@@ -101,6 +101,7 @@ class TransaksiRepository implements TransaksiInterface
     {
         try {
             $callbackToken = $request->header('x-callback-token');
+            return $callbackToken;
             $verifyCallbackToken = $this->XenditInterface->verifyCallbackToken($callbackToken);
             if (!$verifyCallbackToken) {
                 $message = 'Token tidak valid';
@@ -135,7 +136,7 @@ class TransaksiRepository implements TransaksiInterface
             DB::rollBack();
             return response()->json([
                 'error' => true,
-                'message' => $e->getMessage()
+                'message' => 'callback failed'
             ], 400);
         }
     }
