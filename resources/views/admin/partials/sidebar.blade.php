@@ -109,7 +109,7 @@
         <div class="fixed w-80 bottom-0 bg-Sidebar left-0 pt-2 px-3 pb-4">
             <form action="{{ route('auth.logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="flex items-center p-2 text-gray-400 rounded-lg group">
+                <button type="submit" class="flex items-center p-2 text-gray-400 rounded-lg group w-full">
 
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                         class="w-5 h-5 fill-gray-400 transition duration-75"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
