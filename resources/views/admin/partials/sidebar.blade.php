@@ -106,7 +106,7 @@
         </ul>
 
         {{-- menu bawa --}}
-        <div class="fixed w-64 bottom-0 bg-Sidebar left-0 pt-2 px-3 pb-4">
+        <div class="fixed w-80 bottom-0 bg-Sidebar left-0 pt-2 px-3 pb-4">
             <form action="{{ route('auth.logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="flex items-center p-2 text-gray-400 rounded-lg group">

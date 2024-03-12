@@ -30,8 +30,7 @@ class ArtikelController extends Controller
         $headerTitle = 'Kelola Artikel';
         $keyword = request('keyword') ?? null;
         $sortBest = request('sortBest') ?? false;
-        $useForApi = false;
-        $allArtikel = $this->ArtikelInterface->getAllArtikel(20, $keyword, $sortBest, $useForApi);
+        $allArtikel = $this->ArtikelInterface->getAllArtikel(20, $keyword, $sortBest);
         return view('admin.artikel.index', compact('headerTitle', 'allArtikel'));
     }
 

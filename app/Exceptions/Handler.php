@@ -27,10 +27,11 @@ class Handler extends ExceptionHandler
         $this->renderable(function (NotFoundHttpException $e, $request) {
             if ($request->is('api/*')) {
                 return response()->json([
-                    'error' => true,
-                    'code' => 404,
-                    'message' => 'Maaf, data yang Anda cari tidak ditemukan.'
-                ],404);
+                    'error' => [
+                        'code' => 404,
+                        'message' => 'Maaf, data yang Anda cari tidak ditemukan.'
+                    ],
+                ], 404);
             }
         });
     }

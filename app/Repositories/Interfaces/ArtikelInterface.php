@@ -8,13 +8,11 @@ interface ArtikelInterface
      * @param int|null $paginate untuk mempaginate data 
      * @param $keyword untuk mencari data
      * @param bool $sortBest jika true maka akan mensortir data berdasarkan views terbanyak
-     * @param bool $useForApi untuk switch , apakah di gunakan untuk api apa tidak , 
-     * jika trua maka akan di gunakan untuk apa dan return response, jika false maka tidak digunakan untuk api 
      * 
      * @return [JsonResource]
      */
 
-    public function getAllArtikel(int $paginate = null, $keyword = null, bool $sortBest = false, bool $useForApi = true);
+    public function getAllArtikel(int $paginate = null, $keyword = null, bool $sortBest = false);
 
     /**
      * Untuk menyimpan artikel ke dala database

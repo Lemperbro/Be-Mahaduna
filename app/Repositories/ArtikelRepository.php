@@ -42,7 +42,7 @@ class ArtikelRepository implements ArtikelInterface
      * 
      * @return [JsonResource]
      */
-    public function getAllArtikel(int $paginate = null, $keyword = null, bool $sortBest = false, bool $useForApi = true)
+    public function getAllArtikel(int $paginate = null, $keyword = null, bool $sortBest = false)
     {
 
         $data = $this->artikelModel->with('artikel_relasi.artikel_kategori');
@@ -67,7 +67,7 @@ class ArtikelRepository implements ArtikelInterface
         }
 
         $resource = ArtikelResource::collection($datas);
-        if ($useForApi) {
+        if (request()->wantsJson()) {
             return ($resource)->response()->setStatusCode(200);
         } else {
             return $resource;
@@ -248,7 +248,6 @@ class ArtikelRepository implements ArtikelInterface
         try {
             $delete = false;
             DB::beginTransaction();
-            // $this->saveFileRepo->deleteFileSingle('uploads/artikelImage', $data->bannerImage);
             $delete = $data->update([
                 'user_deleted' => auth()->user()->user_id,
                 'deleted_at' => now(),
