@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Transaksi;
 
-use App\Http\Controllers\Controller;
 use App\Models\Tagihan;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\TransaksiInterface;
-use GuzzleHttp\Psr7\Request;
 
 class TransaksiController extends Controller
 {
@@ -22,7 +22,6 @@ class TransaksiController extends Controller
         return $transaksi;
     }
     public function webhooksXendit(Request $request){
-        return 'sasadw';
-        // return $this->TransaksiInterface->webhooksXendit($request);
+        return $this->TransaksiInterface->webhooksXendit($request);
     }
 }
