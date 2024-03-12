@@ -32,15 +32,15 @@
 
                 </div>
             </div>
-            <div class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4 flex gap-4">
+            <div class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4 flex flex-wrap gap-4">
                 <a href="{{ route('kelola-pembayaran.create.tagihan') }}"
                     class="flex gap-2 items-center bg-Sidebar py-1 px-4 rounded-md">
                     <i class="ri-add-box-fill text-white text-[20px]"></i>
-                    <p class="mt-[2px] text-white">Buat Tagihan</p>
+                    <p class="mt-[2px] text-white whitespace-nowrap">Buat Tagihan</p>
                 </a>
                 <button class="flex gap-2 items-center justify-center bg-green-600 py-1 px-4 rounded-md">
                     <i class="ri-download-2-fill text-white text-[20px]"></i>
-                    <p class="text-white mt-[2px]">Download Data</p>
+                    <p class="text-white mt-[2px] whitespace-nowrap">Download Data</p>
                 </button>
             </div>
             <div class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4">

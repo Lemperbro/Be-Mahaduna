@@ -13,7 +13,7 @@
 
                 <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
                     type="button"
-                    class="inline-flex justify-center w-8 h-8 items-center text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 bg-main">
+                    class="inline-flex justify-center w-8 h-8 items-center text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 bg-white">
                     <i class="ri-close-fill text-[30px]"></i>
                 </button>
             </div>
