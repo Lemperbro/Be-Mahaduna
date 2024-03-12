@@ -32,7 +32,7 @@
 
                 </div>
             </div>
-            <div class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4 flex flex-wrap gap-4">
+            <div class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4 flex flex-wrap gap-4 items-center">
                 <a href="{{ route('kelola-pembayaran.create.tagihan') }}"
                     class="flex gap-2 items-center bg-Sidebar py-1 px-4 rounded-md">
                     <i class="ri-add-box-fill text-white text-[20px]"></i>
