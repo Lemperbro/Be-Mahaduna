@@ -58,7 +58,6 @@ class TransaksiRepository implements TransaksiInterface
     public function createTransaksiByXendit($tagihan)
     {
         try {
-            DB::beginTransaction();
             if ($tagihan->status !== 'belum dibayar') {
                 $cekDiTransaksi = $this->transaksiModel->where('tagihan_id', $tagihan->tagihan_id)->whereIn('payment_status', ['PENDING', 'PAID'])->count();
                 if ($cekDiTransaksi > 0) {
@@ -66,6 +65,7 @@ class TransaksiRepository implements TransaksiInterface
                     return $this->handleResponseError->ResponseException($message, 400);
                 }
             }
+            DB::beginTransaction();
             $invoiceXendit = $this->XenditInterface->createInvoice($tagihan);
             $this->tagihanModel->where('tagihan_id', $tagihan->tagihan_id)->update([
                 'status' => 'menunggu dibayar'
@@ -83,12 +83,9 @@ class TransaksiRepository implements TransaksiInterface
             ]);
             DB::commit();
             return(TransaksiResource::make($createTransaksi->fresh()))->response()->setStatusCode(201);
-
-
         } catch (Exception $e) {
             DB::rollBack();
             return $this->handleResponseError->responseError($e);
-
         }
     }
     /**

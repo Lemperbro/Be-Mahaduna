@@ -18,7 +18,6 @@ class TransaksiController extends Controller
 
     public function createTransaksiByXendit(Tagihan $id)
     {
-        return $id;
         $transaksi = $this->TransaksiInterface->createTransaksiByXendit($id);
         return $transaksi;
     }
