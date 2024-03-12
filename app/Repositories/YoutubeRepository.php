@@ -6,7 +6,6 @@ use App\Models\PlaylistVideo;
 use Illuminate\Support\Facades\Http;
 use App\Http\Resources\Youtube\VideoResource;
 use App\Repositories\ResponseErrorRepository;
-use Illuminate\Validation\ValidationException;
 use App\Http\Resources\Youtube\PlaylistResource;
 use App\Repositories\Interfaces\YoutubeInterface;
 

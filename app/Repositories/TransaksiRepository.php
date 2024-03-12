@@ -86,8 +86,6 @@ class TransaksiRepository implements TransaksiInterface
             return(TransaksiResource::make($createTransaksi->fresh()))->response()->setStatusCode(201);
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error($e);
-
             return $this->handleResponseError->responseError($e);
         }
     }
