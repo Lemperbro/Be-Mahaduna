@@ -21,4 +21,5 @@ if (sidebar) {
     sidebarBackdrop.addEventListener('click', () => {
         toggleSidebarMobile(sidebar, sidebarBackdrop, toggleSidebarMobileHamburger, toggleSidebarMobileClose);
     });
+
 }
