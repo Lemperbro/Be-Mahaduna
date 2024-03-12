@@ -65,7 +65,7 @@ class TransaksiRepository implements TransaksiInterface
                     return $this->handleResponseError->ResponseException($message, 400);
                 }
             }
-            DB::beginTransaction();
+            // DB::beginTransaction();
             $invoiceXendit = $this->XenditInterface->createInvoice($tagihan);
             $this->tagihanModel->where('tagihan_id', $tagihan->tagihan_id)->update([
                 'status' => 'menunggu dibayar'
@@ -81,10 +81,10 @@ class TransaksiRepository implements TransaksiInterface
                 'payment_status' => $invoiceXendit->status,
                 'expired' => Carbon::parse($invoiceXendit->expiry_date)->format('Y-m-d H:i:s')
             ]);
-            DB::commit();
+            // DB::commit();
             return(TransaksiResource::make($createTransaksi->fresh()))->response()->setStatusCode(201);
         } catch (Exception $e) {
-            DB::rollBack();
+            // DB::rollBack();
             return $this->handleResponseError->responseError($e);
         }
     }
