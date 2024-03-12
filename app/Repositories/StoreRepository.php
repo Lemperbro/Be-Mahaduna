@@ -220,7 +220,7 @@ class StoreRepository implements StoreInterface
             }
         } catch (Exception $e) {
             DB::rollback();
-            Log::error($e);
+            // Log::error($e);
             if (request()->wantsJson()) {
                 return $this->handleResponseError->responseError($e);
             } else {
