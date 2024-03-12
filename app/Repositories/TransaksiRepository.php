@@ -101,7 +101,7 @@ class TransaksiRepository implements TransaksiInterface
     {
         try {
             $callbackToken = $request->header('x-callback-token');
-            return $callbackToken;
+            return $request;
             $verifyCallbackToken = $this->XenditInterface->verifyCallbackToken($callbackToken);
             if (!$verifyCallbackToken) {
                 $message = 'Token tidak valid';
