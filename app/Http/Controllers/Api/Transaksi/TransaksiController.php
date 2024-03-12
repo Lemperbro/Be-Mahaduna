@@ -22,6 +22,7 @@ class TransaksiController extends Controller
         return $transaksi;
     }
     public function webhooksXendit(Request $request){
-        return $this->TransaksiInterface->webhooksXendit($request);
+        return 'sasadw';
+        // return $this->TransaksiInterface->webhooksXendit($request);
     }
 }
