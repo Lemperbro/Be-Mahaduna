@@ -18,6 +18,7 @@ class TransaksiResource extends JsonResource
             'transaksi_id' => $this->transaksi_id,
             'tagihan_id' => $this->tagihan_id,
             'invoice_id' => $this->invoice_id,
+            'external_id' => $this->external_id,
             'payment_link' => $this->payment_link,
             'price' => $this->price,
             'pay' => $this->pay,
