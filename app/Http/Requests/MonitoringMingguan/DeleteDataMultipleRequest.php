@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Tagihan;
+namespace App\Http\Requests\MonitoringMingguan;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TagihanDeleteMultipleRequest extends FormRequest
+class DeleteDataMultipleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,6 @@ class TagihanDeleteMultipleRequest extends FormRequest
             'monitor_mingguan_id_delete_multiple' => 'required'
         ];
     }
-
     public function messages(){
         return [
             'monitor_mingguan_id_delete_multiple' => 'Pilih salah satu data tagihan untuk dihapus'

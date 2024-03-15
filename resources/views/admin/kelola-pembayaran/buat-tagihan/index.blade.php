@@ -69,6 +69,7 @@
                         <div class="grid gap-2 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 mt-4">
                             @include('admin.kelola-pembayaran.buat-tagihan._filterTahun')
                             @include('admin.kelola-pembayaran.buat-tagihan._filterJenisKelamin')
+                            @include('admin.kelola-pembayaran.buat-tagihan._filterJenjang')
                         </div>
                         <div class="mt-4 flex gap-2">
                             <a href="{{ route('kelola-pembayaran.create.tagihan') }}"

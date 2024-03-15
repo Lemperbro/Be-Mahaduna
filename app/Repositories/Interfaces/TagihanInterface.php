@@ -22,6 +22,21 @@ interface TagihanInterface
      * @return mixed
      */
     public function getAllTagihan(int $paginate = null, $keyword = null, int $bulan = null, int $tahun = null, string $status = null);
+        /**
+     * untuk menghitung semua data tagihan
+     * @return [type]
+     */
+    public function countAll();
+        /**
+     * untuk menghitung semua data tagihan yang belum di bayar
+     * @return [type]
+     */
+    public function countTagihanBelumBayar();
+        /**
+     * untuk menghitung semua data tagihan yang sudah dibayar
+     * @return [type]
+     */
+    public function countTagihanSudahDibayar();
     /**
      * untuk membuat tagihan
      * @param mixed $data data yang akan di simpan ke db tagihan

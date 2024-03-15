@@ -87,7 +87,7 @@
             </li>
             <h1 class="text-gray-400 text-sm">MONITORING</h1>
             <li>
-                <a href="/admin" class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive">
+                <a href="{{ route('monitoring.sholat.index') }}" class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive {{ request()->routeIs('monitoring.sholat.*') ? 'bg-SidebarActive' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
                         class="w-5 h-[30px] transition fill-gray-400 duration-75"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
                         <path

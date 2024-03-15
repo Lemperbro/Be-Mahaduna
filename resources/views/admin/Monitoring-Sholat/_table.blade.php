@@ -16,22 +16,22 @@
                     Jenjang
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-64 lg:w-96">
-                    Keterangan Tagihan
+                    Tahun Masuk
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-36">
-                    Tagihan
+                    Hadir
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-36">
-                    Bayar
+                    Tidak Hadir
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-36">
-                    Tagihan Bulan
+                    Terlambat
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-40">
-                    Jalur Pembayaran
+                    Kategori Monitoring
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-44 ">
-                    Status Pembayaran
+                    Di Upload
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-16">
                     Action
@@ -41,15 +41,11 @@
         <tbody>
             @foreach ($data as $key => $item)
                 <tr class="{{ $key % 2 == 0 ? 'bg-white' : 'bg-gray-200 ' }} text-gray-700 border-b ">
-                    @if ($item->status === 'belum dibayar')
-                        <td class="px-2  py-2 md:py-4 font-medium text-gray-900 whitespace-nowrap text-center">
-                            <input type="checkbox" name="tagihan_id_delete_multiple[]" value="{{ $item->tagihan_id }}"
-                                class="checkboxValue">
-                        </td>
-                    @else
-                        <td class="px-2  py-2 md:py-4 font-medium text-gray-900 whitespace-nowrap text-center">
-                        </td>
-                    @endif
+                    <td class="px-2  py-2 md:py-4 font-medium text-gray-900 whitespace-nowrap text-center">
+                        <input type="checkbox" name="monitor_mingguan_id_delete_multiple[]"
+                            value="{{ $item->monitor_mingguan_id }}" class="checkboxValue">
+                    </td>
+
                     <td class="px-2  py-2 md:py-4 font-medium text-gray-900 whitespace-nowrap text-center">
                         {{ $loop->iteration }}
                     </td>
@@ -58,45 +54,40 @@
                             {{ $item->santri->nama }}
                         </h1>
                     </td>
-                    <td class="px-2  py-2 md:py-4 capitalize">
+                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
                         <h1>
                             {{ $item->santri->jenjang->jenjang }}
                         </h1>
                     </td>
-                    <td class="px-2  py-2 md:py-4 capitalize">
-                        <h1 class="line-clamp-2">
-                            {{ $item->label }}
+                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
+                        <h1>
+                            {{ Carbon::parse($item->santri->tgl_masuk)->locale('id')->isoFormat(' MMMM YYYY') }}
                         </h1>
                     </td>
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
-                        Rp. {{ number_format($item->price, 0, ',', '.') }}
+                        <h1>
+                            {{ $item->hadir }}
+                        </h1>
                     </td>
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
-                        {{ $item->transaksi !== null ? 'Rp. ' . number_format($item->transaksi->pay, 0, ',', '.') : 'Belum ada' }}
+                        <h1>
+                            {{ $item->tidak_hadir }}
+                        </h1>
                     </td>
-                    <td class="px-2  py-2 md:py-4 capitalize">
-                        {{ Carbon::parse($item->date)->locale('id')->isoFormat(' MMMM YYYY') }}
+                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
+                        <h1>
+                            {{ $item->terlambat }}
+                        </h1>
                     </td>
-                    <td class="px-2  py-2 md:py-4 capitalize">
-                        {{ $item->payment_type ?? 'Belum ada' }}
+                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
+                        <h1>
+                            {{ $item->kategori }}
+                        </h1>
                     </td>
-                    <td class="px-2  py-2 md:py-4 capitalize">
-                        @if ($item->status === 'sudah dibayar')
-                            <div
-                                class="px-1 py-2 rounded-md bg-green-500 inline-block w-full text-center text-white font-semibold whitespace-nowrap">
-                                Sudah Dibayar
-                            </div>
-                        @elseif ($item->status === 'menunggu dibayar')
-                            <div
-                                class="px-1 py-2 rounded-md bg-yellow-500 inline-block w-full text-center text-white font-semibold whitespace-nowrap">
-                                Menunggu Dibayar
-                            </div>
-                        @else
-                            <div
-                                class="px-1 py-2 rounded-md bg-red-500 inline-block w-full text-center text-white font-semibold whitespace-nowrap">
-                                Belum Dibayar
-                            </div>
-                        @endif
+                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
+                        <h1>
+                            {{ Carbon::parse($item->created_at)->locale('id')->isoFormat('DD MMMM YYYY') }}
+                        </h1>
                     </td>
                     <td class="px-2 py-2 md:py-4">
                         <div class="mx-auto flex items-center">
@@ -107,60 +98,41 @@
                             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-shadow1 w-44 dark:bg-gray-700 dark:divide-gray-600">
                             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                                 aria-labelledby="actionMenuBtn{{ $key }}">
-                                <li>
-                                    <button type="button" onclick="detail{{ $key }}.showModal()"
-                                        class=" px-4 py-2 hover:bg-gray-100 w-full text-Sidebar flex gap-2 items-center">
-                                        <i class="ri-eye-fill text-xl"></i>
-                                        Lihat Detail
-                                    </button>
-                                </li>
-                                @if ($item->status !== 'sudah dibayar')
                                     <li>
-                                        <button type="button" onclick="konfirmasiBayar{{ $key }}.showModal()"
-                                            class="px-4 py-2 hover:bg-gray-100 w-full text-Sidebar flex gap-2 items-center">
-                                            <i class="ri-checkbox-circle-fill text-xl"></i>
-                                            Konfirmasi Bayar
-                                        </button>
-                                    </li>
-                                @endif
-                                @if ($item->status !== 'sudah dibayar' && $item->status !== 'menunggu dibayar')
-                                    <li>
-                                        <a href="{{ route('kelola-pembayaran.edit', ['id' => $item->tagihan_id]) }}"
+                                        <a href=""
                                             class=" px-4 py-2 hover:bg-gray-100 w-full text-Sidebar flex gap-2 items-center">
                                             <i class="ri-edit-2-fill text-xl"></i>
                                             Edit
                                         </a>
                                     </li>
                                     <li>
-                                        <button type="button" onclick="deleteTagihan{{ $key }}.showModal()"
+                                        <button type="button" onclick=""
                                             class=" px-4 py-2 hover:bg-gray-100 w-full text-left text-red-800 flex gap-2 items-center">
                                             <i class="ri-delete-bin-5-fill text-xl"></i>
                                             Hapus
                                         </button>
                                     </li>
-                                @endif
                             </ul>
                         </div>
                     </td>
                 </tr>
             @endforeach
-
         </tbody>
     </table>
 </div>
 @push('scripts')
     <script>
-        $(document).ready(function(){
+        $(document).ready(function() {
 
             const checkAllBtn = $('#checkboxAll');
             const checkValue = $('.checkboxValue');
-        checkAll();
-        
-        function checkAll() {
-            checkAllBtn.on('click', function() {
-                checkValue.prop('checked', checkAllBtn.prop('checked'));
-            });
-        }
-    });
+            checkAll();
+
+            function checkAll() {
+                checkAllBtn.on('click', function() {
+                    checkValue.prop('checked', checkAllBtn.prop('checked'));
+                });
+            }
+        });
     </script>
 @endpush

@@ -20,19 +20,48 @@
                     </div>
                 </div>
 
-                <div class="bg-white border-[1px] border-main3 rounded-md h-36">
-
+                <div class="bg-Sidebar rounded-md h-36 p-4">
+                    <div class="flex justify-between gap-4 items-center h-full my-auto">
+                        <div>
+                            <h1 class="text-4xl font-semibold text-white">
+                                {{ $totalData }}</h1>
+                            <h2 class="text-gray-200">Total Data</h2>
+                        </div>
+                        <div>
+                            <i class="ri-database-2-fill text-white text-[56px]"></i>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="bg-white border-[1px] border-main3 rounded-md h-36">
-
+                <div class="bg-Sidebar rounded-md h-36 p-4">
+                    <div class="flex justify-between gap-4 items-center h-full my-auto">
+                        <div>
+                            <h1 class="text-4xl font-semibold text-white">
+                                {{ $totalTagihanSudahDibayar }}</h1>
+                            <h2 class="text-gray-200">Total Tagihan Yang Sudah Dibayar</h2>
+                        </div>
+                        <div>
+                            <i class="ri-money-dollar-circle-fill text-white text-[56px]"></i>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="bg-white border-[1px] border-main3 rounded-md h-36">
-
+                <div class="bg-Sidebar rounded-md h-36 p-4">
+                    <div class="flex justify-between gap-4 items-center h-full my-auto">
+                        <div>
+                            <h1 class="text-4xl font-semibold text-white">
+                                {{ $totalTagihanBelumDibayar }}</h1>
+                            <h2 class="text-gray-200">Total Tagihan Yang Belum Dibayar</h2>
+                        </div>
+                        <div>
+                            <i class="ri-money-dollar-circle-fill text-white text-[56px]"></i>
+                        </div>
+                    </div>
                 </div>
+
             </div>
-            <div class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4 flex flex-col sm:flex-row gap-4 items-center">
+            <div
+                class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4 flex flex-col sm:flex-row gap-4 items-center">
                 <a href="{{ route('kelola-pembayaran.create.tagihan') }}"
                     class="flex gap-2 items-center bg-Sidebar py-1 px-4 rounded-md w-full sm:w-auto justify-center">
                     <i class="ri-add-box-fill text-white text-[20px]"></i>
@@ -48,7 +77,7 @@
                     <div class=" items-center">
                         <h1 class="font-semibold text-lg md:text-xl xl:text-2xl">Data Pembayaran</h1>
                         <span class="border-[1px] border-main3 rounded-md py-[2px] px-1 text-sm text-gray-600 bg-main">Total
-                            Data {{ $totalData }}</span>
+                            Show Data {{ $totalShowData }}</span>
                     </div>
                     <div class="max-w-[1200px] w-[600px]">
                         @include('admin.kelola-pembayaran._search')
@@ -57,12 +86,12 @@
                 <form class="mt-8" action="{{ route('kelola-pembayaran.delete.tagihan.multiple') }}" method="POST">
                     @csrf
                     <div class="mb-4">
-                        <div
-                            class="py-2 px-4 text-sm md:text-base inline-block bg-red-600 text-white rounded-md text-center cursor-pointer @error('tagihan_id_delete_multiple')
+                        <div class="py-2 px-4 text-sm md:text-base inline-block bg-red-600 text-white rounded-md text-center cursor-pointer @error('tagihan_id_delete_multiple')
                                 peer
-                            @enderror" onclick="deleteTagihanMultiple.showModal()" id="btnAlertDeleteTagihanMultiple">Hapus
+                            @enderror"
+                            onclick="deleteTagihanMultiple.showModal()" id="btnAlertDeleteTagihanMultiple">Hapus
                             Tagihan Yang Dipilih</div>
-                            <button type="submit" id="btnDeleteTagihanMultiple" class="hidden" ></button>
+                        <button type="submit" id="btnDeleteTagihanMultiple" class="hidden"></button>
                         @error('tagihan_id_delete_multiple')
                             <p class="peer-invalid:visible text-red-700 font-light mt-1">
                                 {{ $message }}
@@ -86,5 +115,6 @@
     @foreach ($data as $key => $item)
         @include('admin.kelola-pembayaran._modalKonfirmasiBayar')
         @include('admin.kelola-pembayaran._modalDelete')
+        @include('admin.kelola-pembayaran._modalDetail')
     @endforeach
 @endsection

@@ -31,12 +31,12 @@
                 <div class="mt-5">
                     {{ $playlist->links('vendor.pagination.tailwind') }}
                 </div>
-                @if($playlist->count() <= 0)
+                @if ($playlist->count() <= 0)
                     <div class="flex flex-col items-center mx-auto mt-32">
                         <img src="{{ asset('icon/no_data2.svg') }}" alt="" class="w-48 h-48 object-contain">
                         <h1 class="text-Sidebar font-semibold mt-2">Tidak Ada Playlist Yang Ditemukan</h1>
                     </div>
-                    @endif
+                @endif
 
             </section>
         </div>

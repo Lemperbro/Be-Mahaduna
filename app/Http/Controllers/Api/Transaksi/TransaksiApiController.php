@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\TransaksiInterface;
 
-class TransaksiController extends Controller
+class TransaksiApiController extends Controller
 {
     private $TransaksiInterface;
 
@@ -18,8 +18,7 @@ class TransaksiController extends Controller
 
     public function createTransaksiByXendit(Tagihan $id)
     {
-        $transaksi = $this->TransaksiInterface->createTransaksiByXendit($id);
-        return $transaksi;
+        return $this->TransaksiInterface->createTransaksiByXendit($id);
     }
     public function webhooksXendit(Request $request){
         return $this->TransaksiInterface->webhooksXendit($request);

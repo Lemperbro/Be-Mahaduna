@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FroalaController;
 use App\Http\Controllers\Admin\Auth\AuthController;
@@ -11,6 +10,7 @@ use App\Http\Controllers\Admin\Majalah\MajalahController;
 use App\Http\Controllers\Admin\Youtube\YoutubeController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Pembayaran\PembayaranController;
+use App\Http\Controllers\Admin\MonitoringMingguan\MonitoringMingguanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -125,9 +125,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/kelola-pembayaran/tagihan/delete/{id}', [PembayaranController::class, 'deleteTagihan'])->name('kelola-pembayaran.delete.tagihan');
     Route::post('/kelola-pembayaran/delete/multiple', [PembayaranController::class, 'deleteTagihanMultiple'])->name('kelola-pembayaran.delete.tagihan.multiple');
 
-
+    //monitoring sholat jamaah
+    Route::get('/monitoring/sholat', [MonitoringMingguanController::class, 'monitoringSholatIndex'])->name('monitoring.sholat.index');
+    Route::get('/monitoring/{type}/create', [MonitoringMingguanController::class, 'create'])->name('monitoring.create');
+    Route::post('/monitoring/{type}/store', [MonitoringMingguanController::class, 'store'])->name('monitoring.store');
+    Route::post('/monitoring/sholat/delete/multiple', [MonitoringMingguanController::class, 'deleteDataMultiple'])->name('monitoring.sholat.delete.multiple');
 
     //filepond
     Route::post('/filePond/post/{folder}', [FilePondController::class, 'postImage'])->name('filePond.post');
     Route::post('/filePond/delete/{folder}', [FilePondController::class, 'deleteImage'])->name('filePond.delete');
 });
+
+

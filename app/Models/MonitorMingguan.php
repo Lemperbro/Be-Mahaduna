@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Santri;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MonitorMingguan extends Model
 {
@@ -16,4 +17,8 @@ class MonitorMingguan extends Model
     protected $guarded = [
         'monitor_mingguan_id'
     ];
+
+    public function santri(){
+        return $this->belongsTo(Santri::class, 'santri_id', 'santri_id');
+    }
 }

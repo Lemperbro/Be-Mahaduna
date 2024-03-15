@@ -4,8 +4,10 @@ namespace App\Repositories;
 use Exception;
 use App\Models\PlaylistVideo;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Database\Eloquent\Collection;
 use App\Http\Resources\Youtube\VideoResource;
 use App\Repositories\ResponseErrorRepository;
+use Illuminate\Pagination\LengthAwarePaginator;
 use App\Http\Resources\Youtube\PlaylistResource;
 use App\Repositories\Interfaces\YoutubeInterface;
 
@@ -81,7 +83,7 @@ class YoutubeRepository implements YoutubeInterface
         if ($filter === true) {
             $responseData = $this->filterDataYangSudahAda($get->json(), $this->getAllPlaylistId());
         }
-        return (VideoResource::make($responseData))->response()->setStatusCode($statusCode);
+        return(VideoResource::make($responseData))->response()->setStatusCode($statusCode);
     }
 
     /**
@@ -105,7 +107,7 @@ class YoutubeRepository implements YoutubeInterface
         if ($create) {
             $createdPlaylists = $this->model->whereIn('playlistId', $data->playlistId)->get();
             if (request()->wantsJson()) {
-                return (PlaylistResource::collection($createdPlaylists))->response()->setStatusCode(201);
+                return(PlaylistResource::collection($createdPlaylists))->response()->setStatusCode(201);
             } else {
                 return true;
             }
@@ -169,7 +171,7 @@ class YoutubeRepository implements YoutubeInterface
         $data = $this->model->get();
         $response = PlaylistResource::collection($data);
         if (request()->wantsJson()) {
-            return ($response)->response()->setStatusCode(200);
+            return($response)->response()->setStatusCode(200);
         } else {
             return $response;
         }
@@ -207,26 +209,27 @@ class YoutubeRepository implements YoutubeInterface
      * ambil semua data playlist dari api youtube, berdasarkan playlistId yang di simpan di db
      * @param int $maxResults
      * @param string $part ini bertipe string , contoh 'snippet,contentDetails,id,player,status,localizations'
+     * @param mixed $keyword untuk mencari data
+     * @param int $paginate untuk mempaginate data
      * 
      * @return [type]
      */
 
-    public function getAllDataPlaylist($part = 'snippet')
+    public function getAllDataPlaylist($part = 'snippet', $keyword = null, $paginate = 10)
     {
         if (request()->wantsJson()) {
             $playlistIdData = $this->getAllPlaylistId()->getData()->data;
             $playlistId = collect($playlistIdData);
             $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
-        } else {
-            $playlistId = $this->getAllPlaylistId();
-            $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
-        }
-        if (request()->wantsJson()) {
             if (count($playlistId) <= 0) {
                 $message = 'playlist tidak tersedia';
                 return $this->responseError->ResponseException($message, 404);
             }
+        } else {
+            $playlistId = $this->getAllPlaylistId();
+            $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
         }
+
         $get = Http::get($this->urlPlaylist, [
             'key' => $this->apiKey,
             'id' => $playlistImplode,
@@ -238,27 +241,33 @@ class YoutubeRepository implements YoutubeInterface
 
         $statusCode = $this->cekStatusCodeApi($get);
         $responseData = $this->sortVideoLatest($get->json());
-        if (request('search') !== null) {
-            $responseData = $this->cariPlaylist($get->json(), request('search'));
+        if ($keyword !== null) {
+            $responseData = $this->cariPlaylist($get->json(), $keyword);
         }
-        return (VideoResource::make($responseData))->response()->setStatusCode($statusCode);
+        $responseWithPaginate = $this->getManualPagination($paginate, $responseData);
+        if (request()->wantsJson()) {
+            return(VideoResource::make($responseWithPaginate))->response()->setStatusCode($statusCode);
+        } else {
+            return $responseWithPaginate;
+        }
     }
 
     /**
      * Menampilkan isi playlist
      * @param mixed $playlistId id playlist yang akan di ambil
-     * @param int $maxResults
+     * @param int $paginate untuk mempaginate data
+     * @param string $part ini bertipe string , contoh 'snippet,contentDetails,id,status'
      * 
      * @return mixed
      */
-    public function getPlaylistItems($playlistId, $maxResults = 50)
+    public function getPlaylistItems($part = 'snippet', $playlistId, $paginate = 50)
     {
         $get = Http::get($this->playlistItems, [
             'key' => $this->apiKey,
             'playlistId' => $playlistId,
-            'maxResults' => $maxResults,
+            'maxResults' => $paginate,
             'type' => 'video',
-            'part' => 'snippet',
+            'part' => $part,
         ]);
 
         $statusCode = $this->cekStatusCodeApi($get);
@@ -283,6 +292,27 @@ class YoutubeRepository implements YoutubeInterface
 
         $statusCode = $this->cekStatusCodeApi($get);
         return response()->json($get->json())->setStatusCode($statusCode);
+    }
+    public function getManualPagination($perPages, $data)
+    {
+        $data = json_decode(json_encode($data));
+        $currentPage = 1;
+        $items = $data->items;
+        $perPage = $perPages; // Jumlah item per halaman
+        $currentPage = request()->get('page', $currentPage); // Nomor halaman saat ini
+
+        $slicedData = (new Collection($items))->forPage($currentPage, $perPage)->values();
+        $total = count($items);
+
+        $dataSemuafix = new LengthAwarePaginator(
+            $slicedData,
+            $total,
+            $perPage,
+            $currentPage,
+            ['path' => url()->current(), 'query' => ['page' => $currentPage]]
+        );
+
+        return $dataSemuafix;
     }
 
 }

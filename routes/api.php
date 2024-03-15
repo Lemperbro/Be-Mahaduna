@@ -2,8 +2,8 @@
 
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\Transaksi\TransaksiController;
-
+use App\Http\Controllers\Api\Transaksi\TransaksiApiController;
+use App\Http\Controllers\Api\Youtube\YoutubeApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,15 +16,15 @@ use App\Http\Controllers\Api\Transaksi\TransaksiController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+
+//playlist
+Route::prefix('playlist')->group(function(){
+    Route::get('all', [YoutubeApiController::class, 'getAllPlaylist'])->name('playlist.all');
+    Route::get('items/{playlistId}', [YoutubeApiController::class, 'showPlaylistItems'])->name('playlist.show.items');
+});
 
 
-
-
-
-
-
-Route::post('/tagihan/callback/xendit', [TransaksiController::class, 'webhooksXendit']);
-Route::post('/tagihan/create-billing/{id}', [TransaksiController::class, 'createTransaksiByXendit'])->name('tagihan.create.billing');
+Route::post('/tagihan/callback/xendit', [TransaksiApiController::class, 'webhooksXendit'])->name('tagihan.xendit.webhooks');
+Route::post('/tagihan/create-billing/{id}', [TransaksiApiController::class, 'createTransaksiByXendit'])->name('tagihan.xendit.create');
+Route::middleware('auth:sanctum')->group(function () {
+});

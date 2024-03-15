@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Pembayaran;
 use App\Models\Tagihan;
 use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\SantriInterface;
+use App\Repositories\Interfaces\JenjangInterface;
 use App\Repositories\Interfaces\TagihanInterface;
 use App\Http\Requests\Tagihan\TagihanCreateRequest;
 use App\Http\Requests\Tagihan\TagihanUpdateRequest;
@@ -15,13 +16,14 @@ use App\Http\Requests\Tagihan\TagihanDeleteMultipleRequest;
 class PembayaranController extends Controller
 {
     //
-    private $TagihanInterface, $SantriInterface, $TransaksiInterface;
+    private $TagihanInterface, $SantriInterface, $TransaksiInterface,$JenjangInterface;
 
-    public function __construct(TagihanInterface $TagihanInterface, SantriInterface $SantriInterface, TransaksiInterface $TransaksiInterface)
+    public function __construct(TagihanInterface $TagihanInterface, SantriInterface $SantriInterface, TransaksiInterface $TransaksiInterface, JenjangInterface $JenjangInterface)
     {
         $this->TagihanInterface = $TagihanInterface;
         $this->SantriInterface = $SantriInterface;
         $this->TransaksiInterface = $TransaksiInterface;
+        $this->JenjangInterface = $JenjangInterface;
     }
     public function index()
     {
@@ -32,9 +34,12 @@ class PembayaranController extends Controller
         $status = request('status') ?? null;
         $keyword = request('search') ?? null;
         $data = $this->TagihanInterface->getAllTagihan(paginate: 50, bulan: $bulan, tahun: $tahun, status: $status, keyword: $keyword);
-        $totalData = $data->total();
+        $totalShowData = $data->total();
+        $totalData = $this->TagihanInterface->countAll();
+        $totalTagihanBelumDibayar = $this->TagihanInterface->countTagihanBelumBayar();
+        $totalTagihanSudahDibayar = $this->TagihanInterface->countTagihanSudahDibayar();
         $pendapatanTahunIni = $this->TagihanInterface->moneyInYear();
-        return view('admin.kelola-pembayaran.index', compact('headerTitle', 'data', 'totalData', 'pendapatanTahunIni'));
+        return view('admin.kelola-pembayaran.index', compact('headerTitle', 'data', 'totalShowData','totalData','totalTagihanBelumDibayar','totalTagihanSudahDibayar', 'pendapatanTahunIni'));
     }
 
     public function createTagihan()
@@ -43,8 +48,9 @@ class PembayaranController extends Controller
         $tahunMasuk = request('tahun') ?? null;
         $jenisKelamin = request('jenis_kelamin') ?? null;
         $jenjang = request('jenjang') ?? null;
+        $dataJenjang = $this->JenjangInterface->getAll();
         $data = $this->SantriInterface->getAll(tahunMasuk: $tahunMasuk, jenisKelamin: $jenisKelamin, jenjang: $jenjang);
-        return view('admin.kelola-pembayaran.buat-tagihan.index', compact('headerTitle', 'data'));
+        return view('admin.kelola-pembayaran.buat-tagihan.index', compact('headerTitle', 'data','dataJenjang'));
     }
 
     public function storeTagihan(TagihanCreateRequest $request)

@@ -7,7 +7,6 @@ use App\Models\Santri;
 use App\Models\Tagihan;
 use App\Models\Transaksi;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Repositories\ResponseErrorRepository;
 use App\Http\Resources\Tagihan\TagihanResource;
 use App\Http\Resources\Transaksi\TransaksiResource;
@@ -115,6 +114,33 @@ class TagihanRepository implements TagihanInterface
         } else {
             return $datas;
         }
+    }
+    /**
+     * untuk menghitung semua data tagihan
+     * @return [type]
+     */
+    public function countAll()
+    {
+        $count = $this->tagihanModel->count();
+        return $this->formatAngka($count);
+    }
+    /**
+     * untuk menghitung semua data tagihan yang belum di bayar
+     * @return [type]
+     */
+    public function countTagihanBelumBayar()
+    {
+        $count = $this->tagihanModel->whereIn('status', ['belum dibayar', 'menunggu dibayar'])->count();
+        return $this->formatAngka($count);
+    }
+    /**
+     * untuk menghitung semua data tagihan yang sudah dibayar
+     * @return [type]
+     */
+    public function countTagihanSudahDibayar()
+    {
+        $count = $this->tagihanModel->where('status', 'sudah dibayar')->count();
+        return $this->formatAngka($count);
     }
 
     /**

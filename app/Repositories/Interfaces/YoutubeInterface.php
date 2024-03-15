@@ -13,7 +13,7 @@ interface YoutubeInterface
      * 
      * @return mixed Mengembalikan respons dari YouTube API yang berisi informasi Playlist.
      */
-    public function getAllPlaylistFrYoutube($maxResults = 50,$filter = false, $part = 'snippet');
+    public function getAllPlaylistFrYoutube($maxResults = 50, $filter = false, $part = 'snippet');
     /**
      * Menyimpan playlistId ke database
      * @param mixed $data data request yang berisi playlistId yang akan disimpan di dalam database
@@ -22,27 +22,29 @@ interface YoutubeInterface
      */
     public function createPlaylistId($data);
     /**
-     * Mengambil data playlist dari api youtube berdasarkan playlistId yang tersimpan dalam database
-     * @param int $maxResults Jumlah maksimal hasil yang akan diambil (default adalah 50)
+     * ambil semua data playlist dari api youtube, berdasarkan playlistId yang di simpan di db
+     * @param int $maxResults
      * @param string $part ini bertipe string , contoh 'snippet,contentDetails,id,player,status,localizations'
+     * @param mixed $keyword untuk mencari data
+     * @param int $paginate untuk mempaginate data
      * 
-     * @return mixed
+     * @return [type]
      */
-
-    public function getAllDataPlaylist($part = 'snippet');
+     public function getAllDataPlaylist($part = 'snippet', $keyword = null, $paginate = 10);
     /**
      * Mengambil semua data playlistId yang tersimpan dalam database
      * @return mixed
      */
     public function getAllPlaylistId($paginate = null);
     /**
-     * Mengambil semua isi video dari isi playlist berdasarkan playlistId
-     * @param mixed $playlistId playlistId yang di dapatkan dari database
-     * @param int $maxResults Jumlah maksimal hasil yang akan diambil (default adalah 50)
+     * Menampilkan isi playlist
+     * @param mixed $playlistId id playlist yang akan di ambil
+     * @param int $paginate untuk mempaginate data
+     * @param string $part ini bertipe string , contoh snippet,contentDetails,id,status
      * 
      * @return mixed
      */
-    public function getPlaylistItems($playlistId, $maxResults = 50);
+    public function getPlaylistItems($part = 'snippet', $playlistId, $paginate = 50);
     /**
      * mengambil detail data video berdasarkan VideoId
      * @param mixed $videoId id video yang ini di tampilkan
@@ -74,5 +76,5 @@ interface YoutubeInterface
      * 
      * @return [type]
      */
-    public function filterDataYangSudahAda($data,$playlistFromDb);
+    public function filterDataYangSudahAda($data, $playlistFromDb);
 }

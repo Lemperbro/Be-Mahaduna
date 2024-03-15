@@ -25,9 +25,10 @@ class YoutubeController extends Controller
     public function index()
     {
         $headerTitle = 'Video Kajian';
-        $getPlaylist = $this->YoutubeInterface->getAllDataPlaylist('snippet,contentDetails')->getData();
-        $playlist = $this->getManualPagination(8, $getPlaylist);
-        
+        $part = 'snippet,contentDetails';
+        $keyword = request('keyword') ?? null;
+        $paginate = 10;
+        $playlist = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
         if (request('ajaxPageToken')) {
             // remove cache di sini , agar data tidak dobel
             cache()->forget('allPlaylist');
@@ -44,26 +45,7 @@ class YoutubeController extends Controller
         return view('admin.video.index', compact('headerTitle', 'playlist', 'allPlaylist'));
     }
 
-    public function getManualPagination($perPages, $data)
-    {
-        $currentPage = 1;
-        $items = $data->data->items;
-        $perPage = $perPages; // Jumlah item per halaman
-        $currentPage = request()->get('page', $currentPage); // Nomor halaman saat ini
 
-        $slicedData = (new Collection($items))->forPage($currentPage, $perPage)->values();
-        $total = count($items);
-
-        $dataSemuafix = new LengthAwarePaginator(
-            $slicedData,
-            $total,
-            $perPage,
-            $currentPage,
-            ['path' => url()->current(), 'query' => ['page' => $currentPage]]
-        );
-
-        return $dataSemuafix;
-    }
 
     public function createPlaylist()
     {
