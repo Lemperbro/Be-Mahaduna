@@ -13,7 +13,7 @@
                             </path>
                         </svg>
                     </button>
-                    <h1 class="font-semibold text-Sidebar my-auto text-lg md:text-xl capitalize">{{ $headerTitle ?? 'Halaman Admin' }} hmm</h1>
+                    <h1 class="font-semibold text-Sidebar my-auto text-lg md:text-xl capitalize">{{ $headerTitle ?? 'Halaman Admin' }}</h1>
                 </div>
 
                 <div class="flex gap-x-2 sm:mx-0">
