@@ -125,11 +125,19 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/kelola-pembayaran/tagihan/delete/{id}', [PembayaranController::class, 'deleteTagihan'])->name('kelola-pembayaran.delete.tagihan');
     Route::post('/kelola-pembayaran/delete/multiple', [PembayaranController::class, 'deleteTagihanMultiple'])->name('kelola-pembayaran.delete.tagihan.multiple');
 
-    //monitoring sholat jamaah
-    Route::get('/monitoring/sholat', [MonitoringMingguanController::class, 'monitoringSholatIndex'])->name('monitoring.sholat.index');
+    //monitoring mingguan
     Route::get('/monitoring/{type}/create', [MonitoringMingguanController::class, 'create'])->name('monitoring.create');
     Route::post('/monitoring/{type}/store', [MonitoringMingguanController::class, 'store'])->name('monitoring.store');
-    Route::post('/monitoring/sholat/delete/multiple', [MonitoringMingguanController::class, 'deleteDataMultiple'])->name('monitoring.sholat.delete.multiple');
+    Route::get('/monitoring/{type}/edit/{id}', [MonitoringMingguanController::class, 'edit'])->name('monitoring.edit');
+    Route::post('/monitoring/{type}/update/{id}', [MonitoringMingguanController::class, 'update'])->name('monitoring.update');
+    Route::post('/monitoring/{type}/delete/multiple', [MonitoringMingguanController::class, 'deleteDataMultiple'])->name('monitoring.delete.multiple');
+
+    //monitoring sholat jamaah
+    Route::get('/monitoring/sholat', [MonitoringMingguanController::class, 'monitoringSholatIndex'])->name('monitoring.sholat.index');
+
+
+    //monitoring ngaji
+    Route::get('/monitoting/ngaji', [MonitoringMingguanController::class, 'monitoringNgajiIndex'])->name('monitoring.ngaji.index');
 
     //filepond
     Route::post('/filePond/post/{folder}', [FilePondController::class, 'postImage'])->name('filePond.post');

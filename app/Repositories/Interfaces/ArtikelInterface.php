@@ -3,17 +3,26 @@ namespace App\Repositories\Interfaces;
 
 interface ArtikelInterface
 {
-    /**
+/**
      * Semua data artikel dan relasi kategori nya
      * @param int|null $paginate untuk mempaginate data 
      * @param $keyword untuk mencari data
      * @param bool $sortBest jika true maka akan mensortir data berdasarkan views terbanyak
+     * @param bool $useForApi untuk switch , apakah di gunakan untuk api apa tidak , 
+     * jika trua maka akan di gunakan untuk apa dan return response, jika false maka tidak digunakan untuk api 
+     * @param int|null $kategori untuk memfilter artikel berdasarkan kategori
      * 
      * @return [JsonResource]
      */
 
-    public function getAllArtikel(int $paginate = null, $keyword = null, bool $sortBest = false);
-
+     public function getAllArtikel(int $paginate = null, $keyword = null, bool $sortBest = false, int $kategori = null);
+         /**
+     * untuk menapilkan detail artikel
+     * @param mixed $data data artikel dari db
+     * 
+     * @return [type]
+     */
+    public function showArtikel($data);
     /**
      * Untuk menyimpan artikel ke dala database
      * @param mixed $data data request dari form

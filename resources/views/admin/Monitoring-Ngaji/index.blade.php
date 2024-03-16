@@ -6,7 +6,7 @@
         <div class="pt-24 min-h-screen">
             <div
                 class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4 flex flex-col sm:flex-row gap-4 items-center">
-                <a href="{{ route('monitoring.create', ['type' => 'sholat']) }}"
+                <a href="{{ route('monitoring.create', ['type' => 'ngaji']) }}"
                     class="flex gap-2 items-center bg-Sidebar py-1 px-4 rounded-md w-full sm:w-auto justify-center">
                     <i class="ri-add-box-fill text-white text-[20px]"></i>
                     <p class="mt-[2px] text-white whitespace-nowrap">Tambah Data</p>
@@ -20,15 +20,15 @@
             <div class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4">
                 <div class="flex flex-wrap justify-between gap-4">
                     <div class=" items-center">
-                        <h1 class="font-semibold text-lg md:text-xl xl:text-2xl">Data Monitoring Sholat Jamaah</h1>
+                        <h1 class="font-semibold text-lg md:text-xl xl:text-2xl">Data Monitoring Ngaji</h1>
                         <span class="border-[1px] border-main3 rounded-md py-[2px] px-1 text-sm text-gray-600 bg-main">Total
                             Show Data {{ $totalShowData }}</span>
                     </div>
                     <div class="max-w-[1200px] w-[600px]">
-                        @include('admin.Monitoring-Sholat._search')
+                        @include('admin.Monitoring-Ngaji._search')
                     </div>
                 </div>
-                <form class="mt-8" action="{{ route('monitoring.delete.multiple', ['type' => 'sholat']) }}" method="POST">
+                <form class="mt-8" action="{{ route('monitoring.delete.multiple', ['type' => 'ngaji']) }}" method="POST">
                     @csrf
                     <div class="mb-4">
                         <div class="py-2 px-4 text-sm md:text-base inline-block bg-red-600 text-white rounded-md text-center cursor-pointer @error('monitor_mingguan_id_delete_multiple')
@@ -43,7 +43,7 @@
                             </p>
                         @enderror
                     </div>
-                    @include('admin.Monitoring-Sholat._table')
+                    @include('admin.Monitoring-Ngaji._table')
                     @if ($data->count() <= 0)
                         <div class="flex flex-col items-center mx-auto my-14">
                             <img src="{{ asset('icon/no_data2.svg') }}" alt="" class="w-48 h-48 object-contain">
@@ -54,6 +54,6 @@
             </div>
         </div>
     </section>
-    @include('admin.Monitoring-Sholat._modalDeleteMultiple')
+    @include('admin.Monitoring-Ngaji._modalDeleteMultiple')
 @endsection
 

@@ -98,20 +98,20 @@
                             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-shadow1 w-44 dark:bg-gray-700 dark:divide-gray-600">
                             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                                 aria-labelledby="actionMenuBtn{{ $key }}">
-                                <li>
-                                    <a href="{{ route('monitoring.edit', ['id' => $item->monitor_mingguan_id, 'type' => 'sholat']) }}"
-                                        class=" px-4 py-2 hover:bg-gray-100 w-full text-Sidebar flex gap-2 items-center">
-                                        <i class="ri-edit-2-fill text-xl"></i>
-                                        Edit
-                                    </a>
-                                </li>
-                                {{-- <li>
-                                    <button type="button" onclick=""
-                                        class=" px-4 py-2 hover:bg-gray-100 w-full text-left text-red-800 flex gap-2 items-center">
-                                        <i class="ri-delete-bin-5-fill text-xl"></i>
-                                        Hapus
-                                    </button>
-                                </li> --}}
+                                    <li>
+                                        <a href="{{ route('monitoring.edit', ['id' => $item->monitor_mingguan_id, 'type' => 'ngaji']) }}"
+                                            class=" px-4 py-2 hover:bg-gray-100 w-full text-Sidebar flex gap-2 items-center">
+                                            <i class="ri-edit-2-fill text-xl"></i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                    {{-- <li>
+                                        <button type="button" onclick=""
+                                            class=" px-4 py-2 hover:bg-gray-100 w-full text-left text-red-800 flex gap-2 items-center">
+                                            <i class="ri-delete-bin-5-fill text-xl"></i>
+                                            Hapus
+                                        </button>
+                                    </li> --}}
                             </ul>
                         </div>
                     </td>

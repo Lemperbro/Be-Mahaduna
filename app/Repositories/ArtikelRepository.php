@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\Artikel;
 use App\Models\ArtikelRelasi;
 use App\Models\ArtikelKategori;
@@ -39,19 +40,27 @@ class ArtikelRepository implements ArtikelInterface
      * @param bool $sortBest jika true maka akan mensortir data berdasarkan views terbanyak
      * @param bool $useForApi untuk switch , apakah di gunakan untuk api apa tidak , 
      * jika trua maka akan di gunakan untuk apa dan return response, jika false maka tidak digunakan untuk api 
+     * @param int|null $kategori untuk memfilter artikel berdasarkan kategori
      * 
      * @return [JsonResource]
      */
-    public function getAllArtikel(int $paginate = null, $keyword = null, bool $sortBest = false)
-    {
 
+    public function getAllArtikel(int $paginate = null, $keyword = null, bool $sortBest = false, int $kategori = null)
+    {
         $data = $this->artikelModel->with('artikel_relasi.artikel_kategori');
         if ($keyword !== null) {
             $data->where('judul', 'like', '%' . $keyword . '%');
         }
 
+        if ($kategori !== null) {
+            $data->whereHas('artikel_relasi', function ($item) use ($kategori) {
+                $item->where('artikel_kategori_id', $kategori);
+            });
+        }
         if ($sortBest) {
-            $data->orderBy('views', 'desc');
+            //date 1 bulan ke belakang dari sekarang
+            $date1Bulan = Carbon::now()->subWeek()->format('Y-m-d');
+            $data->where('created_at', '>=', $date1Bulan)->orderBy('views', 'desc');
         } else {
             $data->latest();
         }
@@ -73,7 +82,29 @@ class ArtikelRepository implements ArtikelInterface
             return $resource;
         }
     }
-
+    /**
+     * untuk menapilkan detail artikel
+     * @param mixed $data data artikel dari db
+     * 
+     * @return [type]
+     */
+    public function showArtikel($data): mixed
+    {
+        if($data !== null){
+            $user_updated = $data->user_updated ?? null;
+            $updated_at = $data->updated_at ?? null;
+            $this->artikelModel->where('artikel_id', $data->artikel_id)->update([
+                'views' => $data->views + 1,
+                'user_updated' => $user_updated,
+                'updated_at' => $updated_at
+            ]);
+        }
+        if (request()->wantsJson()) {
+            return (ArtikelResource::make($data))->response()->setStatusCode(200);
+        } else {
+            return $data;
+        }
+    }
     /**
      * Untuk menyimpan artikel ke dala database
      * @param mixed $data data request dari form

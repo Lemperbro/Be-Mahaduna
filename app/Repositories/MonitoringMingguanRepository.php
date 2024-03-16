@@ -2,7 +2,6 @@
 namespace App\Repositories;
 
 use Exception;
-use Carbon\Carbon;
 use App\Models\MonitorMingguan;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -67,6 +66,16 @@ class MonitoringMingguanRepository implements MonitoringMingguanInterface
             return $this->handleResponseError->responseError($e);
         }
     }
+    public function cekType(string $type){
+        if(!in_array($type, ['sholat', 'ngaji'])){
+            return [
+                'error' => true,
+                'message' => 'Tidak berhasil menambah data monitoring'
+            ];
+        }
+        $type = $type === 'sholat' ? 'sholat jamaah' : 'ngaji';
+        return $type;
+    }
     /**
      * untuk menambah data monitoring
      * @param mixed $data
@@ -76,24 +85,44 @@ class MonitoringMingguanRepository implements MonitoringMingguanInterface
      */
     public function store($data, $type){
         try{
-            if(!in_array($type, ['sholat', 'ngaji'])){
-                return [
-                    'error' => true,
-                    'message' => 'Tidak berhasil menambah data monitoring'
-                ];
-            }
-            $type = $type === 'sholat' ? 'sholat jamaah' : 'ngaji';
+            $type = $this->cekType($type);
             $create = $this->monitoringMingguanModel->create([
                 'santri_id' => $data->santri,
                 'hadir' => $data->hadir,
                 'tidak_hadir' => $data->tidak_hadir,
                 'terlambat' => $data->terlambat,
-                'kategori' => $type
+                'kategori' => $type,
+                'user_created' => auth()->user()->user_id,
+                'updated_at' => null
             ]);
 
             if($create){
                 return true;
             }
+            return false;
+        }catch(Exception $e){
+            return $this->handleResponseError->responseError($e);
+        }
+    }
+    /**
+     * untuk mengupdate data monitoring mingguan
+     * @param mixed $data
+     * @param mixed $oldData
+     * 
+     * @return [type]
+     */
+    public function update($data, $oldData){
+        try{
+            $update = $oldData->update([
+                'hadir' => $data->hadir,
+                'tidak_hadir' => $data->tidak_hadir,
+                'terlambat' => $data->terlambat,
+                'user_updated' => auth()->user()->user_id,
+            ]);
+            if($update){
+                return true;
+            }
+            return false;
         }catch(Exception $e){
             return $this->handleResponseError->responseError($e);
         }
@@ -142,10 +171,11 @@ class MonitoringMingguanRepository implements MonitoringMingguanInterface
      * 
      * @return [type]
      */
-    public function deleteDataMultiple(array $monitoring_id)
+    public function deleteDataMultiple(array $monitoring_id, $type)
     {
         try {
-            $delete = $this->monitoringMingguanModel->whereIn('monitor_mingguan_id', $monitoring_id)->update([
+            $type = $this->cekType($type);
+            $delete = $this->monitoringMingguanModel->whereIn('monitor_mingguan_id', $monitoring_id)->where('kategori', $type)->update([
                 'deleted_at' => now(),
                 'user_deleted' => auth()->user()->user_id,
                 'deleted' => true,

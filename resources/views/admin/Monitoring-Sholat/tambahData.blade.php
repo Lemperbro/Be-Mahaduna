@@ -3,8 +3,9 @@
 @section('container')
     <section>
         @include('admin.partials._header')
-        <div class="pt-24 min-h-screen">
-            <form action="{{ $type === 'sholat' ? route('monitoring.store', ['type' => 'sholat']) : '' }} " method="POST" class="max-w-[1000px] mx-auto">
+        <div class="pt-24 min-h-screen flex flex-col max-w-[1000px] mx-auto justify-center">
+            <form action="{{ $type === 'sholat' ? route('monitoring.store', ['type' => 'sholat']) : route('monitoring.store', ['type' => 'ngaji']) }} " method="POST"
+                class="w-full mx-auto">
                 @csrf
                 <div>
                     <label for="santri">Pilih Santri</label>
@@ -36,7 +37,8 @@
                         placeholder="masukan jumlah Terlambat Hadir">
                 </div>
                 <div class="flex gap-4 mt-10">
-                    <a href="{{ $type === 'sholat' ? route('monitoring.sholat.index') : '' }}" class="bg-red-600 p-2 rounded-md text-white">Batal</a>
+                    <a href="{{ $type === 'sholat' ? route('monitoring.sholat.index') : route('monitoring.ngaji.index') }}"
+                        class="bg-red-600 p-2 rounded-md text-white">Batal</a>
                     <button type="submit" class="bg-Sidebar text-white p-2 rounded-md">Simpan</button>
                 </div>
             </form>

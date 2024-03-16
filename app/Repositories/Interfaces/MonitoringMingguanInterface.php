@@ -23,6 +23,14 @@ interface MonitoringMingguanInterface
      */
     public function store($data, $type);
         /**
+     * untuk mengupdate data monitoring mingguan
+     * @param mixed $data
+     * @param mixed $oldData
+     * 
+     * @return [type]
+     */
+    public function update($data, $oldData);
+        /**
      * untuk mendapatkan data monitoring berdasarkan santri
      * @param mixed $kategori
      * @param mixed $santriId
@@ -37,5 +45,5 @@ interface MonitoringMingguanInterface
      * 
      * @return [type]
      */
-    public function deleteDataMultiple(array $monitoring_id);
+    public function deleteDataMultiple(array $monitoring_id, string $type);
 }

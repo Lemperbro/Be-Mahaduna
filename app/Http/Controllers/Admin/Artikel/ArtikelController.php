@@ -27,6 +27,7 @@ class ArtikelController extends Controller
 
     public function index()
     {
+        dd(time());
         $headerTitle = 'Kelola Artikel';
         $keyword = request('keyword') ?? null;
         $sortBest = request('sortBest') ?? false;
