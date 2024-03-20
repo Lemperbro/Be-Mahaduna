@@ -39,7 +39,7 @@ class TagihanRepository implements TagihanInterface
         try {
             $data = $this->tagihanModel->where('tagihan_id', $tagihan_id)->first();
             if ($data == null) {
-                $message = 'Data tagihan tidal ditemukan';
+                $message = 'Data tagihan tidak ditemukan';
                 if (request()->wantsJson()) {
                     return $this->handleResponseError->ResponseException($message, 404);
                 } else {
@@ -63,6 +63,7 @@ class TagihanRepository implements TagihanInterface
             }
         }
     }
+
     /**
      * untuk mengambil semua data tagihan beserta relasi nya (santri dan transaksi)
      * @param int|null $paginate untuk mempaginate data

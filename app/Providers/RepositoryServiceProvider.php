@@ -9,6 +9,7 @@ use App\Repositories\SantriRepository;
 use App\Repositories\UserRepositories;
 use App\Repositories\XenditRepository;
 use App\Repositories\ArtikelRepository;
+use App\Repositories\HafalanRepository;
 use App\Repositories\JenjangRepository;
 use App\Repositories\MajalahRepository;
 use App\Repositories\TagihanRepository;
@@ -22,6 +23,7 @@ use App\Repositories\Interfaces\JadwalInterface;
 use App\Repositories\Interfaces\SantriInterface;
 use App\Repositories\Interfaces\XenditInterface;
 use App\Repositories\Interfaces\ArtikelInterface;
+use App\Repositories\Interfaces\HafalanInterface;
 use App\Repositories\Interfaces\JenjangInterface;
 use App\Repositories\Interfaces\MajalahInterface;
 use App\Repositories\Interfaces\TagihanInterface;
@@ -50,6 +52,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(XenditInterface::class, XenditRepository::class);
         $this->app->bind(MonitoringMingguanInterface::class, MonitoringMingguanRepository::class);
         $this->app->bind(JenjangInterface::class, JenjangRepository::class);
+        $this->app->bind(HafalanInterface::class, HafalanRepository::class);
     }
 
     /**

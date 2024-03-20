@@ -55,7 +55,9 @@
                             </p>
                         @enderror
                         <input type="date" name="date" id="date"
-                            class="mt-1 w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2"
+                            class="mt-1 w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 @error('date')
+                                peer
+                            @enderror"
                             placeholder="pilih bulan dan tahun untuk tagihan" value="{{ $data->date }}">
                     </div>
                 </div>

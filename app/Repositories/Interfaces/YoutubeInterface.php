@@ -30,28 +30,39 @@ interface YoutubeInterface
      * 
      * @return [type]
      */
-     public function getAllDataPlaylist($part = 'snippet', $keyword = null, $paginate = 10);
+    public function getAllDataPlaylist($part = 'snippet', $keyword = null, $paginate = 10);
     /**
      * Mengambil semua data playlistId yang tersimpan dalam database
      * @return mixed
      */
     public function getAllPlaylistId($paginate = null);
-    /**
+/**
      * Menampilkan isi playlist
      * @param mixed $playlistId id playlist yang akan di ambil
      * @param int $paginate untuk mempaginate data
-     * @param string $part ini bertipe string , contoh snippet,contentDetails,id,status
+     * @param string $part ini bertipe string , contoh 'snippet,contentDetails,id,status'
+     * @param mixed $pageToken ini untuk ketika ada nextPageToken atau paginate di api youtube
      * 
      * @return mixed
      */
-    public function getPlaylistItems($part = 'snippet', $playlistId, $paginate = 50);
+    public function getPlaylistItems($part = 'snippet', $playlistId, $paginate = 10, $pageToken = null);
     /**
-     * mengambil detail data video berdasarkan VideoId
-     * @param mixed $videoId id video yang ini di tampilkan
+     * untuk menampilkan video dari semua playlist
+     * @param string $evenType default 'completed', nilai yang tersedia 'completed', 'live'
+     * @param int $paginate
+     * 
+     * @return [type]
+     */
+    public function getAllVideo($evenType = 'completed', $paginate = 10,$pageToken = null);
+
+    /**
+     * Ambil detail data video dari id video
+     * @param mixed $videoId id video yang akan di ambil datanya
+     * @param string $part default 'player,snippet' , nilai yang tersedia 'player,snippet,contentDetails,statistics',
      * 
      * @return mixed
      */
-    public function getVideoItem($videoId);
+    public function getVideoItem(string $videoId, string $part = 'player,snippet');
     /**
      * update data playlistId yang tersimpan didalam database
      * @param mixed $newData Data baru yang akan disimpan ke database

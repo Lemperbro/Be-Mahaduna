@@ -14,6 +14,13 @@ interface MajalahInterface
      */
     public function getAll(int $paginate = 20, $keyword = null, bool $sortBest = false);
     /**
+     * untuk menapilkan detail majalah
+     * @param mixed $data data majalah dari db
+     * 
+     * @return [type]
+     */
+    public function showMajalah($data);
+    /**
      * untuk menambah majalah
      * @param mixed $data data majalah yang akan di simpan di dalam database
      * 

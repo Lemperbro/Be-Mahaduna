@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\PlaylistVideo;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Collection;
@@ -14,7 +15,7 @@ use App\Repositories\Interfaces\YoutubeInterface;
 class YoutubeRepository implements YoutubeInterface
 {
 
-    private $apiKey, $channelId, $model, $urlPlaylist, $playlistItems, $videoItem;
+    private $apiKey, $channelId, $model, $urlPlaylist, $playlistItems, $videoItem,$urlSearch;
     private $responseError;
 
     public function __construct()
@@ -24,6 +25,7 @@ class YoutubeRepository implements YoutubeInterface
         $this->urlPlaylist = config('services.youtube.urlPlaylist');
         $this->playlistItems = config('services.youtube.playlist_items');
         $this->videoItem = config('services.youtube.video_item');
+        $this->urlSearch = config('services.youtube.url_search');
         $this->responseError = new ResponseErrorRepository;
         $this->model = new PlaylistVideo;
     }
@@ -36,7 +38,7 @@ class YoutubeRepository implements YoutubeInterface
 
     public function cekStatusCodeApi($data)
     {
-        return isset($data->json()['error']) && isset($data->json()['error']['code']) ? $data->json()['error']['code'] : 200;
+        return isset ($data->json()['error']) && isset ($data->json()['error']['code']) ? $data->json()['error']['code'] : 200;
     }
 
 
@@ -83,7 +85,7 @@ class YoutubeRepository implements YoutubeInterface
         if ($filter === true) {
             $responseData = $this->filterDataYangSudahAda($get->json(), $this->getAllPlaylistId());
         }
-        return(VideoResource::make($responseData))->response()->setStatusCode($statusCode);
+        return (VideoResource::make($responseData))->response()->setStatusCode($statusCode);
     }
 
     /**
@@ -107,7 +109,7 @@ class YoutubeRepository implements YoutubeInterface
         if ($create) {
             $createdPlaylists = $this->model->whereIn('playlistId', $data->playlistId)->get();
             if (request()->wantsJson()) {
-                return(PlaylistResource::collection($createdPlaylists))->response()->setStatusCode(201);
+                return (PlaylistResource::collection($createdPlaylists))->response()->setStatusCode(201);
             } else {
                 return true;
             }
@@ -171,7 +173,7 @@ class YoutubeRepository implements YoutubeInterface
         $data = $this->model->get();
         $response = PlaylistResource::collection($data);
         if (request()->wantsJson()) {
-            return($response)->response()->setStatusCode(200);
+            return ($response)->response()->setStatusCode(200);
         } else {
             return $response;
         }
@@ -184,23 +186,23 @@ class YoutubeRepository implements YoutubeInterface
      * 
      * @return [type]
      */
-    public function sortVideoLatest($data)
+    public function sortVideoLatest($data, $sortLokasi)
     {
-        $response = $data;
-        $videoCollect = collect($response['items']);
-        $sortVideo = $videoCollect->sortByDesc('snippet.publishedAt')->values()->all();
-        $response['items'] = $sortVideo;
+        $response = json_decode(json_encode($data));
+        $videoCollect = collect($response->items);
+        $sortVideo = $videoCollect->sortByDesc($sortLokasi)->values()->all();
+        $response->items = $sortVideo;
         return $response;
     }
 
     public function cariPlaylist($data, $keyword)
     {
-        $response = $data;
-        $videoCollect = collect($response['items']);
+        $response = json_decode(json_encode($data));
+        $videoCollect = collect($response->items);
         $filter = $videoCollect->filter(function ($video) use ($keyword) {
-            return stripos($video['snippet']['title'], $keyword) !== false;
+            return stripos($video->snippet->title, $keyword) !== false;
         })->values()->all();
-        $response['items'] = $filter;
+        $response->items = $filter;
         return $response;
     }
 
@@ -235,18 +237,17 @@ class YoutubeRepository implements YoutubeInterface
             'id' => $playlistImplode,
             'type' => 'video',
             'part' => $part,
-            'pageToken' => request('pageToken') ?? null
         ]);
 
 
         $statusCode = $this->cekStatusCodeApi($get);
-        $responseData = $this->sortVideoLatest($get->json());
+        $responseData = $this->sortVideoLatest($get->json(), 'snippet.publishedAt');
         if ($keyword !== null) {
             $responseData = $this->cariPlaylist($get->json(), $keyword);
         }
         $responseWithPaginate = $this->getManualPagination($paginate, $responseData);
         if (request()->wantsJson()) {
-            return(VideoResource::make($responseWithPaginate))->response()->setStatusCode($statusCode);
+            return (VideoResource::make($responseWithPaginate))->response()->setStatusCode($statusCode);
         } else {
             return $responseWithPaginate;
         }
@@ -257,10 +258,11 @@ class YoutubeRepository implements YoutubeInterface
      * @param mixed $playlistId id playlist yang akan di ambil
      * @param int $paginate untuk mempaginate data
      * @param string $part ini bertipe string , contoh 'snippet,contentDetails,id,status'
+     * @param mixed $pageToken ini untuk ketika ada nextPageToken atau paginate di api youtube
      * 
      * @return mixed
      */
-    public function getPlaylistItems($part = 'snippet', $playlistId, $paginate = 50)
+    public function getPlaylistItems($part = 'snippet', $playlistId, $paginate = 10, $pageToken = null)
     {
         $get = Http::get($this->playlistItems, [
             'key' => $this->apiKey,
@@ -268,26 +270,48 @@ class YoutubeRepository implements YoutubeInterface
             'maxResults' => $paginate,
             'type' => 'video',
             'part' => $part,
+            'pageToken' => $pageToken
         ]);
 
         $statusCode = $this->cekStatusCodeApi($get);
         return response()->json($get->json())->setStatusCode($statusCode);
     }
-
+    /**
+     * untuk menampilkan video dari semua playlist
+     * @param string $evenType default 'completed', nilai yang tersedia 'completed', 'live'
+     * @param int $paginate
+     * 
+     * @return [type]
+     */
+    public function getAllVideo($evenType = 'completed',$paginate = 10, $pageToken = null)
+    {
+        $getData = Http::get($this->urlSearch, [
+            'key' => $this->apiKey,
+            'part' => 'snippet',
+            'type' => 'video',
+            'channelId' => $this->channelId,
+            'order' => 'date',
+            'eventType' => $evenType,
+            'maxResults' => $paginate,
+            'pageToken' => $pageToken
+        ]);
+        $statusCode = $this->cekStatusCodeApi($getData);
+        return response()->json($getData->json())->setStatusCode($statusCode);
+    }
     /**
      * Ambil detail data video dari id video
      * @param mixed $videoId id video yang akan di ambil datanya
-     * @param int $maxResults
+     * @param string $part default 'player' , nilai yang tersedia 'player,snippet,contentDetails,statistics',
      * 
      * @return mixed
      */
-    public function getVideoItem($videoId, $maxResults = 50)
+    public function getVideoItem(string $videoId, string $part = 'player,snippet')
     {
         $get = Http::get($this->videoItem, [
             'key' => $this->apiKey,
             'id' => $videoId,
             'type' => 'video',
-            'part' => 'player,snippet,contentDetails,statistics',
+            'part' => $part
         ]);
 
         $statusCode = $this->cekStatusCodeApi($get);

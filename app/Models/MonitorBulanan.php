@@ -15,4 +15,8 @@ class MonitorBulanan extends Model
     protected $guarded = [
         'monitor_bulanan_id'
     ];
+
+    public function santri(){
+        return $this->belongsTo(Santri::class, 'santri_id', 'santri_id');
+    }
 }

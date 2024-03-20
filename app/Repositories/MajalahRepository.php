@@ -36,7 +36,7 @@ class MajalahRepository implements MajalahInterface
         try {
             $data = $this->majalahModel;
             if ($keyword !== null) {
-                $data->where('judul', 'like', '%' . $keyword . '%');
+                $data = $data->where('judul', 'like', '%' . $keyword . '%');
             }
             if ($sortBest) {
                 $response = $data->orderBy('views', 'desc')->paginate($paginate);
@@ -52,6 +52,29 @@ class MajalahRepository implements MajalahInterface
             if (request()->wantsJson()) {
                 return $this->handleResponseError->responseError($e);
             }
+        }
+    }
+    /**
+     * untuk menapilkan detail majalah
+     * @param mixed $data data majalah dari db
+     * 
+     * @return [type]
+     */
+    public function showMajalah($data): mixed
+    {
+        if ($data !== null) {
+            $user_updated = $data->user_updated ?? null;
+            $updated_at = $data->updated_at ?? null;
+            $this->majalahModel->where('majalah_id', $data->majalah_id)->update([
+                'views' => $data->views + 1,
+                'user_updated' => $user_updated,
+                'updated_at' => $updated_at
+            ]);
+        }
+        if (request()->wantsJson()) {
+            return (MajalahResource::make($data))->response()->setStatusCode(200);
+        } else {
+            return $data;
         }
     }
 

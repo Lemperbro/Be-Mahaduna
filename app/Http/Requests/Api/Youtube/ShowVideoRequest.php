@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class showAllPlaylistItemsRequest extends FormRequest
+class ShowVideoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,25 +24,17 @@ class showAllPlaylistItemsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'playlistId' => 'required|string',
             'part' => 'string',
-            'paginate' => 'integer|min:1',
-            'pageToken' => 'string'
+            'videoId' => 'string'
         ];
     }
-
     public function messages()
     {
         return [
-            'playlistId.required' => 'playlistId harus dimasukan',
-            'playlistId.string' => 'playlistId harus string',
-            'part.string' => 'part harus string',
-            'paginate.integer' => 'paginate harus integer',
-            'paginate.min' => 'paginate minimal 1',
-            'pageToken.string' => 'nextPageToken harus string'
+            'part.string' => 'part harus berupa string!',
+            'videoId.string' => 'videoId harus berupa string!'
         ];
     }
-
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response([

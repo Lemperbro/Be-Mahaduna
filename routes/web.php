@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Artikel\ArtikelController;
 use App\Http\Controllers\Admin\Majalah\MajalahController;
 use App\Http\Controllers\Admin\Youtube\YoutubeController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
+use App\Http\Controllers\Admin\MonitoringBulanan\HafalanController;
 use App\Http\Controllers\Admin\Pembayaran\PembayaranController;
 use App\Http\Controllers\Admin\MonitoringMingguan\MonitoringMingguanController;
 
@@ -138,6 +139,14 @@ Route::middleware(['auth'])->group(function () {
 
     //monitoring ngaji
     Route::get('/monitoting/ngaji', [MonitoringMingguanController::class, 'monitoringNgajiIndex'])->name('monitoring.ngaji.index');
+
+    //monitoring hafalan
+    Route::get('/monitoring/hafalan', [HafalanController::class, 'index'])->name('monitoring.hafalan');
+    Route::get('/monitoring/create/hafalan', [HafalanController::class, 'create'])->name('monitoring.hafalan.create');
+    Route::post('/monitoring/create/hafalan', [HafalanController::class, 'store'])->name('monitoring.hafalan.store');
+    Route::get('/monitoring/update/hafalan/{id}', [HafalanController::class, 'edit'])->name('monitoring.hafalan.edit');
+    Route::post('/monitoring/update/hafalan/{id}', [HafalanController::class, 'update'])->name('monitoring.hafalan.update');
+    Route::post('/monitoring/hafalan/delete', [HafalanController::class, 'delete'])->name('monitoring.hafalan.delete');
 
     //filepond
     Route::post('/filePond/post/{folder}', [FilePondController::class, 'postImage'])->name('filePond.post');

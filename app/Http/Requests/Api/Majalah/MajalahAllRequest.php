@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Api\Youtube;
+namespace App\Http\Requests\Api\Majalah;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class showAllPlaylistItemsRequest extends FormRequest
+class MajalahAllRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,25 +24,20 @@ class showAllPlaylistItemsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'playlistId' => 'required|string',
-            'part' => 'string',
-            'paginate' => 'integer|min:1',
-            'pageToken' => 'string'
+            'paginate' => 'min:1|numeric',
+            'keyword' => 'string',
+            'sortBest' => 'boolean',
         ];
     }
-
-    public function messages()
+    public function messages(): array
     {
         return [
-            'playlistId.required' => 'playlistId harus dimasukan',
-            'playlistId.string' => 'playlistId harus string',
-            'part.string' => 'part harus string',
-            'paginate.integer' => 'paginate harus integer',
-            'paginate.min' => 'paginate minimal 1',
-            'pageToken.string' => 'nextPageToken harus string'
+            'paginate.min' => 'Paginate halaman harus minimal :min.',
+            'paginate.numeric' => 'Paginate halaman harus berupa angka.',
+            'keyword.string' => 'Keyword harus berupa teks.',
+            'sortBest.boolean' => 'Parameter sortBest harus berupa nilai boolean (true = 1 /false = 0).',
         ];
     }
-
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response([

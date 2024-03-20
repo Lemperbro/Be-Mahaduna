@@ -39,6 +39,7 @@ return [
         'urlPlaylist' => env('YOUTUBE_URL_PLAYLIST'),
         'video_item' => env('YOUTUBE_URL_VIDEO_ITEM'),
         'playlist_items' => env('YOUTUBE_URL_PLAYLIST_ITEMS'),
+        'url_search' => env('YOUTUBE_URL_SEARCH')
     ],
     'bulan' => [
         'Januari',

@@ -18,15 +18,15 @@ class ArtikelApiController extends Controller
 
     public function all(AllArtikelRequest $request)
     {
-        $paginate = $request->paginate ?? 15;
+        $paginate = $request->paginate ?? 10;
         $keyword = $request->keyword ?? null;
         $sortBest = $request->sortBest ?? false;
         $kategori = $request->kategori_id ?? null;
         $data = $this->ArtikelInterface->getAllArtikel(paginate: $paginate, keyword: $keyword, sortBest: $sortBest, kategori: $kategori);
         return $data;
     }
-    public function show(Artikel $id){
-        $data = $this->ArtikelInterface->showArtikel($id);
+    public function show(Request $request){
+        $data = $this->ArtikelInterface->showArtikel($request->artikelSlug);
         return $data;
     }
     public function kategoriAll(){

@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -170,6 +171,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+        App\Providers\ViewServiceProvider::class
 
     ])->toArray(),
 

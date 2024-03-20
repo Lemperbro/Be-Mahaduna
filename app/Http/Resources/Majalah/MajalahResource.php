@@ -15,6 +15,7 @@ class MajalahResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'majalah_id' => $this->majalah_id,
             'judul' => $this->judul,
             'bannerImage' => $this->bannerImage,
             'source' => $this->source,
