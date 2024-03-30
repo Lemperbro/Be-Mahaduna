@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Transaksi;
 use App\Models\Tagihan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\Interfaces\TransaksiInterface;
+use App\Repositories\Transaksi\TransaksiInterface;
 
 class TransaksiApiController extends Controller
 {

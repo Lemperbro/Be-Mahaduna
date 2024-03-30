@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api\Youtube;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\Youtube\YoutubeInterface;
+use App\Http\Requests\Api\Youtube\ShowVideoRequest;
+use App\Http\Requests\Api\Youtube\ShowAllVideoRequest;
 use App\Http\Requests\Api\Youtube\GetAllPlaylistRequest;
 use App\Http\Requests\Api\Youtube\showAllPlaylistItemsRequest;
-use App\Http\Requests\Api\Youtube\ShowAllVideoRequest;
-use App\Http\Requests\Api\Youtube\ShowVideoRequest;
-use App\Repositories\Interfaces\YoutubeInterface;
 
 class YoutubeApiController extends Controller
 {

@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Artikel;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Models\Artikel;
+use App\Models\ArtikelKategori;
 use App\Http\Controllers\Controller;
-use App\Repositories\Interfaces\ArtikelInterface;
+use App\Repositories\Artikel\ArtikelInterface;
 use App\Http\Requests\Artikel\ArtikelCreateRequest;
 use App\Http\Requests\Artikel\ArtikelUpdateRequest;
 use App\Http\Requests\Artikel\KategoriCreateRequest;
 use App\Http\Requests\Artikel\KategoriUpdateRequest;
-use App\Models\Artikel;
-use App\Models\ArtikelKategori;
 
 class ArtikelController extends Controller
 {

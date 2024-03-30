@@ -2,7 +2,7 @@
 
 @section('container')
     @use('Carbon\Carbon')
-    @use('App\Repositories\TagihanRepository')
+    @use('App\Repositories\Tagihan\TagihanRepository')
     <section>
         @include('admin.partials._header')
         <div class="pt-24 min-h-screen">

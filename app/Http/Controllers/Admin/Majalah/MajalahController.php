@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin\Majalah;
 use App\Models\Majalah;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\Interfaces\MajalahInterface;
+use App\Repositories\Majalah\MajalahInterface;
 use App\Http\Requests\Majalah\MajalahCreateRequest;
 use App\Http\Requests\Majalah\MajalahUpdateRequest;
 

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\Artikel;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Artikel\AllArtikelRequest;
 use App\Models\Artikel;
-use App\Repositories\Interfaces\ArtikelInterface;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Repositories\Artikel\ArtikelInterface;
+use App\Http\Requests\Api\Artikel\AllArtikelRequest;
 
 class ArtikelApiController extends Controller
 {

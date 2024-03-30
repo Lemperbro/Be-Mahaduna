@@ -18,9 +18,9 @@ class WaliRelasi extends Model
     ];
 
     public function wali(){
-        return $this->hasMany(Wali::class);
+        return $this->belongsTo(Wali::class, 'wali_id', 'wali_id');
     }
     public function santri(){
-        return $this->belongsTo(Santri::class);
+        return $this->belongsTo(Santri::class,'santri_id', 'santri_id');
     }
 }

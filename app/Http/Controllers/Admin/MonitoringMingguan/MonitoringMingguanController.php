@@ -6,10 +6,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\MonitorMingguan;
 use App\Http\Controllers\Controller;
-use App\Repositories\Interfaces\SantriInterface;
-use App\Repositories\Interfaces\JenjangInterface;
-use App\Repositories\Interfaces\MonitoringMingguanInterface;
+use App\Repositories\Santri\SantriInterface;
+use App\Repositories\Jenjang\JenjangInterface;
 use App\Http\Requests\MonitoringMingguan\DeleteDataMultipleRequest;
+use App\Repositories\MonitoringMingguan\MonitoringMingguanInterface;
 use App\Http\Requests\MonitoringMingguan\CreateMonitorMingguanRequest;
 use App\Http\Requests\MonitoringMingguan\UpdateMonitoringMingguanRequest;
 

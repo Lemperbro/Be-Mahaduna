@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin\Pembayaran;
 
 use App\Models\Tagihan;
 use App\Http\Controllers\Controller;
-use App\Repositories\Interfaces\SantriInterface;
-use App\Repositories\Interfaces\JenjangInterface;
-use App\Repositories\Interfaces\TagihanInterface;
+use App\Repositories\Santri\SantriInterface;
+use App\Repositories\Jenjang\JenjangInterface;
+use App\Repositories\Tagihan\TagihanInterface;
+use App\Repositories\Transaksi\TransaksiInterface;
 use App\Http\Requests\Tagihan\TagihanCreateRequest;
 use App\Http\Requests\Tagihan\TagihanUpdateRequest;
-use App\Repositories\Interfaces\TransaksiInterface;
 use App\Http\Requests\Tagihan\TagihanKonfirmRequest;
 use App\Http\Requests\Tagihan\TagihanDeleteMultipleRequest;
 

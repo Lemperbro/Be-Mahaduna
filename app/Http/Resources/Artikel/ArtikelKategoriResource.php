@@ -19,4 +19,5 @@ class ArtikelKategoriResource extends JsonResource
             'kategori' => $this->artikel_kategori->kategori
         ];
     }
+
 }

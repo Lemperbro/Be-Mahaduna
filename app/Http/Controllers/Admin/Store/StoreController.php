@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Admin\Store;
 
 use App\Models\Store;
+use App\Models\StoreImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use App\Repositories\Store\StoreInterface;
 use App\Http\Requests\Store\StoreCreateRequest;
 use App\Http\Requests\Store\StoreUpdateRequest;
-use App\Models\StoreImage;
-use App\Repositories\Interfaces\StoreInterface;
 
 class StoreController extends Controller
 {

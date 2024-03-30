@@ -19,7 +19,7 @@ class Wali extends Model
 
 
     public function waliRelasi(){
-        return $this->hasMany(WaliRelasi::class);
+        return $this->hasMany(WaliRelasi::class, 'wali_id', 'wali_id');
     }
     
 }

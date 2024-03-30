@@ -8,8 +8,8 @@ use App\Models\PlaylistVideo;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Youtube\YoutubeInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
-use App\Repositories\Interfaces\YoutubeInterface;
 use App\Http\Requests\Youtube\CreatePlaylistIdRequest;
 
 class YoutubeController extends Controller

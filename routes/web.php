@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\MonitoringBulanan\HafalanController;
 use App\Http\Controllers\Admin\Pembayaran\PembayaranController;
 use App\Http\Controllers\Admin\MonitoringMingguan\MonitoringMingguanController;
+use App\Http\Controllers\Admin\Santri\SantriController;
+use App\Http\Controllers\Admin\WaliSantri\WaliController;
 
 /*
 |--------------------------------------------------------------------------
@@ -147,6 +149,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/monitoring/update/hafalan/{id}', [HafalanController::class, 'edit'])->name('monitoring.hafalan.edit');
     Route::post('/monitoring/update/hafalan/{id}', [HafalanController::class, 'update'])->name('monitoring.hafalan.update');
     Route::post('/monitoring/hafalan/delete', [HafalanController::class, 'delete'])->name('monitoring.hafalan.delete');
+
+    //wali santri
+    Route::get('/wali', [WaliController::class, 'index'])->name('wali.index');
+    Route::get('/wali/show/santri/{wali_id}', [WaliController::class, 'showSantri'])->name('wali.show.santri');
+    Route::get('/wali/create', [WaliController::class, 'create'])->name('wali.create');
+    Route::post('/wali/create', [WaliController::class, 'store'])->name('wali.store');
+    Route::get('/wali/edit/{id}', [WaliController::class, 'edit'])->name('wali.edit');
+    Route::post('/wali/update/{id}', [WaliController::class, 'update'])->name('wali.update');
+    Route::post('/wali/delete', [WaliController::class, 'delete'])->name('wali.delete');
+    //santri
+    Route::get('/santri', [SantriController::class, 'index'])->name('santri.index');
+    Route::get('/santri/create', [SantriController::class, 'create'])->name('santri.create');
 
     //filepond
     Route::post('/filePond/post/{folder}', [FilePondController::class, 'postImage'])->name('filePond.post');

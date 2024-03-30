@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin\Jadwal;
 use App\Models\Jadwal;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\Interfaces\JadwalInterface;
+use App\Repositories\Jadwal\JadwalInterface;
 use App\Http\Requests\Jadwal\JadwalCreateRequest;
 use App\Http\Requests\Jadwal\JadwalUpdateRequest;
 

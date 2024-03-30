@@ -6,8 +6,8 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\Auth\AuthInterface;
 use App\Http\Requests\Auth\LoginProsesRequest;
-use App\Repositories\Interfaces\AuthInterface;
 
 class AuthController extends Controller
 {

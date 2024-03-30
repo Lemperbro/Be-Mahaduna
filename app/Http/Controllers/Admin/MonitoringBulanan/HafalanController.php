@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin\MonitoringBulanan;
 
+use App\Models\MonitorBulanan;
 use App\Http\Controllers\Controller;
+use App\Repositories\Santri\SantriInterface;
+use App\Repositories\Jenjang\JenjangInterface;
+use App\Repositories\Hafalan\HafalanRepository;
 use App\Http\Requests\Hafalan\HafalanCreateRequest;
-use App\Repositories\HafalanRepository;
-use App\Repositories\Interfaces\SantriInterface;
-use App\Repositories\Interfaces\JenjangInterface;
 use App\Http\Requests\Hafalan\HafalanDeleteRequest;
 use App\Http\Requests\Hafalan\HafalanUpdateRequest;
-use App\Models\MonitorBulanan;
 
 class HafalanController extends Controller
 {

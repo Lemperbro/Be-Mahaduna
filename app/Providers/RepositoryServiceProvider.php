@@ -2,35 +2,37 @@
 
 namespace App\Providers;
 
-use App\Repositories\AuthRepository;
-use App\Repositories\StoreRepository;
-use App\Repositories\JadwalRepository;
-use App\Repositories\SantriRepository;
-use App\Repositories\UserRepositories;
-use App\Repositories\XenditRepository;
-use App\Repositories\ArtikelRepository;
-use App\Repositories\HafalanRepository;
-use App\Repositories\JenjangRepository;
-use App\Repositories\MajalahRepository;
-use App\Repositories\TagihanRepository;
-use App\Repositories\YoutubeRepository;
 use Illuminate\Support\ServiceProvider;
-use App\Repositories\TransaksiRepository;
-use App\Repositories\Interfaces\AuthInterface;
-use App\Repositories\Interfaces\UserInterface;
-use App\Repositories\Interfaces\StoreInterface;
-use App\Repositories\Interfaces\JadwalInterface;
-use App\Repositories\Interfaces\SantriInterface;
-use App\Repositories\Interfaces\XenditInterface;
-use App\Repositories\Interfaces\ArtikelInterface;
-use App\Repositories\Interfaces\HafalanInterface;
-use App\Repositories\Interfaces\JenjangInterface;
-use App\Repositories\Interfaces\MajalahInterface;
-use App\Repositories\Interfaces\TagihanInterface;
-use App\Repositories\Interfaces\YoutubeInterface;
-use App\Repositories\MonitoringMingguanRepository;
-use App\Repositories\Interfaces\TransaksiInterface;
-use App\Repositories\Interfaces\MonitoringMingguanInterface;
+use App\Repositories\Auth\AuthInterface;
+use App\Repositories\User\UserInterface;
+use App\Repositories\Wali\WaliInterface;
+use App\Repositories\Auth\AuthRepository;
+use App\Repositories\User\UserRepository;
+use App\Repositories\Wali\WaliRepository;
+use App\Repositories\Store\StoreInterface;
+use App\Repositories\Store\StoreRepository;
+use App\Repositories\Jadwal\JadwalInterface;
+use App\Repositories\Santri\SantriInterface;
+use App\Repositories\Xendit\XenditInterface;
+use App\Repositories\Jadwal\JadwalRepository;
+use App\Repositories\Santri\SantriRepository;
+use App\Repositories\Xendit\XenditRepository;
+use App\Repositories\Artikel\ArtikelInterface;
+use App\Repositories\Hafalan\HafalanInterface;
+use App\Repositories\Jenjang\JenjangInterface;
+use App\Repositories\Majalah\MajalahInterface;
+use App\Repositories\Tagihan\TagihanInterface;
+use App\Repositories\Youtube\YoutubeInterface;
+use App\Repositories\Artikel\ArtikelRepository;
+use App\Repositories\Hafalan\HafalanRepository;
+use App\Repositories\Jenjang\JenjangRepository;
+use App\Repositories\Majalah\MajalahRepository;
+use App\Repositories\Tagihan\TagihanRepository;
+use App\Repositories\Youtube\YoutubeRepository;
+use App\Repositories\Transaksi\TransaksiInterface;
+use App\Repositories\Transaksi\TransaksiRepository;
+use App\Repositories\MonitoringMingguan\MonitoringMingguanInterface;
+use App\Repositories\MonitoringMingguan\MonitoringMingguanRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -39,7 +41,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(UserInterface::class, UserRepositories::class);
+        $this->app->bind(UserInterface::class, UserRepository::class);
         $this->app->bind(YoutubeInterface::class, YoutubeRepository::class);
         $this->app->bind(AuthInterface::class, AuthRepository::class);
         $this->app->bind(ArtikelInterface::class, ArtikelRepository::class);
@@ -53,6 +55,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(MonitoringMingguanInterface::class, MonitoringMingguanRepository::class);
         $this->app->bind(JenjangInterface::class, JenjangRepository::class);
         $this->app->bind(HafalanInterface::class, HafalanRepository::class);
+        $this->app->bind(WaliInterface::class, WaliRepository::class);
     }
 
     /**

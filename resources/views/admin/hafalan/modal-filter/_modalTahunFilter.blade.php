@@ -10,8 +10,8 @@
                 <input type="text" name="keyword" value="{{ request('keyword') }}" class="hidden">
             @endif
             @if (request('bulan') !== null)
-            <input type="text" name="bulan" value="{{ request('bulan') }}" class="hidden">
-        @endif
+                <input type="text" name="bulan" value="{{ request('bulan') }}" class="hidden">
+            @endif
             <div>
                 <label for="tahunFilterSelect">Pilih Tahun</label>
                 <div class="mt-1">

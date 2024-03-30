@@ -127,15 +127,15 @@
                 </a>
             </li>
             <li>
-                <a href="/admin"
-                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white">
+                <a href="{{ route('wali.index') }}"
+                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('wali.*') ? 'bg-SidebarActive text-white' : '' }}">
                     <i class="ri-parent-fill text-[20px] transition duration-75"></i>
                     <span class="ml-3 font-semibold">Wali Santri</span>
                 </a>
             </li>
             <li>
-                <a href="/admin"
-                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white">
+                <a href="{{ route('santri.index') }}"
+                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('santri.*') ? 'bg-SidebarActive text-white' : '' }}">
                     <i class="ri-group-fill text-[20px] transition duration-75"></i>
                     <span class="ml-3 font-semibold">Santri</span>
                 </a>

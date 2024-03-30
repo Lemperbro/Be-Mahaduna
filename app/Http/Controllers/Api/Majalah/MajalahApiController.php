@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Majalah;
 use App\Models\Majalah;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\Interfaces\MajalahInterface;
+use App\Repositories\Majalah\MajalahInterface;
 use App\Http\Requests\Api\Majalah\MajalahAllRequest;
 
 class MajalahApiController extends Controller
