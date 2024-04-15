@@ -14,10 +14,10 @@ return new class extends Migration {
             $table->id('santri_id');
             $table->foreignId('jenjang_id')->constrained('jenjang')->references('jenjang_id');
             $table->string('nama');
-            $table->bigInteger('nisn');
-            $table->date('tgl_masuk');
+            $table->date('tgl_lahir');
+            $table->date('tgl_keluar')->nullable();
             $table->enum('jenis_kelamin', ['laki-laki', 'perempuan']);
-            $table->enum('status', ['aktif', 'lulus']);
+            $table->enum('status', ['aktif', 'lulus', 'keluar']);
             $table->integer('user_created')->nullable();
             $table->timestamps();
             $table->integer('user_updated')->nullable();

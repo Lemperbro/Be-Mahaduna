@@ -16,7 +16,7 @@ use App\Http\Requests\Tagihan\TagihanDeleteMultipleRequest;
 class PembayaranController extends Controller
 {
     //
-    private $TagihanInterface, $SantriInterface, $TransaksiInterface,$JenjangInterface;
+    private $TagihanInterface, $SantriInterface, $TransaksiInterface, $JenjangInterface;
 
     public function __construct(TagihanInterface $TagihanInterface, SantriInterface $SantriInterface, TransaksiInterface $TransaksiInterface, JenjangInterface $JenjangInterface)
     {
@@ -27,19 +27,31 @@ class PembayaranController extends Controller
     }
     public function index()
     {
-       
         $headerTitle = 'Kelola Pembayaran';
+        $jenjang = $this->JenjangInterface->getAll();
         $bulan = request('bulan') ?? null;
         $tahun = request('tahun') ?? null;
         $status = request('status') ?? null;
         $keyword = request('search') ?? null;
-        $data = $this->TagihanInterface->getAllTagihan(paginate: 50, bulan: $bulan, tahun: $tahun, status: $status, keyword: $keyword);
+        $kelas = request('jenjang') ?? null;
+        $data = $this->TagihanInterface->getAllTagihan(paginate: 50, bulan: $bulan, kelas: $kelas, tahun: $tahun, status: $status, keyword: $keyword);
         $totalShowData = $data->total();
         $totalData = $this->TagihanInterface->countAll();
         $totalTagihanBelumDibayar = $this->TagihanInterface->countTagihanBelumBayar();
         $totalTagihanSudahDibayar = $this->TagihanInterface->countTagihanSudahDibayar();
         $pendapatanTahunIni = $this->TagihanInterface->moneyInYear();
-        return view('admin.kelola-pembayaran.index', compact('headerTitle', 'data', 'totalShowData','totalData','totalTagihanBelumDibayar','totalTagihanSudahDibayar', 'pendapatanTahunIni'));
+        return view('admin.kelola-pembayaran.index', compact('headerTitle', 'data', 'totalShowData', 'totalData', 'totalTagihanBelumDibayar', 'totalTagihanSudahDibayar', 'pendapatanTahunIni', 'jenjang'));
+    }
+
+    public function indexNunggak()
+    {
+        $headerTitle = 'Daftar Tunggakan';
+        $keyword = request('keyword') ?? null;
+        $kelas = request('jenjang') ?? null;
+        $data = $this->TagihanInterface->getAllTunggakan(paginate: 20, keyword: $keyword, kelas: $kelas);
+        $showTotal = $data->total();
+        $jenjang = $this->JenjangInterface->getAll();
+        return view('admin.kelola-pembayaran.daftarNunggak.index', compact('headerTitle', 'data', 'showTotal', 'jenjang'));
     }
 
     public function createTagihan()
@@ -50,7 +62,7 @@ class PembayaranController extends Controller
         $jenjang = request('jenjang') ?? null;
         $dataJenjang = $this->JenjangInterface->getAll();
         $data = $this->SantriInterface->getAll(tahunMasuk: $tahunMasuk, jenisKelamin: $jenisKelamin, jenjang: $jenjang);
-        return view('admin.kelola-pembayaran.buat-tagihan.index', compact('headerTitle', 'data','dataJenjang'));
+        return view('admin.kelola-pembayaran.buat-tagihan.index', compact('headerTitle', 'data', 'dataJenjang'));
     }
 
     public function storeTagihan(TagihanCreateRequest $request)

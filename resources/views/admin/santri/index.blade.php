@@ -15,12 +15,13 @@
                     <i class="ri-download-2-fill text-white text-[20px]"></i>
                     <p class="text-white mt-[2px] whitespace-nowrap">Download Data</p>
                 </button>
+
             </div>
 
             <div class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4">
                 <div class="flex flex-wrap justify-between gap-4">
                     <div class=" items-center">
-                        <h1 class="font-semibold text-lg md:text-xl xl:text-2xl">Data Wali Santri</h1>
+                        <h1 class="font-semibold text-lg md:text-xl xl:text-2xl">Data Santri</h1>
                         <span class="border-[1px] border-main3 rounded-md py-[2px] px-1 text-sm text-gray-600 bg-main">Total
                             Show Data {{ $dataTotal }}</span>
                     </div>
@@ -28,16 +29,33 @@
                         @include('admin.santri._search')
                     </div>
                 </div>
-                <form class="mt-8" action="" method="POST">
+                <form class="mt-8" action="{{ route('santri.delete') }}" method="POST">
                     @csrf
                     <div class="mb-4">
-                        <div class="py-2 px-4 text-sm md:text-base inline-block bg-red-600 text-white rounded-md text-center cursor-pointer @error('monitor_mingguan_id_delete_multiple')
-                                peer
+                        <p class="italic text-gray-500 mb-2 text-sm">Note: Pilih Santri Terlebih Dahulu Sebelum Menggunakan Aksi</p>
+                        <div class="flex flex-wrap gap-4">
+                            <button type="button"
+                                class="py-2 px-4 text-sm md:text-base w-full sm:w-auto inline-block bg-red-600 text-white rounded-md text-center cursor-pointer @error('santri_id')
+                            peer
                             @enderror"
-                            onclick="deleteMonitoringMultiple.showModal()" id="btnAlertDeleteMultiple">Hapus
-                            Data Yang Dipilih</div>
-                        <button type="submit" id="btnDeleteMonitorMultiple" class="hidden"></button>
-                        @error('monitor_mingguan_id_delete_multiple')
+                                onclick="deleteMultiple.showModal()" id="btnAlertDeleteMultiple">
+                                Hapus Data Yang Dipilih
+                            </button>
+                            {{-- belum fungsi start --}}
+                            <a href="{{ route('santri.create') }}"
+                                class="flex gap-2 items-center bg-Sidebar py-1 px-4 rounded-md w-full sm:w-auto justify-center">
+                                <i class="ri-graduation-cap-fill text-white text-[20px]"></i>
+                                <p class="mt-[2px] text-white whitespace-nowrap text-sm md:text-base">Jadikan Lulus</p>
+                            </a>
+                            <a href="{{ route('santri.create') }}"
+                                class="flex gap-2 items-center bg-Sidebar py-1 px-4 rounded-md w-full sm:w-auto justify-center">
+                                <i class="ri-edit-2-fill text-white text-[20px]"></i>
+                                <p class="mt-[2px] text-white whitespace-nowrap text-sm md:text-base">Ubah Kelas</p>
+                            </a>
+                            {{-- belum fungsi end --}}
+                        </div>
+                        <button type="submit" id="btnDeleteMultiple" class="hidden"></button>
+                        @error('santri_id')
                             <p class="peer-invalid:visible text-red-700 font-light mt-1">
                                 {{ $message }}
                             </p>
@@ -55,4 +73,5 @@
 
         </div>
     </section>
+    @include('admin.santri._modalDelete')
 @endsection

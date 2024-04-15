@@ -32,7 +32,7 @@
             class="flex gap-2 items-center justify-between px-4 border-l-2 relative" type="button">
             <i class="ri-filter-3-fill text-[25px]"></i>
             <span class="hidden md:block">Filters </span>
-            @if (request('tahun') || request('bulan') || request('status'))
+            @if (request('tahun') || request('bulan') || request('status') || request('jenjang'))
                 <i class="ri-checkbox-circle-fill text-lime-500 text-[15px] absolute left-[34px] top-5"></i>
             @endif
         </button>
@@ -41,6 +41,15 @@
                 <li>
                     <a href="{{ route('kelola-pembayaran.index') }}"
                         class="inline-flex w-full px-4 py-2 hover:bg-gray-100">Clear</a>
+                </li>
+                <li class="flex justify-between items-center px-4 hover:bg-gray-100">
+                    <button type="button" onclick="jenjangFilter.showModal()"
+                        class="inline-flex w-full py-2 {{ request('jenjang') !== null ? 'font-semibold' : '' }}">
+                        Kelas
+                    </button>
+                    @if (request('jenjang') !== null)
+                        <i class="ri-checkbox-circle-fill text-lime-500 text-[15px]"></i>
+                    @endif
                 </li>
                 <li class="flex justify-between items-center px-4 hover:bg-gray-100">
                     <button type="button" onclick="bulanFilter.showModal()"
@@ -105,4 +114,5 @@
     </div>
 </form>
 @include('admin.kelola-pembayaran.modal-Filter._modalTahunFilter')
+@include('admin.kelola-pembayaran.modal-Filter._modalJenjangFilter')
 @include('admin.kelola-pembayaran.modal-Filter._modalBulanFilter')

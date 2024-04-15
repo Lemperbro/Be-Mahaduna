@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('monitor_mingguan', function (Blueprint $table) {
             $table->id('monitor_mingguan_id');
             $table->foreignId('santri_id')->constrained('santri')->references('santri_id');
-            $table->integer('hadir');
             $table->integer('tidak_hadir');
             $table->integer('terlambat');
             $table->enum('kategori', ['sholat jamaah', 'ngaji']);

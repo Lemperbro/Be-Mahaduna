@@ -2,7 +2,7 @@
 <dialog id="tahunFilter" class="modal modal-bottom sm:modal-middle">
     <div class="modal-box bg-white">
         <form action="{{ route('monitoring.sholat.index') }}" method="GET">
-            <h3 class="font-bold text-lg">Filter Tahun</h3>
+            <h3 class="font-bold text-lg">Filter Tahun Diupload</h3>
             @if (request('jenjang') !== null)
                 <input type="text" name="jenjang" value="{{ request('jenjang') }}" class="hidden">
             @endif
@@ -10,7 +10,7 @@
                 <input type="text" name="search" value="{{ request('search') }}" class="hidden">
             @endif
             <div>
-                <label for="tahunFilterSelect">Pilih Tahun</label>
+                <label for="tahunFilterSelect">Pilih Tahun </label>
                 <div class="mt-1">
                     <select name="tahun" id="tahunFilterSelect" class="w-full">
                         @for ($i = 2005; $i <= Carbon::now()->format('Y') + 100; $i++)

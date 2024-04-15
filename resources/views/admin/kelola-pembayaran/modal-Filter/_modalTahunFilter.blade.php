@@ -12,6 +12,9 @@
             @if (request('search') !== null)
                 <input type="text" name="search" value="{{ request('search') }}" class="hidden">
             @endif
+            @if (request('jenjang') !== null)
+                <input type="text" name="jenjang" value="{{ request('jenjang') }}" class="hidden">
+            @endif
             <div>
                 <label for="tahunFilterSelect">Pilih Tahun</label>
                 <div class="mt-1">

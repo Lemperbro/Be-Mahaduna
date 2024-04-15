@@ -25,7 +25,7 @@ class WaliCreateRequest extends FormRequest
             'nama' => 'required|string',
             'email' => 'required|email|unique:wali,email',
             'alamat' => 'required',
-            'telp' => 'required|numeric'
+            'telp' => 'required|numeric|unique:wali,telp'
         ];
     }
     public function messages()
@@ -37,7 +37,8 @@ class WaliCreateRequest extends FormRequest
             'email.unique' => 'Email sudah terdaftar.',
             'alamat.required' => 'Kolom alamat wajib diisi.',
             'telp.required' => 'Kolom telepon wajib diisi.',
-            'telp.numeric' => 'Kolom telepon harus berupa angka.'
+            'telp.numeric' => 'Kolom telepon harus berupa angka.',
+            'telp.unique' => 'Nomor Telphone Sudah Terdaftar'
         ];
     }
 }

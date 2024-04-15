@@ -24,6 +24,9 @@
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-40">
                     Telphone
                 </th>
+                <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-40">
+                    Desa
+                </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-64 lg:w-96">
                     Alamat
                 </th>
@@ -62,6 +65,11 @@
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
                         <h1>
                             {{ $item->telp }}
+                        </h1>
+                    </td>
+                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
+                        <h1>
+                            {{ $item->desa }}
                         </h1>
                     </td>
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">

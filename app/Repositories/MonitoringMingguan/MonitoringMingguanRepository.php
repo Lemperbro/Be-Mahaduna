@@ -47,9 +47,7 @@ class MonitoringMingguanRepository implements MonitoringMingguanInterface
                 });
             }
             if ($tahun !== null) {
-                $data->whereHas('santri', function ($item) use ($tahun) {
-                    $item->whereYear('tgl_masuk', $tahun);
-                });
+                $data->whereYear('created_at', $tahun);
             }
             if ($jenjang_id !== null) {
                 $data->whereHas('santri', function ($item) use ($jenjang_id) {
@@ -66,8 +64,9 @@ class MonitoringMingguanRepository implements MonitoringMingguanInterface
             return $this->handleResponseError->responseError($e);
         }
     }
-    public function cekType(string $type){
-        if(!in_array($type, ['sholat', 'ngaji'])){
+    public function cekType(string $type)
+    {
+        if (!in_array($type, ['sholat', 'ngaji'])) {
             return [
                 'error' => true,
                 'message' => 'Tidak berhasil menambah data monitoring'
@@ -83,24 +82,23 @@ class MonitoringMingguanRepository implements MonitoringMingguanInterface
      * 
      * @return [type]
      */
-    public function store($data, $type){
-        try{
+    public function store($data, $type)
+    {
+        try {
             $type = $this->cekType($type);
             $create = $this->monitoringMingguanModel->create([
                 'santri_id' => $data->santri,
-                'hadir' => $data->hadir,
                 'tidak_hadir' => $data->tidak_hadir,
                 'terlambat' => $data->terlambat,
                 'kategori' => $type,
                 'user_created' => auth()->user()->user_id,
                 'updated_at' => null
             ]);
-
-            if($create){
+            if ($create) {
                 return true;
             }
             return false;
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return $this->handleResponseError->responseError($e);
         }
     }
@@ -111,19 +109,20 @@ class MonitoringMingguanRepository implements MonitoringMingguanInterface
      * 
      * @return [type]
      */
-    public function update($data, $oldData){
-        try{
+    public function update($data, $oldData)
+    {
+        try {
             $update = $oldData->update([
                 'hadir' => $data->hadir,
                 'tidak_hadir' => $data->tidak_hadir,
                 'terlambat' => $data->terlambat,
                 'user_updated' => auth()->user()->user_id,
             ]);
-            if($update){
+            if ($update) {
                 return true;
             }
             return false;
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return $this->handleResponseError->responseError($e);
         }
     }
@@ -148,7 +147,7 @@ class MonitoringMingguanRepository implements MonitoringMingguanInterface
         });
         $result = $this->getManualPagination($paginate, $result);
 
-        return(MonitorMingguanResource::collection($result))->response()->setStatusCode(200);
+        return (MonitorMingguanResource::collection($result))->response()->setStatusCode(200);
     }
     public function getManualPagination($perPage, $data)
     {

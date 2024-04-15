@@ -13,19 +13,13 @@
                     Nama Santri
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-32">
-                    Jenjang
-                </th>
-                <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-64 lg:w-96">
-                    Tahun Masuk
-                </th>
-                <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-36">
-                    Hadir
+                    Kelas
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-36">
                     Tidak Hadir
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-36">
-                    Terlambat
+                    Total Jam Ngaji
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-40">
                     Kategori Monitoring
@@ -61,22 +55,12 @@
                     </td>
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
                         <h1>
-                            {{ Carbon::parse($item->santri->tgl_masuk)->locale('id')->isoFormat(' MMMM YYYY') }}
-                        </h1>
-                    </td>
-                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
-                        <h1>
-                            {{ $item->hadir }}
-                        </h1>
-                    </td>
-                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
-                        <h1>
                             {{ $item->tidak_hadir }}
                         </h1>
                     </td>
-                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
+                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize text">
                         <h1>
-                            {{ $item->terlambat }}
+                            {{ $item->terlambat }} jam
                         </h1>
                     </td>
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
@@ -105,13 +89,7 @@
                                             Edit
                                         </a>
                                     </li>
-                                    {{-- <li>
-                                        <button type="button" onclick=""
-                                            class=" px-4 py-2 hover:bg-gray-100 w-full text-left text-red-800 flex gap-2 items-center">
-                                            <i class="ri-delete-bin-5-fill text-xl"></i>
-                                            Hapus
-                                        </button>
-                                    </li> --}}
+                                  
                             </ul>
                         </div>
                     </td>

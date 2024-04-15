@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\WaliRelasi;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Wali extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasApiTokens, HasFactory, SoftDeletes;
     protected $table = 'wali';
     protected $primaryKey = 'wali_id';
 
@@ -18,8 +20,9 @@ class Wali extends Model
     ];
 
 
-    public function waliRelasi(){
+    public function waliRelasi()
+    {
         return $this->hasMany(WaliRelasi::class, 'wali_id', 'wali_id');
     }
-    
+
 }

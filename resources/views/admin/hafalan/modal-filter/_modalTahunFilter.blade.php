@@ -2,7 +2,7 @@
 <dialog id="tahunFilter" class="modal modal-bottom sm:modal-middle">
     <div class="modal-box bg-white">
         <form action="{{ route('monitoring.hafalan') }}" method="GET">
-            <h3 class="font-bold text-lg">Filter Tahun</h3>
+            <h3 class="font-bold text-lg">Filter Tahun Diupload</h3>
             @if (request('jenjang') !== null)
                 <input type="text" name="jenjang" value="{{ request('jenjang') }}" class="hidden">
             @endif

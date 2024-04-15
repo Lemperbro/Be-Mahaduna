@@ -15,4 +15,18 @@ interface SantriInterface
      * @return [type]
      */
     public function getAll($paginate = null, string $keyword = null, $tahunMasuk = null, int $jenjang = null, string $status = null, string $jenisKelamin = null);
+    /**
+     * untuk menambah santri
+     * @param mixed $data
+     * 
+     * @return [type]
+     */
+    public function create($data);
+    /**
+     * untuk menghapus daya santri , bisa multiple
+     * @param array $santri_id
+     * 
+     * @return [type]
+     */
+    public function delete(array $santri_id);
 }

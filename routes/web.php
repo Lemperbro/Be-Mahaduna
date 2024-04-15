@@ -120,6 +120,7 @@ Route::middleware(['auth'])->group(function () {
 
     //kelola pembayaran
     Route::get('/kelola-pembayaran', [PembayaranController::class, 'index'])->name('kelola-pembayaran.index');
+    Route::get('/kelola-pembayaran/tunggakan', [PembayaranController::class, 'indexNunggak'])->name('kelola-pembayaran.tunggakan');
     Route::get('/kelola-pembayaran/buat-tagihan', [PembayaranController::class, 'createTagihan'])->name('kelola-pembayaran.create.tagihan');
     Route::post('/kelola-pembayaran/buat-tagihan', [PembayaranController::class, 'storeTagihan'])->name('kelola-pembayaran.store.tagihan');
     Route::post('/kelola-pembayaran/konfirmasi/{id}', [PembayaranController::class, 'konfirmasiTagihan'])->name('kelola-pembayaran.konfirmasi');
@@ -161,6 +162,8 @@ Route::middleware(['auth'])->group(function () {
     //santri
     Route::get('/santri', [SantriController::class, 'index'])->name('santri.index');
     Route::get('/santri/create', [SantriController::class, 'create'])->name('santri.create');
+    Route::post('/santri/create', [SantriController::class, 'store'])->name('santri.store');
+    Route::post('/santri/delete', [SantriController::class, 'delete'])->name('santri.delete');
 
     //filepond
     Route::post('/filePond/post/{folder}', [FilePondController::class, 'postImage'])->name('filePond.post');

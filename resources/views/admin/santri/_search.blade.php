@@ -44,7 +44,7 @@
                     <button id="jenjangBtn" data-dropdown-toggle="jenjang" data-dropdown-placement="right-start"
                         type="button"
                         class="flex items-center justify-between w-full px-4 py-2 hover:bg-gray-100 {{ request('jenjang') !== null ? 'font-semibold' : '' }}">
-                        Jenjang
+                        Kelas
                         @if (request('jenjang') !== null)
                             <i class="ri-checkbox-circle-fill text-lime-500 text-[15px]"></i>
                         @endif
@@ -53,7 +53,7 @@
                         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-shadow1 w-44 dark:bg-gray-700">
                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="jenjangBtn">
                             <li>
-                                <h1 class="block px-4 py-2 text-center font-semibold">Pilih Jenjang</h1>
+                                <h1 class="block px-4 py-2 text-center font-semibold">Pilih Kelas</h1>
                             </li>
                             @foreach ($jenjang as $item)
                                 <li class="flex justify-between items-center hover:bg-gray-100 px-4">
@@ -125,6 +125,13 @@
                                 <a href="{{ route('santri.index', array_merge(request()->all(), ['status' => 'lulus'])) }}"
                                     class="block py-2  ">Lulus</a>
                                 @if (request('status') !== null && request('status') == 'lulus')
+                                    <i class="ri-checkbox-circle-fill text-lime-500 text-[15px]"></i>
+                                @endif
+                            </li>
+                            <li class="flex justify-between items-center hover:bg-gray-100 px-4">
+                                <a href="{{ route('santri.index', array_merge(request()->all(), ['status' => 'keluar'])) }}"
+                                    class="block py-2  ">keluar</a>
+                                @if (request('status') !== null && request('status') == 'keluar')
                                     <i class="ri-checkbox-circle-fill text-lime-500 text-[15px]"></i>
                                 @endif
                             </li>

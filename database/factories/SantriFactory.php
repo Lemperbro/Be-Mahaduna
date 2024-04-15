@@ -22,11 +22,11 @@ class SantriFactory extends Factory
         $this::$counter += 1;
         return [
             'nama' => fake()->unique()->name,
-            'nisn' => fake()->unique()->numberBetween(100000, 999999),
             'jenjang_id' => fake()->randomElement([1,2]),
             'status' => $this::$counter % 2 == 0 ? 'lulus' : 'aktif',
             'jenis_kelamin' => fake()->randomElement(['laki-laki', 'perempuan']),
-            'tgl_masuk' => fake()->date('Y-m-d'),
+            'tgl_lahir' => fake()->date('Y-m-d'),
+            'tgl_keluar' => $this::$counter % 2 == 0 ? now() : null
         ];
     }
 }

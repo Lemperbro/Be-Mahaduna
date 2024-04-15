@@ -3,7 +3,8 @@
     <section>
         @include('admin.partials._header')
         <div class="min-h-screen pt-24">
-            <form action="{{ route('wali.update', ['id' => $data->wali_id]) }}" method="POST" class="max-w-[800px] mx-auto mt-10">
+            <form action="{{ route('wali.update', ['id' => $data->wali_id]) }}" method="POST"
+                class="max-w-[800px] mx-auto mt-10">
                 @csrf
                 <div class="mt-4">
                     <label for="nama">Nama</label>
@@ -26,6 +27,18 @@
                     @enderror"
                         placeholder="Masukan Email" value="{{ $data->email }}">
                     @error('email')
+                        <p class="peer-invalid:visible text-red-700 font-light">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
+                <div class="mt-4">
+                    <label for="desa">Desa</label>
+                    <input type="text" name="desa" id="desa"
+                        class="mt-1 w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 @error('desa')
+                    peer
+                @enderror" value="{{ $data->desa }}">
+                    @error('desa')
                         <p class="peer-invalid:visible text-red-700 font-light">
                             {{ $message }}
                         </p>

@@ -42,7 +42,7 @@ class WaliController extends Controller
     public function store(WaliCreateRequest $request)
     {
         $create = $this->WaliInterface->create($request);
-        if (isset ($create['error']) && $create['error'] == true) {
+        if (isset($create['error']) && $create['error'] == true) {
             return redirect()->back()->with('toast_error', $create['message']);
         } else if ($create) {
             return redirect(route('wali.index'))->with('toast_success', 'Berhasil menambah data');
@@ -59,7 +59,7 @@ class WaliController extends Controller
     public function update(WaliUpdateRequest $request, Wali $id)
     {
         $update = $this->WaliInterface->update($request, $id);
-        if (isset ($update['error']) && $update['error'] == true) {
+        if (isset($update['error']) && $update['error'] == true) {
             return redirect()->back()->with('toast_error', $update['message']);
         } else if ($update) {
             return redirect(route('wali.index'))->with('toast_success', 'Berhasil memperbarui data');
@@ -70,7 +70,7 @@ class WaliController extends Controller
     public function delete(WaliDeleteRequest $request)
     {
         $delete = $this->WaliInterface->delete($request->wali_id);
-        if (isset ($delete['error']) && $delete['error'] == true) {
+        if (isset($delete['error']) && $delete['error'] == true) {
             return redirect()->back()->with('toast_error', $delete['message']);
         } else if ($delete) {
             return redirect()->back()->with('toast_success', 'Berhasil menghapus data');

@@ -4,8 +4,7 @@
     <section>
         @include('admin.partials._header')
         <div class="pt-24 min-h-screen flex flex-col max-w-[1000px] mx-auto justify-center">
-            <form action="{{ route('monitoring.hafalan.store
-                        ') }}" method="POST" class="w-full mx-auto">
+            <form action="{{ route('monitoring.hafalan.store') }}" method="POST" class="w-full mx-auto">
                 @csrf
                 <div>
                     <label for="santri">Pilih Santri</label>

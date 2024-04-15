@@ -39,9 +39,7 @@ class HafalanRepository implements HafalanInterface
             }
 
             if ($tahun !== null) {
-                $data->whereHas('santri', function ($item) use ($tahun) {
-                    $item->whereYear('tgl_masuk', $tahun);
-                });
+                $data->whereYear('created_at', $tahun);
             }
 
             if ($bulan !== null) {

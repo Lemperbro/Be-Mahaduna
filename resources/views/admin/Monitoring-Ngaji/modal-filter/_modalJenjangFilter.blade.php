@@ -2,7 +2,7 @@
 <dialog id="jenjangFilter" class="modal modal-bottom sm:modal-middle">
     <div class="modal-box bg-white">
         <form action="{{ route('monitoring.ngaji.index') }}" method="GET">
-            <h3 class="font-bold text-lg">Filter Tahun</h3>
+            <h3 class="font-bold text-lg">Filter Kelas</h3>
             @if (request('tahun') !== null)
                 <input type="text" name="tahun" value="{{ request('tahun') }}" class="hidden">
             @endif
@@ -10,7 +10,7 @@
                 <input type="text" name="search" value="{{ request('search') }}" class="hidden">
             @endif
             <div>
-                <label for="jenjangFilterSelect">Pilih Jenjang</label>
+                <label for="jenjangFilterSelect">Pilih Kelas</label>
                 <div class="mt-1">
                     <select name="jenjang" id="jenjangFilterSelect" class="w-full">
                         @foreach ($dataJenjang as $key => $item)
@@ -58,7 +58,7 @@
             placeholder: "Pilih Jenjang",
             language: {
                 noResults: function() {
-                    return "Jenjang Tidak Di Temukan.";
+                    return "Kelas Tidak Di Temukan.";
                 }
             }
         });

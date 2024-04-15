@@ -25,7 +25,8 @@ class WaliUpdateRequest extends FormRequest
             'nama' => 'required|string',
             'email' => 'required|email|unique:wali,email,' . $this->id->wali_id . ',wali_id',
             'alamat' => 'required',
-            'telp' => 'required|numeric'
+            'desa' => 'required',
+            'telp' => 'required|numeric|unique:wali,telp,' . $this->id->wali_id . ',wali_id'
         ];
     }
     public function messages()
@@ -35,9 +36,11 @@ class WaliUpdateRequest extends FormRequest
             'email.required' => 'Kolom email wajib diisi.',
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email sudah terdaftar.',
+            'desa.required' => 'Kolom desa wajid diisi',
             'alamat.required' => 'Kolom alamat wajib diisi.',
             'telp.required' => 'Kolom telepon wajib diisi.',
-            'telp.numeric' => 'Kolom telepon harus berupa angka.'
+            'telp.numeric' => 'Kolom telepon harus berupa angka.',
+            'telp.unique' => 'Nomor Telphone Sudah Terdaftar'
         ];
     }
 }

@@ -27,39 +27,26 @@
                     @enderror
                 </div>
                 <div class="mt-4">
-                    <label for="hadir">Jumlah Hadir</label>
-                    <input type="number" id="hadir" name="hadir"
-                        class="mt-1 w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 @error('hadir')
-                            peer
-                        @enderror"
-                        placeholder="masukan jumlah hadir">
-                        @error('hadir')
-                        <p class="peer-invalid:visible text-red-700 font-light">
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
-                <div class="mt-4">
                     <label for="tidak_hadir">Tidak Hadir</label>
                     <input type="number" id="tidak_hadir" name="tidak_hadir"
                         class="mt-1 w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 @error('tidak_hadir')
                             peer
                         @enderror"
                         placeholder="masukan jumlah Tidak hadir">
-                        @error('tidak_hadir')
+                    @error('tidak_hadir')
                         <p class="peer-invalid:visible text-red-700 font-light">
                             {{ $message }}
                         </p>
                     @enderror
                 </div>
                 <div class="mt-4">
-                    <label for="terlambat">Terlambat Hadir</label>
+                    <label for="terlambat">{{ $type === 'sholat' ? 'Terlambat Hadir' : 'Total Jam Ngaji' }}</label>
                     <input type="number" id="terlambat" name="terlambat"
                         class="mt-1 w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 @error('terlambat')
-                            
+                            peer
                         @enderror"
-                        placeholder="masukan jumlah Terlambat Hadir">
-                        @error('terlambat')
+                        placeholder="masukan jumlah {{ $type === 'sholat' ? 'Terlambat Hadir' : 'Total Jam Ngaji' }}">
+                    @error('terlambat')
                         <p class="peer-invalid:visible text-red-700 font-light">
                             {{ $message }}
                         </p>

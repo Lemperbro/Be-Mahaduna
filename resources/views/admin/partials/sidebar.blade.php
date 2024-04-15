@@ -83,12 +83,37 @@
                 </a>
             </li>
             <li>
+                <button type="button"
+                    class="flex items-center w-full p-2 text-gray-400 transition-all duration-75 rounded-lg group dropdownSidebar {{ request()->routeIs('kelola-pembayaran.*') ? 'bg-SidebarActive text-white' : '' }}"
+                    aria-controls="tagihan" data-collapse-toggle="tagihan">
+                    <i class="ri-bank-card-fill text-[20px] transition duration-75"></i>
+                    <span class="flex-1 font-semibold ml-3 text-left whitespace-nowrap">Tagihan</span>
+                    <svg class="w-3 h-3 arrowSidebar transition-all duration-300" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 4 4 4-4" />
+                    </svg>
+                </button>
+                <ul id="tagihan" class="hidden py-2 space-y-2 duration-300 transition-all">
+                    <li>
+                        <a href="{{ route('kelola-pembayaran.index') }}"
+                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group {{ request()->routeIs('kelola-pembayaran.*') && !request()->routeIs('kelola-pembayaran.tunggakan') ? 'text-white font-semibold' : '' }}">Semua
+                            Data Tagihan</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('kelola-pembayaran.tunggakan') }}"
+                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group {{ request()->routeIs('kelola-pembayaran.tunggakan') ? 'text-white font-semibold' : '' }}">Data
+                            Tunggakan</a>
+                    </li>
+                </ul>
+            </li>
+            {{-- <li>
                 <a href="{{ route('kelola-pembayaran.index') }}"
                     class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('kelola-pembayaran.*') ? 'bg-SidebarActive text-white' : '' }}">
                     <i class="ri-bank-card-fill text-[20px] transition duration-75"></i>
                     <span class="ml-3 font-semibold">Pembayaran SPP</span>
                 </a>
-            </li>
+            </li> --}}
             <li>
                 <a href="/admin"
                     class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white">

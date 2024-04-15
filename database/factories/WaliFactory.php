@@ -23,7 +23,8 @@ class WaliFactory extends Factory
             'password' => Hash::make('12345678'),
             'nama' => fake()->unique()->name,
             'alamat' => fake()->address,
-            'telp' => fake()->phoneNumber,
+            'desa' => 'maduran',
+            'telp' => fake()->numerify('############'),
         ];
     }
 }

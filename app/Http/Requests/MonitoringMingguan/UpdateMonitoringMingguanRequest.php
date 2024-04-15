@@ -22,7 +22,6 @@ class UpdateMonitoringMingguanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'hadir' => 'required|numeric',
             'tidak_hadir' => 'required|numeric',
             'terlambat' => 'required|numeric'
         ];
@@ -31,8 +30,6 @@ class UpdateMonitoringMingguanRequest extends FormRequest
     public function messages()
     {
         return [
-            'hadir.required' => 'Kolom hadir wajib diisi.',
-            'hadir.numeric' => 'Kolom hadir harus berupa angka.',
             'tidak_hadir.required' => 'Kolom tidak hadir wajib diisi.',
             'tidak_hadir.numeric' => 'Kolom tidak hadir harus berupa angka.',
             'terlambat.required' => 'Kolom terlambat wajib diisi.',

@@ -12,17 +12,17 @@
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-32">
                     Nama Santri
                 </th>
-                <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-32 text-center">
+                <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-32 ">
                     Wali
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-32">
-                    Nisn
-                </th>
-                <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-32">
-                    Jenjang
+                    Kelas
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-40">
-                    Tanggal Masuk
+                    Tanggal Lahir
+                </th>
+                <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-40">
+                    Tanggal Keluar
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-32">
                     Jenis Kelamin
@@ -30,7 +30,7 @@
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-32">
                     Status
                 </th>
-                <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-16">
+                <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-16 text-center">
                     Action
                 </th>
             </tr>
@@ -39,7 +39,7 @@
             @foreach ($data as $key => $item)
                 <tr class="{{ $key % 2 == 0 ? 'bg-white' : 'bg-gray-200 ' }} text-gray-700 border-b ">
                     <td class="px-2  py-2 md:py-4 font-medium text-gray-900 whitespace-nowrap text-center">
-                        <input type="checkbox" name="wali_id[]" value="{{ $item->wali_id }}" class="checkboxValue">
+                        <input type="checkbox" name="santri_id[]" value="{{ $item->santri_id }}" class="checkboxValue">
                     </td>
                     <td class="px-2  py-2 md:py-4 font-medium text-gray-900 whitespace-nowrap text-center">
                         {{ $loop->iteration }}
@@ -49,14 +49,9 @@
                             {{ $item->nama }}
                         </h1>
                     </td>
-                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize text-center">
+                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
                         <h1>
                             {{ $item->waliRelasi !== null ? $item->waliRelasi->wali->nama : 'Tidak Ada' }}
-                        </h1>
-                    </td>
-                    <td class="px-2  py-2 md:py-4 whitespace-nowrap">
-                        <h1>
-                            {{ $item->nisn }}
                         </h1>
                     </td>
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
@@ -66,15 +61,33 @@
                     </td>
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
                         <h1>
-                            {{ $item->tgl_masuk }}
+                            {{ $item->tgl_lahir }}
                         </h1>
+                    </td>
+                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
+                        @if (in_array($item->status, ['lulus', 'keluar']))
+                            <h1>
+                                {{ $item->tgl_lahir }}
+                            </h1>
+                        @else
+                            <h1>
+                                Tidak Ada
+                            </h1>
+                        @endif
                     </td>
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
                         <h1>
                             {{ $item->jenis_kelamin }}
                         </h1>
                     </td>
-                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
+                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize flex gap-x-1.5 items-center">
+                        @if ($item->status == 'aktif')
+                        <span class="bg-lime-600 w-2.5 h-2.5 rounded-full"></span>
+                        @elseif ($item->status == 'lulus')
+                        <span class="bg-Sidebar w-2.5 h-2.5 rounded-full"></span>
+                        @elseif ($item->status == 'keluar')
+                        <span class="bg-red-600 w-2.5 h-2.5 rounded-full"></span>
+                        @endif
                         <h1>
                             {{ $item->status }}
                         </h1>

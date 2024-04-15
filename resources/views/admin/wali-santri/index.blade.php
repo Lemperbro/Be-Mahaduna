@@ -31,13 +31,13 @@
                 <form class="mt-8" action="{{ route('wali.delete') }}" method="POST">
                     @csrf
                     <div class="mb-4">
-                        <div class="py-2 px-4 text-sm md:text-base inline-block bg-red-600 text-white rounded-md text-center cursor-pointer @error('monitor_mingguan_id_delete_multiple')
+                        <div class="py-2 px-4 text-sm md:text-base inline-block bg-red-600 text-white rounded-md text-center cursor-pointer @error('wali_id')
                                 peer
                             @enderror"
                             onclick="deleteMonitoringMultiple.showModal()" id="btnAlertDeleteMultiple">Hapus
                             Data Yang Dipilih</div>
                         <button type="submit" id="btnDeleteMonitorMultiple" class="hidden"></button>
-                        @error('monitor_mingguan_id_delete_multiple')
+                        @error('wali_id')
                             <p class="peer-invalid:visible text-red-700 font-light mt-1">
                                 {{ $message }}
                             </p>

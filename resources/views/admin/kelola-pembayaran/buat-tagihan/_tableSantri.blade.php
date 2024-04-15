@@ -18,7 +18,7 @@
                     Jenis Kelamin
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-32">
-                    Jenjang
+                    Kelas
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-64 lg:w-96">
                     Tahun Masuk

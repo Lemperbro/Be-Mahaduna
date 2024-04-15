@@ -18,7 +18,6 @@ class MonitorMingguanFactory extends Factory
     {
         return [
             'santri_id' => fake()->unique(true)->numberBetween(1,10),
-            'hadir' => fake()->numberBetween(1,15),
             'tidak_hadir' => fake()->numberBetween(1,15),
             'terlambat' => fake()->numberBetween(1,15),
             'kategori' => fake()->randomElement(['sholat jamaah', 'ngaji'])

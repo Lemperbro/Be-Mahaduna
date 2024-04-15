@@ -13,13 +13,7 @@
                     Nama Santri
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-32">
-                    Jenjang
-                </th>
-                <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-64 lg:w-96">
-                    Tahun Masuk
-                </th>
-                <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-36">
-                    Hadir
+                    Kelas
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-36">
                     Tidak Hadir
@@ -57,16 +51,6 @@
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
                         <h1>
                             {{ $item->santri->jenjang->jenjang }}
-                        </h1>
-                    </td>
-                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
-                        <h1>
-                            {{ Carbon::parse($item->santri->tgl_masuk)->locale('id')->isoFormat(' MMMM YYYY') }}
-                        </h1>
-                    </td>
-                    <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
-                        <h1>
-                            {{ $item->hadir }}
                         </h1>
                     </td>
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">

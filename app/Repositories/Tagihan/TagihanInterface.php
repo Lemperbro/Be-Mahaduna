@@ -17,22 +17,32 @@ interface TagihanInterface
      * @param int|null $tahun untuk memfilter data pertahun
      * @param string|null $status untuk memfilter data berdasarkan status pembayaran 
      * @param  $keyword untuk mencari data
+     * @param int|null $kelas
      * 
      * 
      * @return mixed
      */
-    public function getAllTagihan(int $paginate = null, $keyword = null, int $bulan = null, int $tahun = null, string $status = null);
-        /**
+    public function getAllTagihan(int $paginate = null, $keyword = null, int $bulan = null, int $tahun = null, string $status = null, int $kelas = null);
+    /**
+     * untuk menampilkan data tagihan yang nunggak
+     * @param int|null $paginate
+     * @param string|null $keyword
+     * @param int|null $kelas
+     * 
+     * @return [type]
+     */
+    public function getAllTunggakan(int $paginate = null, string $keyword = null, int $kelas = null);
+    /**
      * untuk menghitung semua data tagihan
      * @return [type]
      */
     public function countAll();
-        /**
+    /**
      * untuk menghitung semua data tagihan yang belum di bayar
      * @return [type]
      */
     public function countTagihanBelumBayar();
-        /**
+    /**
      * untuk menghitung semua data tagihan yang sudah dibayar
      * @return [type]
      */

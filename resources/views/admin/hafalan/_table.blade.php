@@ -13,10 +13,10 @@
                     Nama Santri
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-32">
-                    Jenjang
+                    Kelas
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-40">
-                    Tahun Masuk
+                    Tahun Diupload
                 </th>
                 <th scope="col" class="px-2 py-3 md:py-4 text-sm whitespace-nowrap w-44 ">
                     Bulan Monitoring
@@ -52,7 +52,7 @@
                     </td>
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
                         <h1>
-                            {{ Carbon::parse($item->santri->tgl_masuk)->locale('id')->isoFormat(' MMMM YYYY') }}
+                            {{ Carbon::parse($item->created_at)->locale('id')->isoFormat('DD MMMM YYYY') }}
                         </h1>
                     </td>
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">

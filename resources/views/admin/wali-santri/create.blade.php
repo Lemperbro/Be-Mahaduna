@@ -7,8 +7,7 @@
 
             <form action="{{ route('wali.store') }}" method="POST" class="max-w-[800px] mx-auto mt-10">
                 @csrf
-                <div class="flex p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50"
-                    role="alert">
+                <div class="flex p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50" role="alert">
                     <svg class="flex-shrink-0 inline w-4 h-4 me-3 mt-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor" viewBox="0 0 20 20">
                         <path
@@ -17,7 +16,9 @@
                     <span class="sr-only">Info</span>
                     <div class="">
                         <span class="font-semibold">INFO!</span>
-                        <p class="capitalize mt-1">Setiap data wali santri yang dibuat akan memiliki password default <span class="font-semibold">'mahaduna12345'</span>. Mohon informasikan kepada para wali santri untuk segera mengganti password pada halaman profil mereka.</p>
+                        <p class="capitalize mt-1">Setiap data wali santri yang dibuat akan memiliki password default <span
+                                class="font-semibold">'mahaduna12345'</span>. Mohon informasikan kepada para wali santri
+                            untuk segera mengganti password pada halaman profil mereka.</p>
                     </div>
                 </div>
 
@@ -28,7 +29,7 @@
                             peer
                         @enderror"
                         placeholder="Masukan Nama" value="{{ old('nama') }}">
-                        @error('nama')
+                    @error('nama')
                         <p class="peer-invalid:visible text-red-700 font-light">
                             {{ $message }}
                         </p>
@@ -41,7 +42,19 @@
                             peer
                         @enderror"
                         placeholder="Masukan Email" value="{{ old('email') }}">
-                        @error('email')
+                    @error('email')
+                        <p class="peer-invalid:visible text-red-700 font-light">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
+                <div class="mt-4">
+                    <label for="desa">Desa</label>
+                    <input type="text" name="desa" id="desa"
+                        class="mt-1 w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 @error('desa')
+                    peer
+                @enderror">
+                    @error('desa')
                         <p class="peer-invalid:visible text-red-700 font-light">
                             {{ $message }}
                         </p>
@@ -54,7 +67,7 @@
                             peer
                         @enderror"
                         placeholder="Masukan Alamat">{{ old('alamat') }}</textarea>
-                        @error('alamat')
+                    @error('alamat')
                         <p class="peer-invalid:visible text-red-700 font-light">
                             {{ $message }}
                         </p>
@@ -67,7 +80,7 @@
                             peer
                         @enderror"
                         placeholder="Masuk nomor telphone" value="{{ old('telp') }}">
-                        @error('telp')
+                    @error('telp')
                         <p class="peer-invalid:visible text-red-700 font-light">
                             {{ $message }}
                         </p>

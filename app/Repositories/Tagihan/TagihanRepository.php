@@ -7,8 +7,10 @@ use App\Models\Santri;
 use App\Models\Tagihan;
 use App\Models\Transaksi;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\Tagihan\TagihanInterface;
 use App\Http\Resources\Tagihan\TagihanResource;
+use Illuminate\Pagination\LengthAwarePaginator;
 use App\Repositories\Transaksi\TransaksiInterface;
 use App\Http\Resources\Transaksi\TransaksiResource;
 use App\Repositories\HandleError\ResponseErrorRepository;
@@ -51,7 +53,7 @@ class TagihanRepository implements TagihanInterface
             }
 
             if (request()->wantsJson()) {
-                return(TagihanResource::make($data))->response()->setStatusCode(200);
+                return (TagihanResource::make($data))->response()->setStatusCode(200);
             } else {
                 return $data;
             }
@@ -71,18 +73,19 @@ class TagihanRepository implements TagihanInterface
      * @param int|null $tahun untuk memfilter data pertahun
      * @param string|null $status untuk memfilter data berdasarkan status pembayaran 
      * @param  $keyword untuk mencari data
+     * @param int|null $kelas
      * 
      * 
      * @return mixed
      */
-    public function getAllTagihan(int $paginate = null, $keyword = null, int $bulan = null, int $tahun = null, string $status = null)
+    public function getAllTagihan(int $paginate = null, $keyword = null, int $bulan = null, int $tahun = null, string $status = null, int $kelas = null)
     {
         $data = $this->tagihanModel->with([
             'transaksi' => function ($transaksi) {
                 $transaksi->where('payment_status', 'PAID');
             },
             'santri' => function ($santri) {
-                $santri->with('jenjang');
+                $santri->withTrashed()->with('jenjang');
             }
         ])->latest();
 
@@ -99,6 +102,11 @@ class TagihanRepository implements TagihanInterface
         } else if ($status !== null && $status == 'menunggu') {
             $data->where('status', 'menunggu dibayar');
         }
+        if ($kelas !== null) {
+            $data->whereHas('santri', function ($query) use ($kelas) {
+                $query->where('jenjang_id', $kelas);
+            });
+        }
         if ($keyword !== null) {
             $data->whereHas('santri', function ($query) use ($keyword) {
                 $query->where('nama', 'like', '%' . $keyword . '%');
@@ -111,10 +119,71 @@ class TagihanRepository implements TagihanInterface
         }
 
         if (request()->wantsJson()) {
-            return(TagihanResource::collection($datas))->response()->setStatusCode(200);
+            return (TagihanResource::collection($datas))->response()->setStatusCode(200);
         } else {
             return $datas;
         }
+    }
+    /**
+     * untuk menampilkan data tagihan yang nunggak
+     * @param int|null $paginate
+     * @param string|null $keyword
+     * @param int|null $kelas
+     * 
+     * @return [type]
+     */
+    public function getAllTunggakan(int $paginate = null, string $keyword = null, int $kelas = null)
+    {
+        $data = $this->tagihanModel
+            ->with([
+                'santri' => function ($santri) {
+                    $santri->withTrashed();
+                },
+                'transaksi' => function ($transaksi) {
+                    $transaksi->where('payment_status', 'PAID');
+                }
+            ])
+            ->where('status', 'belum dibayar')
+            ->orderBy('date', 'desc');
+
+        if ($keyword !== null || $kelas !== null) {
+            $data->whereHas('santri', function ($item) use ($keyword, $kelas) {
+                if ($keyword !== null) {
+                    $item->where('nama', 'like', '%' . $keyword . '%');
+                }
+                if ($kelas !== null) {
+                    $item->where('jenjang_id', $kelas);
+                }
+            });
+        }
+
+        if ($paginate !== null) {
+            $response = $this->getManualPagination($paginate, $data->get()
+                ->groupBy('santri_id'));
+        } else {
+            $response = $data->get()
+                ->groupBy('santri_id');
+        }
+        return $response;
+    }
+    public function getManualPagination($perPages, $data)
+    {
+        $currentPage = 1;
+        $items = $data;
+        $perPage = $perPages; // Jumlah item per halaman
+        $currentPage = request()->get('page', $currentPage); // Nomor halaman saat ini
+        $slicedData = (new Collection($items))->forPage($currentPage, $perPage)->values();
+        $total = count($items);/*  */
+
+        $dataSemuafix = new LengthAwarePaginator(
+            $slicedData,
+            $total,
+            $perPage,
+            $currentPage,
+            ['path' => url()->current(), 'query' => ['page' => $currentPage]]
+        );
+
+        return $dataSemuafix;
     }
     /**
      * untuk menghitung semua data tagihan
@@ -192,7 +261,7 @@ class TagihanRepository implements TagihanInterface
             if ($create) {
                 if (request()->wantsJson()) {
                     $response = $create->fresh()->load('santri');
-                    return(TagihanResource::make($response))->response()->setStatusCode(201);
+                    return (TagihanResource::make($response))->response()->setStatusCode(201);
                 } else {
                     return true;
                 }
@@ -250,7 +319,7 @@ class TagihanRepository implements TagihanInterface
             ]);
 
             if (request()->wantsJson()) {
-                return(TagihanResource::make($oldData->fresh()))->response()->setStatusCode(200);
+                return (TagihanResource::make($oldData->fresh()))->response()->setStatusCode(200);
             } else {
                 return true;
             }
@@ -312,7 +381,7 @@ class TagihanRepository implements TagihanInterface
 
             DB::commit();
             if (request()->wantsJson()) {
-                return(TransaksiResource::make($transaksi->fresh()))->response()->setStatusCode(201);
+                return (TransaksiResource::make($transaksi->fresh()))->response()->setStatusCode(201);
             } else {
                 return true;
             }

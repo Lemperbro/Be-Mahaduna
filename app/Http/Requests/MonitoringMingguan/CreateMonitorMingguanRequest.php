@@ -23,7 +23,6 @@ class CreateMonitorMingguanRequest extends FormRequest
     {
         return [
             'santri' => 'required|numeric',
-            'hadir' => 'required|numeric',
             'tidak_hadir' => 'required|numeric',
             'terlambat' => 'required|numeric'
         ];
@@ -34,8 +33,6 @@ class CreateMonitorMingguanRequest extends FormRequest
         return [
             'santri.required' => 'Kolom santri wajib diisi.',
             'santri.numeric' => 'Kolom santri harus berupa angka.',
-            'hadir.required' => 'Kolom hadir wajib diisi.',
-            'hadir.numeric' => 'Kolom hadir harus berupa angka.',
             'tidak_hadir.required' => 'Kolom tidak hadir wajib diisi.',
             'tidak_hadir.numeric' => 'Kolom tidak hadir harus berupa angka.',
             'terlambat.required' => 'Kolom terlambat wajib diisi.',

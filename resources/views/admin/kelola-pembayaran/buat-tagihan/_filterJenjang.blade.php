@@ -1,9 +1,9 @@
 <div>
-    <label for="jenjangFilterSelect">Jenjang</label>
+    <label for="jenjangFilterSelect">Kelas</label>
     <div class="mt-1">
         <select name="jenjang" id="jenjangFilterSelect"
             class="mt-1 w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2">
-            <option value="" selected>Pilih Jenjang</option>
+            <option value="" selected>Pilih Kelas</option>
             @foreach ($dataJenjang as $key => $item)
                 <option value="{{ $item->jenjang_id }}" {{ $item->jenjang_id == request('jenjang') ? 'selected' : '' }}>
                     {{ ucwords($item->jenjang) }}
@@ -31,10 +31,10 @@
     <script>
         $('#jenjangFilterSelect').select2({
             width: 'resolve',
-            placeholder: "Pilih jenjang",
+            placeholder: "Pilih kelas",
             language: {
                 noResults: function() {
-                    return "Jenjang Tidak Di Temukan.";
+                    return "Kelas Tidak Di Temukan.";
                 }
             }
         });

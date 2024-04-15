@@ -52,7 +52,7 @@
                 <li class="flex justify-between items-center px-4 hover:bg-gray-100">
                     <button type="button" onclick="tahunFilter.showModal()"
                         class="inline-flex w-full py-2 {{ request('tahun') !== null ? 'font-semibold' : '' }}">Tahun
-                        Masuk</button>
+                        Diupload</button>
                     @if (request('tahun') !== null)
                         <i class="ri-checkbox-circle-fill text-lime-500 text-[15px]"></i>
                     @endif

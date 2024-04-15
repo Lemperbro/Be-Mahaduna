@@ -41,14 +41,14 @@
                 </li>
                 <li class="flex justify-between items-center px-4 hover:bg-gray-100">
                     <button type="button" onclick="jenjangFilter.showModal()"
-                        class="inline-flex w-full py-2 {{ request('jenjang') !== null ? 'font-semibold' : '' }}">Jenjang</button>
+                        class="inline-flex w-full py-2 {{ request('jenjang') !== null ? 'font-semibold' : '' }}">Kelas</button>
                     @if (request('jenjang') !== null)
                         <i class="ri-checkbox-circle-fill text-lime-500 text-[15px]"></i>
                     @endif
                 </li>
                 <li class="flex justify-between items-center px-4 hover:bg-gray-100">
                     <button type="button" onclick="tahunFilter.showModal()"
-                        class="inline-flex w-full py-2 {{ request('tahun') !== null ? 'font-semibold' : '' }}">Tahun Masuk</button>
+                        class="inline-flex w-full py-2 {{ request('tahun') !== null ? 'font-semibold' : '' }}">Tahun Diupload</button>
                     @if (request('tahun') !== null)
                         <i class="ri-checkbox-circle-fill text-lime-500 text-[15px]"></i>
                     @endif

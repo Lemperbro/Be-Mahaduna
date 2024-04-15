@@ -59,7 +59,7 @@ class MonitoringMingguanController extends Controller
     public function store(CreateMonitorMingguanRequest $request, $type)
     {
         $create = $this->MonitoringMingguanInterface->store($request, $type);
-        if (isset ($create['error']) && $create['error'] == true) {
+        if (isset($create['error']) && $create['error'] == true) {
             return redirect()->back()->with('toast_error', $create['message']);
         } else if ($create) {
             return redirect($type === 'sholat' ? route('monitoring.sholat.index') : route('monitoring.ngaji.index'))->with('toast_success', 'Berhasil menambah data monitoring');
@@ -76,7 +76,7 @@ class MonitoringMingguanController extends Controller
     public function update(UpdateMonitoringMingguanRequest $request, $type, MonitorMingguan $id)
     {
         $update = $this->MonitoringMingguanInterface->update($request, $id->load('santri'));
-        if (isset ($update['error']) && $update['error'] == true) {
+        if (isset($update['error']) && $update['error'] == true) {
             return redirect()->back()->with('toast_error', $update['message']);
         } else if ($update) {
             return redirect($type === 'sholat' ? route('monitoring.sholat.index') : route('monitoring.ngaji.index'))->with('toast_success', 'Berhasil mengubah data');
@@ -87,7 +87,7 @@ class MonitoringMingguanController extends Controller
     public function deleteDataMultiple(DeleteDataMultipleRequest $request, $type)
     {
         $delete = $this->MonitoringMingguanInterface->deleteDataMultiple($request->monitor_mingguan_id_delete_multiple, $type);
-        if (isset ($delete['error']) && $delete['error'] == true) {
+        if (isset($delete['error']) && $delete['error'] == true) {
             return redirect()->back()->with('toast_error', $delete['message']);
         } else if ($delete) {
             return redirect($type === 'sholat' ? route('monitoring.sholat.index') : route('monitoring.ngaji.index'))->with('toast_success', 'Berhasil menghapus data');

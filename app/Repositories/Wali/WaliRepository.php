@@ -1,13 +1,16 @@
 <?php
 namespace App\Repositories\Wali;
 
-use App\Http\Resources\Wali\SantriOnWaliResource;
 use Exception;
 use App\Models\Wali;
 use App\Models\WaliRelasi;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Repositories\Wali\WaliInterface;
+use App\Http\Resources\Wali\WaliLoginResource;
+use Illuminate\Validation\ValidationException;
+use App\Http\Resources\Wali\SantriOnWaliResource;
 
 class WaliRepository implements WaliInterface
 {
@@ -17,6 +20,64 @@ class WaliRepository implements WaliInterface
     {
         $this->waliModel = new Wali;
         $this->waliRelasi = new WaliRelasi;
+    }
+    /**
+     * untuk login wali santri
+     * @param mixed $data
+     * 
+     * @return [type]
+     */
+    public function login($data)
+    {
+        try {
+            $user = $this->waliModel->where('email', $data->emailOrTelp)->orWhere('telp', $data->emailOrTelp)->first();
+            if (!$user || !Hash::check($data->password, $user->password)) {
+                throw ValidationException::withMessages([
+                    'message' => 'Kombinasi kredensial yang diberikan tidak benar.',
+                ]);
+            }
+
+            // Login berhasil, buat token dan kirim respons
+            $token = $user->createToken('userLogin')->plainTextToken;
+            return (WaliLoginResource::make($token))->response()->setStatusCode(200);
+        } catch (ValidationException $e) {
+            // Tangkap pengecualian validasi dan kirim pesan kesalahan
+            return response()->json([
+                'error' => [
+                    'message' => $e->getMessage(),
+                ],
+            ], 422);
+        } catch (Exception $e) {
+            // Log::error($e->getMessage());
+            // Tangkap pengecualian lainnya dan kirim pesan kesalahan umum
+            return response()->json([
+                'error' => [
+                    'message' => 'Terjadi kesalahan saat memproses permintaan Anda.',
+                ],
+            ], 500);
+        }
+    }
+    /**
+     * untuk logout
+     * @param mixed $user
+     * 
+     * @return [type]
+     */
+    public function logout($user){
+        try {
+            $user->user()->currentAccessToken()->delete();
+            return response()->json([
+                'code' => 200,
+                'status' => true,
+                'message' => 'logout successful'
+            ])->setStatusCode(200);
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 400,
+                'status' => false,
+                'message' => 'logout error'
+            ], 400);
+        }
     }
     /**
      * untuk mengambil semua data wali
@@ -59,9 +120,13 @@ class WaliRepository implements WaliInterface
      * 
      * @return [type]
      */
-    public function emailAlreadyExists($email, $whereNot = false, $id = null)
+    public function emailAlreadyExists($data, $whereNot = false, $id = null, string $type = 'email')
     {
-        $check = $this->waliModel->where('email', $email);
+        if ($type == 'email') {
+            $check = $this->waliModel->where('email', $data);
+        } else {
+            $check = $this->waliModel->where('telp', $data);
+        }
         if ($whereNot === true && $id !== null) {
             $check->whereNotIn('wali_id', [$id]);
         }
@@ -78,8 +143,9 @@ class WaliRepository implements WaliInterface
      */
     public function create($data)
     {
-        $emailSudahAda = $this->emailAlreadyExists($data->email);
-        if ($emailSudahAda) {
+        $emailSudahAda = $this->emailAlreadyExists(data: $data->email, type: 'email');
+        $telpSudahAda = $this->emailAlreadyExists(data: $data->telp, type: 'telp');
+        if ($emailSudahAda || $telpSudahAda) {
             return false;
         }
         $password = Hash::make($this->defaultPassword);
@@ -89,6 +155,7 @@ class WaliRepository implements WaliInterface
             'nama' => $data->nama,
             'alamat' => $data->alamat,
             'telp' => $data->telp,
+            'desa' => $data->desa,
             'user_created' => auth()->user()->user_id,
             'updated_at' => null
         ]);
@@ -106,8 +173,9 @@ class WaliRepository implements WaliInterface
      */
     public function update($data, $oldData)
     {
-        $emailSudahAda = $this->emailAlreadyExists($data->email, true, $oldData->wali_id);
-        if ($emailSudahAda) {
+        $emailSudahAda = $this->emailAlreadyExists(data: $data->email, whereNot: true, id: $oldData->wali_id, type: 'email');
+        $telpSudahAda = $this->emailAlreadyExists(data: $data->telp, whereNot: true, id: $oldData->wali_id, type: 'telp');
+        if ($emailSudahAda || $telpSudahAda) {
             return false;
         }
         $update = $oldData->update([
@@ -115,6 +183,7 @@ class WaliRepository implements WaliInterface
             'nama' => $data->nama,
             'alamat' => $data->alamat,
             'telp' => $data->telp,
+            'desa' => $data->desa,
             'user_updated' => auth()->user()->user_id,
         ]);
         if (!$update) {
