@@ -21,7 +21,7 @@ class MajalahFactory extends Factory
         return [
             'judul' => fake()->sentence(),
             'source' => 'default'.self::$index.'.pdf',
-            'bannerImage' => 'http://127.0.0.1:8000/uploads/majalahImage/bg.jpg',
+            'bannerImage' => 'https://qomaruddinpd.com/uploads/majalahImage/bg.jpg',
             'views' => fake()->numberBetween(100,1000)
         ];
     }

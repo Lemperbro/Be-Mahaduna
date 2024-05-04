@@ -67,7 +67,7 @@
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize">
                         @if (in_array($item->status, ['lulus', 'keluar']))
                             <h1>
-                                {{ $item->tgl_lahir }}
+                                {{ $item->tgl_keluar }}
                             </h1>
                         @else
                             <h1>

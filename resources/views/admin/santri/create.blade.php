@@ -132,7 +132,7 @@
             var datepicker = {
                 dateFormat: "Y-m-d",
                 allowInput: true,
-                placeholder: "Pilih Bulan Monitoring",
+                placeholder: "Pilih Tanggal Lahir",
                 theme: "light",
             };
             flatpickr('#tgl_lahir', datepicker);

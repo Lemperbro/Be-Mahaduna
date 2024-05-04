@@ -40,7 +40,11 @@ class SantriRepository implements SantriInterface
             $data->where('nama', 'like', '%' . $keyword . '%');
         }
         if ($tahunMasuk !== null) {
-            $data->whereYear('tgl_masuk', $tahunMasuk);
+            if(request('status') == 'lulus'){
+                $data->whereYear('tgl_keluar', $tahunMasuk);
+            }else{
+                $data->whereYear('tgl_lahir', $tahunMasuk);
+            }
         }
         if ($jenjang !== null) {
             $data->where('jenjang_id', $jenjang);
@@ -89,6 +93,32 @@ class SantriRepository implements SantriInterface
         DB::commit();
         if (!$create || !$createRelasi) {
             DB::rollBack();
+            return false;
+        }
+        return true;
+    }
+    /**
+     * untuk merubah status santri ke lulus
+     * @param mixed $data
+     * 
+     * @return [type]
+     */
+    public function toLulus($data)
+    {
+        if($data->tgl_keluar == null){
+            return [
+                'error' => true,
+                'message' => 'Tanggal Kelulusan Harus Di isi'
+            ];
+        }
+        $santri_id = explode('|', $data->santri_id);
+        $update = $this->santriModel->whereIn('santri_id', $santri_id)->update([
+            'status' => 'lulus',
+            'tgl_keluar' => $data->tgl_keluar,
+            'updated_at' => now(),
+            'user_updated' => auth()->user()->user_id,
+        ]);
+        if (!$update) {
             return false;
         }
         return true;

@@ -164,6 +164,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/santri/create', [SantriController::class, 'create'])->name('santri.create');
     Route::post('/santri/create', [SantriController::class, 'store'])->name('santri.store');
     Route::post('/santri/delete', [SantriController::class, 'delete'])->name('santri.delete');
+    Route::post('/santri/jadikan-lulus', [SantriController::class, 'toLulus'])->name('santri.toLulus');
+    Route::post('/santri/ubah-kelas', [SantriController::class, 'ubahKelas'])->name('santri.ubah-kelas');
 
     //filepond
     Route::post('/filePond/post/{folder}', [FilePondController::class, 'postImage'])->name('filePond.post');

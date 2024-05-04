@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Santri;
 
+use App\Models\Santri;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\Wali\WaliInterface;
+use App\Repositories\Santri\SantriInterface;
+use App\Repositories\Jenjang\JenjangInterface;
+use App\Http\Requests\Santri\SantriLulusRequest;
 use App\Http\Requests\Santri\SantriCreateRequest;
 use App\Http\Requests\Santri\SantriDeleteRequest;
-use App\Repositories\Jenjang\JenjangInterface;
-use App\Repositories\Santri\SantriInterface;
-use App\Repositories\Wali\WaliInterface;
-use Illuminate\Http\Request;
 
 class SantriController extends Controller
 {
@@ -51,6 +53,16 @@ class SantriController extends Controller
             return redirect(route('santri.index'))->with('toast_success', 'Berhasil menambah data');
         } else {
             return redirect()->back()->with('toast_error', 'Tidak berhasil menambah data');
+        }
+    }
+    public function toLulus(SantriLulusRequest $request){
+        $update = $this->SantriInterface->toLulus($request);
+        if (isset($update['error']) && $update['error'] == true) {
+            return redirect()->back()->with('toast_error', $update['message']);
+        } else if ($update) {
+            return redirect()->back()->with('toast_success', 'Berhasil merubah status santri');
+        } else {
+            return redirect()->back()->with('toast_error', 'Tidak berhasil merubah status santri');
         }
     }
     public function delete(SantriDeleteRequest $request)

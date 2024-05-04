@@ -59,7 +59,12 @@ class ArtikelRepository implements ArtikelInterface
         if ($sortBest) {
             //date 1 minggu ke belakang dari sekarang
             $date1Minggu = Carbon::now()->subWeek()->format('Y-m-d');
-            $data->where('created_at', '>=', $date1Minggu)->orderBy('views', 'desc');
+            $findArtikel = $this->artikelModel->where('created_at', '>=', $date1Minggu)->count();
+            if ($findArtikel <= 0) {
+                $data->orderBy('views', 'desc');
+            } else {
+                $data->where('created_at', '>=', $date1Minggu)->orderBy('views', 'desc');
+            }
         } else {
             $data->latest();
         }
@@ -90,7 +95,7 @@ class ArtikelRepository implements ArtikelInterface
     public function showArtikel($artikelSlug): mixed
     {
         $data = $this->artikelModel->where('slug', $artikelSlug)->firstOrFail();
-        if($data !== null){
+        if ($data !== null) {
             $user_updated = $data->user_updated ?? null;
             $updated_at = $data->updated_at ?? null;
             $this->artikelModel->where('artikel_id', $data->artikel_id)->update([

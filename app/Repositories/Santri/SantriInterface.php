@@ -23,7 +23,14 @@ interface SantriInterface
      */
     public function create($data);
     /**
-     * untuk menghapus daya santri , bisa multiple
+     * untuk merubah status santri ke lulus
+     * @param mixed $data
+     * 
+     * @return [type]
+     */
+    public function toLulus($data);
+    /**
+     * untuk menghapus data santri , bisa multiple
      * @param array $santri_id
      * 
      * @return [type]

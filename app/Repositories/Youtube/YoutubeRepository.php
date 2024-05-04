@@ -2,6 +2,7 @@
 namespace App\Repositories\Youtube;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\PlaylistVideo;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Collection;
@@ -14,7 +15,7 @@ use App\Repositories\HandleError\ResponseErrorRepository;
 class YoutubeRepository implements YoutubeInterface
 {
 
-    private $apiKey, $channelId, $model, $urlPlaylist, $playlistItems, $videoItem,$urlSearch;
+    private $apiKey, $channelId, $model, $urlPlaylist, $playlistItems, $videoItem, $urlSearch;
     private $responseError;
 
     public function __construct()
@@ -37,7 +38,7 @@ class YoutubeRepository implements YoutubeInterface
 
     public function cekStatusCodeApi($data)
     {
-        return isset ($data->json()['error']) && isset ($data->json()['error']['code']) ? $data->json()['error']['code'] : 200;
+        return isset($data->json()['error']) && isset($data->json()['error']['code']) ? $data->json()['error']['code'] : 200;
     }
 
 
@@ -239,17 +240,17 @@ class YoutubeRepository implements YoutubeInterface
         ]);
 
 
-        $statusCode = $this->cekStatusCodeApi($get);
-        $responseData = $this->sortVideoLatest($get->json(), 'snippet.publishedAt');
-        if ($keyword !== null) {
-            $responseData = $this->cariPlaylist($get->json(), $keyword);
-        }
-        $responseWithPaginate = $this->getManualPagination($paginate, $responseData);
-        if (request()->wantsJson()) {
-            return (VideoResource::make($responseWithPaginate))->response()->setStatusCode($statusCode);
-        } else {
-            return $responseWithPaginate;
-        }
+            $statusCode = $this->cekStatusCodeApi($get);
+            $responseData = $this->sortVideoLatest($get->json(), 'snippet.publishedAt');
+            if ($keyword !== null) {
+                $responseData = $this->cariPlaylist($get->json(), $keyword);
+            }
+            $responseWithPaginate = $this->getManualPagination($paginate, $responseData);
+            if (request()->wantsJson()) {
+                return (VideoResource::make($responseWithPaginate))->response()->setStatusCode($statusCode);
+            } else {
+                return $responseWithPaginate;
+            }
     }
 
     /**
@@ -282,8 +283,9 @@ class YoutubeRepository implements YoutubeInterface
      * 
      * @return [type]
      */
-    public function getAllVideo($evenType = 'completed',$paginate = 10, $pageToken = null)
+    public function getAllVideo($evenType = 'completed', $paginate = 10, $pageToken = null)
     {
+        // 2024-04-10T12:16:06Z
         $getData = Http::get($this->urlSearch, [
             'key' => $this->apiKey,
             'part' => 'snippet',
@@ -292,7 +294,9 @@ class YoutubeRepository implements YoutubeInterface
             'order' => 'date',
             'eventType' => $evenType,
             'maxResults' => $paginate,
-            'pageToken' => $pageToken
+            'pageToken' => $pageToken,
+            'publishedBefore' => Carbon::now()->toRfc3339String(),
+            'publishedAfter' => Carbon::now()->subYears(2)->toRfc3339String()
         ]);
         $statusCode = $this->cekStatusCodeApi($getData);
         return response()->json($getData->json())->setStatusCode($statusCode);
