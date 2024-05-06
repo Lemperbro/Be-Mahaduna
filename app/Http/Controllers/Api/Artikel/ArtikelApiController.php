@@ -25,12 +25,19 @@ class ArtikelApiController extends Controller
         $data = $this->ArtikelInterface->getAllArtikel(paginate: $paginate, keyword: $keyword, sortBest: $sortBest, kategori: $kategori);
         return $data;
     }
-    public function show(Request $request){
+    public function show(Request $request)
+    {
         $data = $this->ArtikelInterface->showArtikel($request->artikelSlug);
         return $data;
     }
-    public function kategoriAll(){
+    public function kategoriAll()
+    {
         $data = $this->ArtikelInterface->getAllKategori();
+        return $data;
+    }
+    public function addViewer(Request $request)
+    {
+        $data = $this->ArtikelInterface->addViewer($request->slug);
         return $data;
     }
 }

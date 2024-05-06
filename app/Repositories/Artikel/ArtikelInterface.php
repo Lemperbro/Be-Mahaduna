@@ -74,4 +74,11 @@ interface ArtikelInterface
      * @return [type]
      */
     public function deleteKategori($data);
+        /**
+     * untuk menambah jumlah viewer
+     * @param mixed $artikelSlug
+     * 
+     * @return [type]
+     */
+    public function addViewer($artikelSlug);
 }

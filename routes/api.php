@@ -32,6 +32,7 @@ Route::prefix('artikel')->group(function () {
     Route::get('all', [ArtikelApiController::class, 'all'])->name('artikel.all');
     Route::get('show', [ArtikelApiController::class, 'show'])->name('artikel.show');
     Route::get('kategori/all', [ArtikelApiController::class, 'kategoriAll'])->name('artikel.kategori.all');
+    Route::get('addViewer', [ArtikelApiController::class, 'addViewer'])->name('artikel.addViewer');
 });
 
 //majalah

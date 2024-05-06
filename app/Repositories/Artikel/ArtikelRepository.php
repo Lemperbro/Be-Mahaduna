@@ -95,6 +95,21 @@ class ArtikelRepository implements ArtikelInterface
     public function showArtikel($artikelSlug): mixed
     {
         $data = $this->artikelModel->where('slug', $artikelSlug)->firstOrFail();
+        if (request()->wantsJson()) {
+            return (ArtikelResource::make($data))->response()->setStatusCode(200);
+        } else {
+            return $data;
+        }
+    }
+    /**
+     * untuk menambah jumlah viewer
+     * @param mixed $artikelSlug
+     * 
+     * @return [type]
+     */
+    public function addViewer($artikelSlug)
+    {
+        $data = $this->artikelModel->where('slug', $artikelSlug)->firstOrFail();
         if ($data !== null) {
             $user_updated = $data->user_updated ?? null;
             $updated_at = $data->updated_at ?? null;
@@ -104,12 +119,8 @@ class ArtikelRepository implements ArtikelInterface
                 'updated_at' => $updated_at
             ]);
         }
-        if (request()->wantsJson()) {
-            return (ArtikelResource::make($data))->response()->setStatusCode(200);
-        } else {
-            return $data;
-        }
     }
+
     /**
      * Untuk menyimpan artikel ke dala database
      * @param mixed $data data request dari form
