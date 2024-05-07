@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\Store;
 
+use App\Http\Resources\Store\DetailProdukResource;
 use Exception;
 use App\Models\Store;
 use App\Models\StoreImage;
@@ -62,7 +63,7 @@ class StoreRepository implements StoreInterface
             }
 
             if (request()->wantsJson()) {
-                return(StoreResource::collection($response))->response()->setStatusCode(200);
+                return (StoreResource::collection($response))->response()->setStatusCode(200);
             } else {
                 return $response;
             }
@@ -141,7 +142,7 @@ class StoreRepository implements StoreInterface
             DB::commit();
 
             if (request()->wantsJson()) {
-                return(StoreResource::make($create->fresh()))->response()->setStatusCode(201);
+                return (StoreResource::make($create->fresh()))->response()->setStatusCode(201);
             } else {
                 return true;
             }
@@ -214,7 +215,7 @@ class StoreRepository implements StoreInterface
             }
             DB::commit();
             if (request()->wantsJson()) {
-                return(StoreResource::make($oldData->fresh()))->response()->setStatusCode(201);
+                return (StoreResource::make($oldData->fresh()))->response()->setStatusCode(201);
             } else {
                 return true;
             }
@@ -276,5 +277,28 @@ class StoreRepository implements StoreInterface
         }
     }
 
+    /**
+     * find detail produk
+     * @param mixed $slug
+     * 
+     * @return [type]
+     */
+    public function detail($slug)
+    {
+        try {
+            $data = $this->StoreModel->where('slug', $slug)->first();
+            if (request()->wantsJson()) {
+                return (DetailProdukResource::make($data))->response()->setStatusCode(200);
+            } else {
+                return $data;
+            }
+        } catch (Exception $e) {
+            if (request()->wantsJson()) {
+                return $this->handleResponseError->responseError($e);
+            } else {
+                return false;
+            }
+        }
+    }
 
 }

@@ -27,11 +27,18 @@ interface StoreInterface
      * @return [type]
      */
     public function update($data, $oldData);
-        /**
+    /**
      * untuk menghapus produk
      * @param mixed $data data yang akan di hapus
      * 
      * @return [type]
      */
     public function delete($data);
+    /**
+     * find detail produk
+     * @param mixed $slug
+     * 
+     * @return [type]
+     */
+    public function detail($slug);
 }

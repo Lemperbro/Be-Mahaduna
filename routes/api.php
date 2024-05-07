@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Wali\WaliApiController;
 use App\Http\Controllers\Api\Artikel\ArtikelApiController;
 use App\Http\Controllers\Api\Majalah\MajalahApiController;
+use App\Http\Controllers\Api\Store\StoreApiController;
 use App\Http\Controllers\Api\Youtube\YoutubeApiController;
 use App\Http\Controllers\Api\Transaksi\TransaksiApiController;
 
@@ -39,6 +40,12 @@ Route::prefix('artikel')->group(function () {
 Route::prefix('majalah')->group(function () {
     Route::get('all', [MajalahApiController::class, 'all'])->name('majalah.all');
     Route::get('show/{id}', [MajalahApiController::class, 'show'])->name('majalah.show');
+});
+
+//store
+Route::prefix('store')->group(function () {
+    Route::get('all', [StoreApiController::class, 'all'])->name('store.all');
+    Route::get('detail', [StoreApiController::class, 'all'])->name('store.detail');
 });
 
 //wali

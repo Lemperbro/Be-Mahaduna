@@ -4,6 +4,7 @@
     <section>
         @include('admin.partials._header')
         <div class="py-24">
+           
             <div class="flex flex-col lg:flex-row gap-4 justify-between">
                 <a href="{{ route('artikel.kategori.index') }}"
                     class="bg-Sidebar py-2 px-4 rounded-md text-white inline-block  max-w-[1200px] font-medium order-2 lg:order-1 items-center">
