@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\AdminApiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Wali\WaliApiController;
 use App\Http\Controllers\Api\Artikel\ArtikelApiController;
@@ -41,6 +42,9 @@ Route::prefix('majalah')->group(function () {
     Route::get('all', [MajalahApiController::class, 'all'])->name('majalah.all');
     Route::get('show/{id}', [MajalahApiController::class, 'show'])->name('majalah.show');
 });
+
+//find nomber admin
+Route::get('admin/number', [AdminApiController::class, 'findNumber'])->name('admin.number');
 
 //store
 Route::prefix('store')->group(function () {
