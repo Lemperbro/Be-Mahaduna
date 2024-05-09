@@ -30,7 +30,7 @@ class YoutubeApiController extends Controller
         $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
         return $data;
     }
-    public function showPlaylistItems(showAllPlaylistItemsRequest $request)
+    public function showPlaylistItems(showAllPlaylistItemsRequest $request)  
     {
         $playlistId = $request->playlistId;
         // value part 'snippet,contentDetails,id,status'

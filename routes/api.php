@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Admin\AdminApiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Wali\WaliApiController;
 use App\Http\Controllers\Api\Artikel\ArtikelApiController;
+use App\Http\Controllers\Api\Jadwal\JadwalApiController;
 use App\Http\Controllers\Api\Majalah\MajalahApiController;
 use App\Http\Controllers\Api\Store\StoreApiController;
 use App\Http\Controllers\Api\Youtube\YoutubeApiController;
@@ -51,6 +52,9 @@ Route::prefix('store')->group(function () {
     Route::get('all', [StoreApiController::class, 'all'])->name('store.all');
     Route::get('detail', [StoreApiController::class, 'all'])->name('store.detail');
 });
+
+//jadwal
+Route::get('/jadwal/santri', [JadwalApiController::class, 'all'])->name('jadwal.all');
 
 //wali
 Route::post('/wali/login', [WaliApiController::class, 'login'])->name('wali.login');

@@ -11,7 +11,7 @@ class SantriUbahKelasRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user() !== null;
     }
 
     /**
@@ -22,7 +22,7 @@ class SantriUbahKelasRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            
         ];
     }
 }

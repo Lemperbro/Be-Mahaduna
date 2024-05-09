@@ -10,7 +10,7 @@ interface WaliInterface
      * @return [type]
      */
     public function login($data);
-        /**
+    /**
      * untuk logout
      * @param mixed $user
      * 

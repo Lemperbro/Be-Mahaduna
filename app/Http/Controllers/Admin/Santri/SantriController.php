@@ -11,6 +11,7 @@ use App\Repositories\Jenjang\JenjangInterface;
 use App\Http\Requests\Santri\SantriLulusRequest;
 use App\Http\Requests\Santri\SantriCreateRequest;
 use App\Http\Requests\Santri\SantriDeleteRequest;
+use App\Http\Requests\Santri\SantriUbahKelasRequest;
 
 class SantriController extends Controller
 {
@@ -64,6 +65,9 @@ class SantriController extends Controller
         } else {
             return redirect()->back()->with('toast_error', 'Tidak berhasil merubah status santri');
         }
+    }
+    public function ubahKelas(SantriUbahKelasRequest $request){
+        
     }
     public function delete(SantriDeleteRequest $request)
     {
