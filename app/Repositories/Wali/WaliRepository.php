@@ -11,6 +11,7 @@ use App\Repositories\Wali\WaliInterface;
 use App\Http\Resources\Wali\WaliLoginResource;
 use Illuminate\Validation\ValidationException;
 use App\Http\Resources\Wali\SantriOnWaliResource;
+use App\Http\Resources\Wali\WaliResource;
 
 class WaliRepository implements WaliInterface
 {
@@ -77,6 +78,18 @@ class WaliRepository implements WaliInterface
                 'status' => false,
                 'message' => 'logout error'
             ], 400);
+        }
+    }
+    public function findWali(){
+        try{
+            $user = auth()->user();
+            return (WaliResource::make($user))->response()->setStatusCode(200);
+        }catch(Exception){
+            return response()->json([
+                'code' => 500,
+                'status' => false,
+                'message' => 'error'
+            ], 500);
         }
     }
     /**

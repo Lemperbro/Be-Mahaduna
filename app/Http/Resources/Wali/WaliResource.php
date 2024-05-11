@@ -14,6 +14,12 @@ class WaliResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'wali_id' => $this->wali_id,
+            'nama' => $this->nama,
+            'email' => $this->email,
+            'alamat' => $this->alamat,
+            'telp' => $this->telp
+        ];
     }
 }

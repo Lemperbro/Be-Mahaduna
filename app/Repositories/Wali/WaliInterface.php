@@ -54,4 +54,5 @@ interface WaliInterface
      * @return [type]
      */
     public function delete(array $wali_id);
+    public function findWali();
 }

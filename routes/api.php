@@ -63,5 +63,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tagihan/create-billing/{id}', [TransaksiApiController::class, 'createTransaksiByXendit'])->name('tagihan.xendit.create');
 
     //wali in auth
-    Route::post('/wali/logout', [WaliApiController::class, 'logout'])->name('wali.logout');
+    Route::prefix('wali')->group(function(){
+        Route::post('/logout', [WaliApiController::class, 'logout'])->name('wali.logout');
+        Route::get('/findWali', [WaliApiController::class, 'findWali'])->name('wali.find');
+    });
 });
