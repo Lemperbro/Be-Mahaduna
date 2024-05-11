@@ -59,8 +59,8 @@ Route::get('/jadwal/santri', [JadwalApiController::class, 'all'])->name('jadwal.
 //wali
 Route::post('/wali/login', [WaliApiController::class, 'login'])->name('wali.login');
 Route::post('/tagihan/callback/xendit', [TransaksiApiController::class, 'webhooksXendit'])->name('tagihan.xendit.webhooks');
+Route::post('/tagihan/create-billing/{id}', [TransaksiApiController::class, 'createTransaksiByXendit'])->name('tagihan.xendit.create');
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/tagihan/create-billing/{id}', [TransaksiApiController::class, 'createTransaksiByXendit'])->name('tagihan.xendit.create');
 
     //wali in auth
     Route::prefix('wali')->group(function(){
