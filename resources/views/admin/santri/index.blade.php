@@ -11,6 +11,11 @@
                     <i class="ri-add-box-fill text-white text-[20px]"></i>
                     <p class="mt-[2px] text-white whitespace-nowrap">Tambah Data</p>
                 </a>
+                <a href="{{ route('kelas.index') }}"
+                    class="flex gap-2 items-center bg-Sidebar py-1 px-4 rounded-md w-full sm:w-auto justify-center">
+                    <i class="ri-bar-chart-fill text-white text-[20px]"></i>
+                    <p class="mt-[2px] text-white whitespace-nowrap">Kelola Kelas</p>
+                </a>
                 <button class="flex gap-2 items-center justify-center bg-green-600 py-1 px-4 rounded-md w-full sm:w-auto">
                     <i class="ri-download-2-fill text-white text-[20px]"></i>
                     <p class="text-white mt-[2px] whitespace-nowrap">Download Data</p>
@@ -46,7 +51,8 @@
                 <form class="mt-8" action="{{ route('santri.delete') }}" method="POST">
                     @csrf
                     <div class="mb-4">
-                        <p class="italic text-gray-500 mb-2 text-sm">Note: Pilih Santri Terlebih Dahulu Sebelum Menggunakan Aksi</p>
+                        <p class="italic text-gray-500 mb-2 text-sm">Note: Pilih Santri Terlebih Dahulu Sebelum Menggunakan
+                            Aksi</p>
                         <div class="flex flex-wrap gap-4">
                             <button type="button"
                                 class="py-2 px-4 text-sm md:text-base w-full sm:w-auto inline-block bg-red-600 text-white rounded-md text-center cursor-pointer @error('santri_id')

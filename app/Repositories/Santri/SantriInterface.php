@@ -36,4 +36,5 @@ interface SantriInterface
      * @return [type]
      */
     public function delete(array $santri_id);
+   
 }

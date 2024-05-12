@@ -25,7 +25,7 @@ class MajalahCreateRequest extends FormRequest
         return [
             'judul' => 'required',
             'bannerImage' => 'required',
-            'majalahFile' => 'required|file|mimes:pdf',
+            'majalahFile' => 'required|file|mimes:pdf|max:2048',
         ];
     }
 
@@ -38,6 +38,7 @@ class MajalahCreateRequest extends FormRequest
             'majalahFile.required' => 'Kolom file majalah wajib diisi.',
             'majalahFile.file' => 'Kolom file majalah harus berupa file.',
             'majalahFile.mimes' => 'Format file majalah tidak valid. Hanya mendukung format PDF.',
+            'majalahFile.max' => 'Pdf tidak boleh lebih dari 2 mb'
         ];
     }
 

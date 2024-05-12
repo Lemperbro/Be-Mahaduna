@@ -26,4 +26,40 @@ class JenjangRepository implements JenjangInterface
             return $data;
         }
     }
+
+    /**
+     * untuk menambah data kelas 
+     * @param mixed $data
+     * 
+     * @return [type]
+     */
+    public function tambahKelas($data)
+    {
+        $up = $this->jenjangModel->create([
+            'jenjang' => $data->kelas,
+            'user_created' => auth()->user()->user_id,
+        ]);
+        if (!$up) {
+            return false;
+        }
+        return true;
+    }
+    /**
+     * untuk mengubah data kelas
+     * @param mixed $data
+     * @param mixed $oldData
+     * 
+     * @return [type]
+     */
+    public function updateDataKelas($data, $oldData)
+    {
+        $edit = $oldData->update([
+            'jenjang' => $data->kelas,
+            'user_updated' => auth()->user()->user_id,
+        ]);
+        if (!$edit) {
+            return false;
+        }
+        return true;
+    }
 }

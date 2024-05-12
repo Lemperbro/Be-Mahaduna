@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Artikel\ArtikelController;
 use App\Http\Controllers\Admin\Majalah\MajalahController;
 use App\Http\Controllers\Admin\Youtube\YoutubeController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
+use App\Http\Controllers\Admin\Kelas\KelasController;
 use App\Http\Controllers\Admin\MonitoringBulanan\HafalanController;
 use App\Http\Controllers\Admin\Pembayaran\PembayaranController;
 use App\Http\Controllers\Admin\MonitoringMingguan\MonitoringMingguanController;
@@ -166,6 +167,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/santri/delete', [SantriController::class, 'delete'])->name('santri.delete');
     Route::post('/santri/jadikan-lulus', [SantriController::class, 'toLulus'])->name('santri.toLulus');
     Route::post('/santri/ubah-kelas', [SantriController::class, 'ubahKelas'])->name('santri.ubah-kelas');
+
+    //kelas
+    Route::get('/kelas', [KelasController::class, 'index'])->name('kelas.index');
+    Route::post('/kelas/create', [KelasController::class, 'create'])->name('kelas.create');
+    Route::post('/kelas/update/{id}', [KelasController::class, 'update'])->name('kelas.update');
+    Route::post('/kelas/delete/{id}', [KelasController::class, 'delete'])->name('kelas.delete');
 
     //filepond
     Route::post('/filePond/post/{folder}', [FilePondController::class, 'postImage'])->name('filePond.post');

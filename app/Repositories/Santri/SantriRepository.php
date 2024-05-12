@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\Santri;
 
+use App\Models\Jenjang;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Santri;
@@ -13,13 +14,14 @@ use App\Http\Resources\Santri\SantriResource;
 
 class SantriRepository implements SantriInterface
 {
-    private $santriModel, $santriRelasiModel, $monitoringBulananModel, $monitoringMingguanModel;
+    private $santriModel, $santriRelasiModel, $monitoringBulananModel, $monitoringMingguanModel, $jenjangModel;
     public function __construct()
     {
         $this->santriModel = new Santri;
         $this->santriRelasiModel = new WaliRelasi;
         $this->monitoringBulananModel = new MonitorBulanan;
         $this->monitoringMingguanModel = new MonitorMingguan;
+        $this->jenjangModel = new Jenjang;
     }
 
     /**
@@ -40,9 +42,9 @@ class SantriRepository implements SantriInterface
             $data->where('nama', 'like', '%' . $keyword . '%');
         }
         if ($tahunMasuk !== null) {
-            if(request('status') == 'lulus'){
+            if (request('status') == 'lulus') {
                 $data->whereYear('tgl_keluar', $tahunMasuk);
-            }else{
+            } else {
                 $data->whereYear('tgl_lahir', $tahunMasuk);
             }
         }
@@ -105,7 +107,7 @@ class SantriRepository implements SantriInterface
      */
     public function toLulus($data)
     {
-        if($data->tgl_keluar == null){
+        if ($data->tgl_keluar == null) {
             return [
                 'error' => true,
                 'message' => 'Tanggal Kelulusan Harus Di isi'
@@ -182,4 +184,7 @@ class SantriRepository implements SantriInterface
         }
         return true;
     }
+
+
+
 }
