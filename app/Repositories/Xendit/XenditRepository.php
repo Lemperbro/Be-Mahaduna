@@ -32,6 +32,7 @@ class XenditRepository implements XenditInterface
                     'amount' => $data->price,
                     'description' => $data->label,
                     // 'invoice_duration' => 30
+                    
                 ]);
         $response = $create->object();
         return $response;
