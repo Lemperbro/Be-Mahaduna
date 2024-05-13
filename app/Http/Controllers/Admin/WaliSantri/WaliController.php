@@ -31,7 +31,6 @@ class WaliController extends Controller
     public function showSantri($wali_id)
     {
         $data = $this->WaliInterface->showSantri($wali_id);
-        dd($data);
         $headerTitle = 'Putra - Putri';
         return view('admin.wali-santri.showSantri', compact('headerTitle', 'data'));
     }
