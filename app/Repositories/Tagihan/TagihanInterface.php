@@ -10,7 +10,7 @@ interface TagihanInterface
      * @return [type]
      */
     public function getOneTagihan($tagihan_id);
-    public function getTagihanFromSantri();
+    public function getTagihanFromSantri(string $status = 'belum dibayar');
     /**
      * untuk mengambil semua data tagihan beserta relasi nya (santri dan transaksi)
      * @param int|null $paginate untuk mempaginate data
