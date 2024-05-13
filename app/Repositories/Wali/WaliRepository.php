@@ -133,7 +133,9 @@ class WaliRepository implements WaliInterface
      */
     public function showSantri($wali_id, $getId = false)
     {
-        $data = $this->waliModel->with('waliRelasi.santri.jenjang')->where('wali_id', $wali_id)->firstOrFail();
+        $data = $this->waliModel->with(['waliRelasi.santri.jenjang' => function($query){
+            $query->withTrashed();
+        }])->where('wali_id', $wali_id)->firstOrFail();
         if ($getId) {
             $data = $data->waliRelasi;
             return $data->pluck('santri_id')->toArray();
