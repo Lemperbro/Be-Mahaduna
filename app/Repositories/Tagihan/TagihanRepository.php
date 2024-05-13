@@ -65,16 +65,17 @@ class TagihanRepository implements TagihanInterface
             }
         }
     }
-    public function getTagihanFromSantri(String $santri_id, String $status = 'belum dibayar'){
-        try{
-            $explode = explode($santri_id, ',');
-            if(count($explode) > 0){
+    public function getTagihanFromSantri(string $santri_id, string $status = 'belum dibayar')
+    {
+        try {
+            $explode = explode(',', $santri_id);
+            if (count($explode) > 0) {
                 $data = $this->tagihanModel->whereIn('santri_id', $explode)->where('status', $status)->get();
                 return (TagihanResource::collection($data))->response()->setStatusCode(200);
-            }else{
+            } else {
                 return $this->handleResponseError->ResponseException('data tidak di temukan', 404);
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return $this->handleResponseError->responseError($e);
         }
     }
