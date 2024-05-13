@@ -31,7 +31,7 @@ interface WaliInterface
      * 
      * @return [type]
      */
-    public function showSantri($wali_id);
+    public function showSantri($wali_id, $getId = false);
     /**
      * untuk menambah data wali
      * @param mixed $data

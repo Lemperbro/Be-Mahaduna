@@ -14,20 +14,22 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use App\Repositories\Transaksi\TransaksiInterface;
 use App\Http\Resources\Transaksi\TransaksiResource;
 use App\Repositories\HandleError\ResponseErrorRepository;
+use App\Repositories\Wali\WaliInterface;
 
 class TagihanRepository implements TagihanInterface
 {
     private $tagihanModel, $transaksiModel, $santriModel;
     private $handleResponseError;
-    private $TransaksiInterface;
+    private $TransaksiInterface, $WaliInterface;
 
-    public function __construct(TransaksiInterface $TransaksiInterface)
+    public function __construct(TransaksiInterface $TransaksiInterface, WaliInterface $waliInterface)
     {
         $this->tagihanModel = new Tagihan;
         $this->transaksiModel = new Transaksi;
         $this->santriModel = new Santri;
         $this->handleResponseError = new ResponseErrorRepository;
         $this->TransaksiInterface = $TransaksiInterface;
+        $this->WaliInterface = $waliInterface;
     }
 
     /**
@@ -65,12 +67,13 @@ class TagihanRepository implements TagihanInterface
             }
         }
     }
-    public function getTagihanFromSantri(string $santri_id, string $status = 'belum dibayar')
+    public function getTagihanFromSantri(string $status = 'belum dibayar')
     {
         try {
-            $explode = explode(',', $santri_id);
-            if (count($explode) > 0) {
-                $data = $this->tagihanModel->whereIn('santri_id', $explode)->where('status', $status)->get();
+            $wali_id = auth()->user()->wali_id;
+            $santri_id = $this->WaliInterface->showSantri(wali_id: $wali_id, getId: true);
+            if (count($santri_id) > 0) {
+                $data = $this->tagihanModel->whereIn('santri_id', $santri_id)->where('status', $status)->get();
                 return (TagihanResource::collection($data))->response()->setStatusCode(200);
             } else {
                 return $this->handleResponseError->ResponseException('data tidak di temukan', 404);

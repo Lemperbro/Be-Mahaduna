@@ -13,9 +13,8 @@ class TagihanApiController extends Controller
         $this->tagihanInterface = $tagihanInterface;
     }
 
-    public function getTagihanFromSantri(Request $request){
-        $santri_id = $request->santri_id ?? null;
-        $data = $this->tagihanInterface->getTagihanFromSantri($santri_id);
+    public function getTagihanFromSantri(){
+        $data = $this->tagihanInterface->getTagihanFromSantri();
         return $data;
     }
 }
