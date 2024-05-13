@@ -67,7 +67,14 @@ class SantriController extends Controller
         }
     }
     public function ubahKelas(SantriUbahKelasRequest $request){
-        
+        $update = $this->SantriInterface->ubahKelas($request);
+        if (isset($update['error']) && $update['error'] == true) {
+            return redirect()->back()->with('toast_error', $update['message']);
+        } else if ($update) {
+            return redirect()->back()->with('toast_success', 'Berhasil merubah kelas santri');
+        } else {
+            return redirect()->back()->with('toast_error', 'Tidak berhasil merubah kelas santri');
+        }
     }
     public function delete(SantriDeleteRequest $request)
     {

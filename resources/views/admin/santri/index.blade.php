@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 {{-- form ubah kelas --}}
-                <form action="" class="hidden">
+                <form action="{{ route('santri.ubah-kelas') }}" method="POST" class="hidden">
                     @csrf
                     <input type="text" name="kelas" class="hidden" id="kelas_id">
                     <input type="text" name="santri_id" class="hidden" id="santri_id_ubah_kelas">

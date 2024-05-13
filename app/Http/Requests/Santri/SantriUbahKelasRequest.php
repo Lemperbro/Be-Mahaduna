@@ -22,7 +22,8 @@ class SantriUbahKelasRequest extends FormRequest
     public function rules(): array
     {
         return [
-            
+            'kelas' => 'required',
+            'santri_id' => 'required'
         ];
     }
 }

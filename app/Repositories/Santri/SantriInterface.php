@@ -22,6 +22,13 @@ interface SantriInterface
      * @return [type]
      */
     public function create($data);
+        /**
+     * ubah kelas
+     * @param mixed $data
+     * 
+     * @return [type]
+     */
+    public function ubahKelas($data);
     /**
      * untuk merubah status santri ke lulus
      * @param mixed $data

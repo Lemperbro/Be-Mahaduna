@@ -104,6 +104,24 @@ class SantriRepository implements SantriInterface
         return true;
     }
     /**
+     * ubah kelas
+     * @param mixed $data
+     * 
+     * @return [type]
+     */
+    public function ubahKelas($data){
+        $santri_id = explode('|', $data->santri_id);
+        $update = $this->santriModel->whereIn('santri_id', $santri_id)->update([
+            'jenjang_id' => $data->kelas,
+            'updated_at' => now(),
+            'user_updated' => auth()->user()->user_id,
+        ]);
+        if (!$update) {
+            return false;
+        }
+        return true;
+    }
+    /**
      * untuk merubah status santri ke lulus
      * @param mixed $data
      * 
