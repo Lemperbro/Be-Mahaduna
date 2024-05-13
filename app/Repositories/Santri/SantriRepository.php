@@ -37,7 +37,11 @@ class SantriRepository implements SantriInterface
      */
     public function getAll($paginate = null, string $keyword = null, $tahunMasuk = null, int $jenjang = null, string $status = null, string $jenisKelamin = null)
     {
-        $data = $this->santriModel->with('jenjang', 'waliRelasi.wali')->latest();
+        $data = $this->santriModel->with([
+            'jenjang' => function ($query) {
+                $query->withTrashed();
+            }
+        ])->with('waliRelasi.wali')->latest();
         if ($keyword !== null) {
             $data->where('nama', 'like', '%' . $keyword . '%');
         }
