@@ -64,7 +64,8 @@ class WaliRepository implements WaliInterface
      * 
      * @return [type]
      */
-    public function logout($user){
+    public function logout($user)
+    {
         try {
             $user->user()->currentAccessToken()->delete();
             return response()->json([
@@ -80,11 +81,23 @@ class WaliRepository implements WaliInterface
             ], 400);
         }
     }
-    public function findWali(){
-        try{
-            $user = auth()->user();
-            return (WaliResource::make($user))->response()->setStatusCode(200);
-        }catch(Exception){
+    /**
+     * 
+     * @param bool $withSantri
+     * 
+     * @return [type]
+     */
+    public function findWali($withSantri = false)
+    {
+        try {
+            $user_id = auth()->user()->wali_id;
+            if ($withSantri) {
+                return $this->showSantri(wali_id: $user_id);
+            } else {
+                $user = $this->waliModel->where('wali_id', $user_id)->first();
+                return (WaliResource::make($user))->response()->setStatusCode(200);
+            }
+        } catch (Exception) {
             return response()->json([
                 'code' => 500,
                 'status' => false,

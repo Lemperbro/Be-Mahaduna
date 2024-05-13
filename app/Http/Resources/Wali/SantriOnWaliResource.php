@@ -17,6 +17,10 @@ class SantriOnWaliResource extends JsonResource
     {
         return [
             'wali_id' => $this->wali_id,
+            'nama' => $this->nama,
+            'email' => $this->email,
+            'alamat' => $this->alamat,
+            'telp' => $this->telp,
             'santri' => SantriOnRelasiResource::collection($this->whenLoaded('waliRelasi'))
         ];
     }

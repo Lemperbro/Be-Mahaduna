@@ -54,5 +54,11 @@ interface WaliInterface
      * @return [type]
      */
     public function delete(array $wali_id);
-    public function findWali();
+    /**
+     * 
+     * @param bool $withSantri
+     * 
+     * @return [type]
+     */
+    public function findWali($withSantri = false);
 }

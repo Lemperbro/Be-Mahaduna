@@ -35,14 +35,6 @@ class Handler extends ExceptionHandler
                 ], 404);
             }
         });
-        // $this->renderable(function ($request, Throwable $exception) {
-        //     if ($exception instanceof PostTooLargeException) {
-        //         return response()->view('exception.sizeFileVeryBig', [], 413);
-        //     }
-        //     return parent::render($request, $exception);
-        // });
-
-
     }
 
     /**

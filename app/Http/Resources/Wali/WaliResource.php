@@ -19,7 +19,7 @@ class WaliResource extends JsonResource
             'nama' => $this->nama,
             'email' => $this->email,
             'alamat' => $this->alamat,
-            'telp' => $this->telp
+            'telp' => $this->telp,
         ];
     }
 }

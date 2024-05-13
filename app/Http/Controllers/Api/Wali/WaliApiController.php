@@ -24,8 +24,9 @@ class WaliApiController extends Controller
         $logout = $this->WaliInterface->logout($request);
         return $logout;
     }
-    public function findWali(){
-        $data = $this->WaliInterface->findWali();
+    public function findWali(Request $request){
+        $withSantri = $request->withSantri ?? false;
+        $data = $this->WaliInterface->findWali(withSantri: $withSantri);
         return $data;
     }
 }
