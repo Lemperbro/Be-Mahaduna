@@ -34,7 +34,11 @@ class HafalanRepository implements HafalanInterface
             $data = $this->monitorBulanan->with('santri')->latest();
             if ($keyword !== null) {
                 $data->whereHas('santri', function ($item) use ($keyword) {
-                    $item->where('nama', 'like', '%' . $keyword . '%');
+                    $item->with([
+                        'jenjang' => function ($jenjang) {
+                            $jenjang->withTrashed();
+                        }
+                    ])->where('nama', 'like', '%' . $keyword . '%');
                 });
             }
 
@@ -89,15 +93,16 @@ class HafalanRepository implements HafalanInterface
      * 
      * @return [type]
      */
-    public function update($data, $oldData){
-        try{
+    public function update($data, $oldData)
+    {
+        try {
             $update = $oldData->update([
                 'progres' => $data->progres,
                 'bulan' => Carbon::parse($data->bulan)->format('Y-m-d'),
                 'user_updated' => auth()->user()->user_id,
             ]);
             return $update;
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return $this->handleResponseError->responseError($e);
         }
     }
