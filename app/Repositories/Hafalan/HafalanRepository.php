@@ -31,14 +31,18 @@ class HafalanRepository implements HafalanInterface
     public function getAll($paginate = null, int $bulan = null, int $tahun = null, int $jenjang_id = null, string $keyword = null)
     {
         try {
-            $data = $this->monitorBulanan->with('santri')->latest();
-            if ($keyword !== null) {
-                $data->whereHas('santri', function ($item) use ($keyword) {
-                    $item->with([
+            $data = $this->monitorBulanan->with([
+                'santri' => function ($santri) {
+                    $santri->with([
                         'jenjang' => function ($jenjang) {
                             $jenjang->withTrashed();
                         }
-                    ])->where('nama', 'like', '%' . $keyword . '%');
+                    ]);
+                }
+            ])->latest();
+            if ($keyword !== null) {
+                $data->whereHas('santri', function ($item) use ($keyword) {
+                    $item->where('nama', 'like', '%' . $keyword . '%');
                 });
             }
 
