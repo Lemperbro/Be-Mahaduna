@@ -102,9 +102,11 @@ class TagihanRepository implements TagihanInterface
                 $transaksi->where('payment_status', 'PAID');
             },
             'santri' => function ($santri) {
-                $santri->withTrashed()->with(['jenjang' => function($jenjang){
-                    $jenjang->withTrashed();
-                }]);
+                $santri->withTrashed()->with([
+                    'jenjang' => function ($jenjang) {
+                        $jenjang->withTrashed();
+                    }
+                ]);
             }
         ])->latest();
 
@@ -156,7 +158,11 @@ class TagihanRepository implements TagihanInterface
         $data = $this->tagihanModel
             ->with([
                 'santri' => function ($santri) {
-                    $santri->withTrashed();
+                    $santri->withTrashed()->with([
+                        'jenjang' => function ($jenjang) {
+                            $jenjang->withTrashed();
+                        }
+                    ]);
                 },
                 'transaksi' => function ($transaksi) {
                     $transaksi->where('payment_status', 'PAID');
