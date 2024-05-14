@@ -102,7 +102,9 @@ class TagihanRepository implements TagihanInterface
                 $transaksi->where('payment_status', 'PAID');
             },
             'santri' => function ($santri) {
-                $santri->withTrashed()->with('jenjang');
+                $santri->withTrashed()->with(['jenjang' => function($jenjang){
+                    $jenjang->withTrashed();
+                }]);
             }
         ])->latest();
 
