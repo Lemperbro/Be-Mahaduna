@@ -13,7 +13,7 @@ class AuthRepository implements AuthInterface
     {
             if (Auth::attempt($data->validated())) {
                 $data->session()->regenerate();
-                return redirect()->intended('dashboard')->with('toast_success', 'login berhasil');
+                return redirect()->intended('dashboard')->with(['toast_success' => 'login berhasil', 'welcome' => true]);
             }
             return redirect()->back()->with('toast_error', 'Login Gagal! Email atau password tidak valid.');
     }

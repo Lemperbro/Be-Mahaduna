@@ -73,7 +73,9 @@ class TagihanRepository implements TagihanInterface
             $wali_id = auth()->user()->wali_id;
             $santri_id = $this->WaliInterface->showSantri(wali_id: $wali_id, getId: true);
             if (count($santri_id) > 0) {
-                $data = $this->tagihanModel->with('santri')->whereIn('santri_id', $santri_id)->where('status', $status)->get();
+                $data = $this->tagihanModel->with(['santri' => function($santri){
+                    $santri->with('jenjang')->withTrashed();
+                }])->whereIn('santri_id', $santri_id)->where('status', $status)->get();
                 return (TagihanResource::collection($data))->response()->setStatusCode(200);
             } else {
                 return $this->handleResponseError->ResponseException('data tidak di temukan', 404);
