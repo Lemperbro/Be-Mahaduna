@@ -19,6 +19,7 @@ class TagihanResource extends JsonResource
             'tagihan_id' => $this->tagihan_id,
             'santri_id' => $this->santri_id,
             'santri' => SantriResource::make($this->whenLoaded('santri')),
+            'transaksi' => $this->whenLoaded('transaksi'),
             'label' => $this->label,
             'price' => $this->price,
             'date' => $this->date,

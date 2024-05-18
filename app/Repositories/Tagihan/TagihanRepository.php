@@ -80,7 +80,8 @@ class TagihanRepository implements TagihanInterface
                                 $jenjang->withTrashed();
                             }
                         ]);
-                    }
+                    },
+                    'transaksi'
                 ])->whereIn('santri_id', $santri_id)->where('status', $status)->get();
                 return (TagihanResource::collection($data))->response()->setStatusCode(200);
             } else {
