@@ -27,20 +27,30 @@ class XenditRepository implements XenditInterface
     public function createInvoice($data)
     {
         $waliData = $this->santriModel->with('waliRelasi.wali')->where('santri_id', $data->santri_id)->first();
-        dd($waliData);
         $external_id = Str::uuid();
+    
+        $body = [
+            'external_id' => $external_id,
+            'amount' => $data->price,
+            'description' => $data->label,
+        ];
+    
+        if ($waliData->waliRelasi !== null && $waliData->waliRelasi->wali !== null) {
+            $wali = $waliData->waliRelasi->wali;
+            $body['customer'] = [
+                'email' => $wali->email,
+                'mobile_number' => $wali->telp,
+            ];
+        }
+    
         $create = Http::withHeaders([
             'Authorization' => $this->apiKey
-        ])->post($this->invoiceUrl, [
-                    'external_id' => $external_id,
-                    'amount' => $data->price,
-                    'description' => $data->label,
-                    // 'invoice_duration' => 30
-                    
-                ]);
+        ])->post($this->invoiceUrl, $body);
+    
         $response = $create->object();
         return $response;
     }
+    
 
     /**
      * untuk memverifikasi callback token dari webhooks xendit
