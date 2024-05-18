@@ -107,7 +107,10 @@ class TransaksiRepository implements TransaksiInterface
                 $message = 'Token tidak valid';
                 return $this->handleResponseError->ResponseException($message, 403);
             }
+            $payload = $request->getContent();
+            $event = json_decode($payload, true);
 
+            Log::info('Webhook verified successfully', $event);
             if ($request->status == 'PAID') {
                 $payment_status = 'PAID';
                 $tagihan_status = 'sudah dibayar';
