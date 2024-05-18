@@ -67,7 +67,13 @@ class TagihanRepository implements TagihanInterface
             }
         }
     }
-    public function getTagihanFromSantri(string $status = 'belum dibayar')
+    /**
+     * @param mixed string
+     * @param string $paymentStatus
+     * 
+     * @return [type]
+     */
+    public function getTagihanFromSantri(string $status = 'belum dibayar', string $paymentStatus = 'PENDING')
     {
         try {
             $wali_id = auth()->user()->wali_id;
@@ -81,7 +87,9 @@ class TagihanRepository implements TagihanInterface
                             }
                         ]);
                     },
-                    'transaksi'
+                    'transaksi' => function ($transaksi) use ($paymentStatus) {
+                        $transaksi->where('payment_status', $paymentStatus);
+                    }
                 ])->whereIn('santri_id', $santri_id)->where('status', $status)->get();
                 return (TagihanResource::collection($data))->response()->setStatusCode(200);
             } else {

@@ -15,7 +15,8 @@ class TagihanApiController extends Controller
 
     public function getTagihanFromSantri(Request $request){
         $status = $request->status ?? 'belum dibayar';
-        $data = $this->tagihanInterface->getTagihanFromSantri(status: $status);
+        $paymentStatus = $request->payment_status ?? 'PENDING';
+        $data = $this->tagihanInterface->getTagihanFromSantri(status: $status, paymentStatus: $paymentStatus);
         return $data;
     }
 }
