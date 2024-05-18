@@ -90,7 +90,7 @@ class TagihanRepository implements TagihanInterface
                     'transaksi' => function ($transaksi) use ($paymentStatus) {
                         $transaksi->where('payment_status', $paymentStatus);
                     }
-                ])->whereIn('santri_id', $santri_id)->where('status', $status) ->orderByRaw('COALESCE(updated_at, created_at)')->get();
+                ])->whereIn('santri_id', $santri_id)->where('status', $status)->get();
                 return (TagihanResource::collection($data))->response()->setStatusCode(200);
             } else {
                 return $this->handleResponseError->ResponseException('data tidak di temukan', 404);
