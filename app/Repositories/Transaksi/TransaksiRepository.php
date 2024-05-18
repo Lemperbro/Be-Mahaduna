@@ -69,7 +69,8 @@ class TransaksiRepository implements TransaksiInterface
             DB::beginTransaction();
             $invoiceXendit = $this->XenditInterface->createInvoice($tagihan);
             $this->tagihanModel->where('tagihan_id', $tagihan->tagihan_id)->update([
-                'status' => 'menunggu dibayar'
+                'status' => 'menunggu dibayar',
+                'updated_at' => now()
             ]);
             $createTransaksi = $this->transaksiModel->create([
                 'tagihan_id' => $tagihan->tagihan_id,

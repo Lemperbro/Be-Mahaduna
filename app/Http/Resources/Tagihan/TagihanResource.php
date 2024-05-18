@@ -24,6 +24,8 @@ class TagihanResource extends JsonResource
             'price' => $this->price,
             'date' => $this->date,
             'status' => $this->status,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
         ];
     }
 }
