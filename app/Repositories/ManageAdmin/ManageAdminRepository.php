@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Repositories\ManageAdmin\ManageAdminInterface;
 use App\Repositories\SaveFile\SaveFileRepository;
 use Exception;
+use Illuminate\Support\Facades\Hash;
 
 class ManageAdminRepository implements ManageAdminInterface
 {
@@ -43,5 +44,22 @@ class ManageAdminRepository implements ManageAdminInterface
         }
         return true;
 
+    }
+    /**
+     * ubah password
+     * @param mixed $data
+     * 
+     * @return [type]
+     */
+    public function changePassword($data)
+    {
+        $password = Hash::make($data->password);
+        $change = $this->userModel->where('user_id', auth()->user()->user_id)->update([
+            'password' => $password
+        ]);
+        if (!$change) {
+            return false;
+        }
+        return true;
     }
 }

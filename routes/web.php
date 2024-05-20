@@ -176,9 +176,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/kelas/delete/{id}', [KelasController::class, 'delete'])->name('kelas.delete');
 
     //manage-admin
-    Route::prefix('admin')->group(function(){
+    Route::prefix('admin')->group(function () {
         Route::get('profile', [ManageAdminController::class, 'profile'])->name('admin.profile');
         Route::post('update/profile', [ManageAdminController::class, 'updateProfile'])->name('admin.update.profile');
+        Route::get('ubah/password', [ManageAdminController::class, 'changePassword'])->name('admin.ubah.password');
+        Route::post('ubah/password', [ManageAdminController::class, 'changePasswordSave'])->name('admin.ubah.password.save');
     });
 
     //filepond

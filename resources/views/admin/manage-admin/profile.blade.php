@@ -5,7 +5,6 @@
         @include('admin.partials._header')
         <div class="pt-24 min-h-screen">
             <div class="max-w-[1000px] mx-auto pt-20">
-
                 <div class="p-4 rounded-md border-main3 bg-white">
                     <div class="flex gap-4">
                         <img src="{{ asset(auth()->user()->image) }}" alt=""
@@ -75,7 +74,7 @@
                                 </p>
                             @enderror
                         </div>
-                        <a href="" class="bg-Sidebar p-2 rounded-md inline-block text-white text-center">Ubah
+                        <a href="{{ route('admin.ubah.password') }}" class="bg-Sidebar p-2 rounded-md inline-block text-white text-center">Ubah
                             Password</a>
                     </div>
                     <div class="mt-10">
