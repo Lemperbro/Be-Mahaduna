@@ -17,8 +17,8 @@ class MajalahResource extends JsonResource
         return [
             'majalah_id' => $this->majalah_id,
             'judul' => $this->judul,
-            'bannerImage' => $this->bannerImage,
-            'source' => $this->source,
+            'bannerImage' => url('/') . '/' . $this->bannerImage,
+            'source' => url('/') . '/' . $this->source,
             'views' => $this->views,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at

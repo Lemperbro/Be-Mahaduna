@@ -51,7 +51,7 @@ Route::get('admin/number', [AdminApiController::class, 'findNumber'])->name('adm
 //store
 Route::prefix('store')->group(function () {
     Route::get('all', [StoreApiController::class, 'all'])->name('store.all');
-    Route::get('detail', [StoreApiController::class, 'all'])->name('store.detail');
+    // Route::get('detail', [StoreApiController::class, 'all'])->name('store.detail');
 });
 
 //jadwal
@@ -61,16 +61,16 @@ Route::get('/jadwal/santri', [JadwalApiController::class, 'all'])->name('jadwal.
 Route::post('/wali/login', [WaliApiController::class, 'login'])->name('wali.login');
 Route::post('/tagihan/callback/xendit', [TransaksiApiController::class, 'webhooksXendit'])->name('tagihan.xendit.webhooks');
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/tagihan/create-billing/{id}', [TransaksiApiController::class, 'createTransaksiByXendit'])->name('tagihan.xendit.create');
-
+    
     //wali in auth
-    Route::prefix('wali')->group(function(){
+    Route::prefix('wali')->group(function () {
         Route::post('/logout', [WaliApiController::class, 'logout'])->name('wali.logout');
         Route::get('/findWali', [WaliApiController::class, 'findWali'])->name('wali.find');
     });
-
+    
     //tagihan
-    Route::prefix('tagihan')->group(function(){
+    Route::prefix('tagihan')->group(function () {
         Route::get('/fromSantri', [TagihanApiController::class, 'getTagihanFromSantri'])->name('tagihan.fromSantri');
+        Route::post('/create-billing/{id}', [TransaksiApiController::class, 'createTransaksiByXendit'])->name('tagihan.xendit.create');
     });
 });

@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'image' => 'defaultImage.jpg',
+            'image' => 'uploaads/users/default.jpg',
             'username' => 'ryan yulianto',
             'email' => 'sihdobleh@gmail.com',
             'password' => Hash::make('12345678'),

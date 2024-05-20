@@ -16,7 +16,7 @@ class StoreResource extends JsonResource
     {
         return [
             'produk_id' => $this->store_id,
-            'image' => $this->store_image,
+            'image' => StoreImageResource::collection($this->whenLoaded('store_image')),
             'label' => $this->label,
             'slug' => $this->slug,
             'price' => number_format($this->price, 0, ','),

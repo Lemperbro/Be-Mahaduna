@@ -30,12 +30,12 @@ interface SantriInterface
      */
     public function ubahKelas($data);
     /**
-     * untuk merubah status santri ke lulus
+     * untuk merubah status santri
      * @param mixed $data
      * 
      * @return [type]
      */
-    public function toLulus($data);
+    public function ubahStatus($data);
     /**
      * untuk menghapus data santri , bisa multiple
      * @param array $santri_id

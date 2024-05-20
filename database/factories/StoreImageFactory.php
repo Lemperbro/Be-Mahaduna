@@ -22,7 +22,7 @@ class StoreImageFactory extends Factory
 
         return [
             'store_id' => ceil(self::$index / 2),
-            'image' => 'https://picsum.photos/200/300?random=' . self::$index
+            'image' => 'uploads/storeImage/default.jpg'
         ];
     }
 }

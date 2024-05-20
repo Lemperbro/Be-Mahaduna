@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Majalah\MajalahController;
 use App\Http\Controllers\Admin\Youtube\YoutubeController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Kelas\KelasController;
+use App\Http\Controllers\Admin\ManageAdmin\ManageAdminController;
 use App\Http\Controllers\Admin\MonitoringBulanan\HafalanController;
 use App\Http\Controllers\Admin\Pembayaran\PembayaranController;
 use App\Http\Controllers\Admin\MonitoringMingguan\MonitoringMingguanController;
@@ -165,7 +166,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/santri/create', [SantriController::class, 'create'])->name('santri.create');
     Route::post('/santri/create', [SantriController::class, 'store'])->name('santri.store');
     Route::post('/santri/delete', [SantriController::class, 'delete'])->name('santri.delete');
-    Route::post('/santri/jadikan-lulus', [SantriController::class, 'toLulus'])->name('santri.toLulus');
+    Route::post('/santri/ubah-status', [SantriController::class, 'ubahStatus'])->name('santri.ubahStatus');
     Route::post('/santri/ubah-kelas', [SantriController::class, 'ubahKelas'])->name('santri.ubah-kelas');
 
     //kelas
@@ -173,6 +174,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/kelas/create', [KelasController::class, 'create'])->name('kelas.create');
     Route::post('/kelas/update/{id}', [KelasController::class, 'update'])->name('kelas.update');
     Route::post('/kelas/delete/{id}', [KelasController::class, 'delete'])->name('kelas.delete');
+
+    //manage-admin
+    Route::prefix('admin')->group(function(){
+        Route::get('profile', [ManageAdminController::class, 'profile'])->name('admin.profile');
+        Route::post('update/profile', [ManageAdminController::class, 'updateProfile'])->name('admin.update.profile');
+    });
 
     //filepond
     Route::post('/filePond/post/{folder}', [FilePondController::class, 'postImage'])->name('filePond.post');

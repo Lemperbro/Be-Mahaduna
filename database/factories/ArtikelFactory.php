@@ -19,9 +19,9 @@ class ArtikelFactory extends Factory
     {
         return [
             'judul' => fake()->sentence(),
-            'bannerImage' => 'https://qomaruddinpd.com/uploads/artikelImage/bg.jpg',
+            'bannerImage' => 'uploads/artikelImage/bg.jpg',
             'isi' => fake()->paragraphs(10, true),
-            'views' => fake()->numberBetween(100,1000),
+            'views' => fake()->numberBetween(100, 1000),
             'user_created' => 1,
             'updated_at' => null
         ];

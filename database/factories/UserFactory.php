@@ -24,7 +24,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'image' => 'defaultImage/defaultImage.jpg',
+            'image' => 'uploads/users/default.png',
             'email' => fake()->unique()->safeEmail(),
             'username' => fake()->name(),
             'password' => Hash::make('12345678'),

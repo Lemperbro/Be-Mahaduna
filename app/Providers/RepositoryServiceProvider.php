@@ -27,6 +27,8 @@ use App\Repositories\Artikel\ArtikelRepository;
 use App\Repositories\Hafalan\HafalanRepository;
 use App\Repositories\Jenjang\JenjangRepository;
 use App\Repositories\Majalah\MajalahRepository;
+use App\Repositories\ManageAdmin\ManageAdminInterface;
+use App\Repositories\ManageAdmin\ManageAdminRepository;
 use App\Repositories\Tagihan\TagihanRepository;
 use App\Repositories\Youtube\YoutubeRepository;
 use App\Repositories\Transaksi\TransaksiInterface;
@@ -56,6 +58,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(JenjangInterface::class, JenjangRepository::class);
         $this->app->bind(HafalanInterface::class, HafalanRepository::class);
         $this->app->bind(WaliInterface::class, WaliRepository::class);
+        $this->app->bind(ManageAdminInterface::class, ManageAdminRepository::class);
     }
 
     /**

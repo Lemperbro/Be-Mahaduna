@@ -19,7 +19,7 @@ class ArtikelResource extends JsonResource
             'judul' => $this->judul,
             'slug' => $this->slug,
             'kategori' => ArtikelKategoriResource::collection($this->whenLoaded('artikel_relasi')),
-            'bannerImage' => $this->bannerImage,
+            'bannerImage' => url('/') . '/' . $this->bannerImage,
             'isi' => $this->isi,
             'views' => $this->views,
             'user_created' => $this->user_created ?? null,

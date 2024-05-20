@@ -13,7 +13,8 @@ class SaveFileRepository
         $extension = $fileData->getClientOriginalExtension();
         $name = uniqid() . '-' . now()->timestamp . '.' . $extension;
         $fileData->move($lokasi, $name);
-        $response = url('/') . '/' . $lokasi . '/' . $name;
+        // $response = url('/') . '/' . $lokasi . '/' . $name;
+        $response = $lokasi . '/' . $name;
         return $response;
     }
 
@@ -31,15 +32,18 @@ class SaveFileRepository
                 unlink($storage);
             }
         }
-        $response = url('/') . '/' . $lokasi . '/' . $name;
+        // $response = url('/') . '/' . $lokasi . '/' . $name;
+
+        $response = $lokasi . '/' . $name;
         return $response;
 
     }
 
-    public function deleteFileSingle($lokasi, $file){
+    public function deleteFileSingle($lokasi, $file)
+    {
         $fileName = basename($file);
-        $storage = public_path($lokasi.'/'.$fileName);
-        if(File::exists($storage)){
+        $storage = public_path($lokasi . '/' . $fileName);
+        if (File::exists($storage)) {
             unlink($storage);
         }
         return true;

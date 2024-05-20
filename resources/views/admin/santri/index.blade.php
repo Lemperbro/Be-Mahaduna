@@ -42,7 +42,8 @@
                     <button type="submit" id="btnUbahKelas" class="hidden"></button>
                 </form>
                 {{-- form jadikan Lulus --}}
-                <form action="{{ route('santri.toLulus') }}" method="POST" class="hidden">
+                <form action="{{ route('santri.ubahStatus') }}" method="POST" class="hidden">
+                    <input type="text" name="status" id="status_nilai" class="hidden" value="aktif">
                     <input type="date" name="tgl_keluar" class="hidden" id="tgl_keluar2">
                     <input type="text" name="santri_id" class="hidden" id="santri_id_toLulus">
                     @csrf
@@ -64,8 +65,8 @@
                             {{-- belum fungsi start --}}
                             <button type="button" onclick="modalJadikanLulus.showModal()" id="btnModalJadikanLulus"
                                 class="flex gap-2 items-center bg-Sidebar py-1 px-4 rounded-md w-full sm:w-auto justify-center">
-                                <i class="ri-graduation-cap-fill text-white text-[20px]"></i>
-                                <p class="mt-[2px] text-white whitespace-nowrap text-sm md:text-base">Jadikan Lulus</p>
+                                <i class="ri-refresh-fill text-white text-[20px]"></i>
+                                <p class="mt-[2px] text-white whitespace-nowrap text-sm md:text-base">Ubah Status Santri</p>
                             </button>
                             <button type="button" onclick="modalUbahKelas.showModal()" id="btnModalUbahKelas"
                                 class="flex gap-2 items-center bg-Sidebar py-1 px-4 rounded-md w-full sm:w-auto justify-center">
@@ -94,6 +95,6 @@
         </div>
     </section>
     @include('admin.santri._modalDelete')
-    @include('admin.santri._modalJadikanLulus')
+    @include('admin.santri._modalUbahStatus')
     @include('admin.santri._modalUbahKelas')
 @endsection

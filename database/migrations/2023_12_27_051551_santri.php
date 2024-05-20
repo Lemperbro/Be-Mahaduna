@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->date('tgl_lahir');
             $table->date('tgl_keluar')->nullable();
             $table->enum('jenis_kelamin', ['laki-laki', 'perempuan']);
-            $table->enum('status', ['aktif', 'lulus', 'keluar']);
+            $table->enum('status', ['aktif', 'lulus', 'keluar', 'muhjaz']);
             $table->integer('user_created')->nullable();
             $table->timestamps();
             $table->integer('user_updated')->nullable();

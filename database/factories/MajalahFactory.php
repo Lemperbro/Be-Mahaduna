@@ -20,9 +20,9 @@ class MajalahFactory extends Factory
         self::$index++;
         return [
             'judul' => fake()->sentence(),
-            'source' => 'default'.self::$index.'.pdf',
-            'bannerImage' => 'https://qomaruddinpd.com/uploads/majalahImage/bg.jpg',
-            'views' => fake()->numberBetween(100,1000)
+            'source' => 'uploads/majalahFile/default.pdf',
+            'bannerImage' => 'uploads/majalahImage/bg.jpg',
+            'views' => fake()->numberBetween(100, 1000)
         ];
     }
 }

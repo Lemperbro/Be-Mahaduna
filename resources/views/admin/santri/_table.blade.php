@@ -83,7 +83,7 @@
                     <td class="px-2  py-2 md:py-4 whitespace-nowrap capitalize flex gap-x-1.5 items-center">
                         @if ($item->status == 'aktif')
                         <span class="bg-lime-600 w-2.5 h-2.5 rounded-full"></span>
-                        @elseif ($item->status == 'lulus')
+                        @elseif (in_array($item->status, ['lulus', 'muhjaz']))
                         <span class="bg-Sidebar w-2.5 h-2.5 rounded-full"></span>
                         @elseif ($item->status == 'keluar')
                         <span class="bg-red-600 w-2.5 h-2.5 rounded-full"></span>

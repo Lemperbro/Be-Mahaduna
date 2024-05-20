@@ -57,8 +57,6 @@ class SantriRepository implements SantriInterface
         }
         if ($status !== null) {
             $data->where('status', $status);
-        } else {
-            $data->where('status', 'aktif');
         }
         if ($jenisKelamin !== null) {
             $data->where('jenis_kelamin', $jenisKelamin);
@@ -109,7 +107,8 @@ class SantriRepository implements SantriInterface
      * 
      * @return [type]
      */
-    public function ubahKelas($data){
+    public function ubahKelas($data)
+    {
         $santri_id = explode('|', $data->santri_id);
         $update = $this->santriModel->whereIn('santri_id', $santri_id)->update([
             'jenjang_id' => $data->kelas,
@@ -122,23 +121,35 @@ class SantriRepository implements SantriInterface
         return true;
     }
     /**
-     * untuk merubah status santri ke lulus
+     * untuk merubah status santri 
      * @param mixed $data
      * 
      * @return [type]
      */
-    public function toLulus($data)
+    public function ubahStatus($data)
     {
-        if ($data->tgl_keluar == null) {
+        if (!in_array($data->status, ['aktif', 'lulus', 'keluar', 'muhjaz'])) {
             return [
                 'error' => true,
-                'message' => 'Tanggal Kelulusan Harus Di isi'
+                'message' => 'Pilih status dengan benar'
             ];
+        }
+        if ($data->status !== 'aktif') {
+            if ($data->tgl_keluar == null) {
+                return [
+                    'error' => true,
+                    'message' => 'Tanggal Kelulusan Harus Di isi'
+                ];
+            } else {
+                $tgl_keluar = $data->tgl_keluar;
+            }
+        } else {
+            $tgl_keluar = null;
         }
         $santri_id = explode('|', $data->santri_id);
         $update = $this->santriModel->whereIn('santri_id', $santri_id)->update([
-            'status' => 'lulus',
-            'tgl_keluar' => $data->tgl_keluar,
+            'status' => $data->status,
+            'tgl_keluar' => $tgl_keluar,
             'updated_at' => now(),
             'user_updated' => auth()->user()->user_id,
         ]);

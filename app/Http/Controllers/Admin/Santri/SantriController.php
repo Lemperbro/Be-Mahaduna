@@ -8,10 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Wali\WaliInterface;
 use App\Repositories\Santri\SantriInterface;
 use App\Repositories\Jenjang\JenjangInterface;
-use App\Http\Requests\Santri\SantriLulusRequest;
 use App\Http\Requests\Santri\SantriCreateRequest;
 use App\Http\Requests\Santri\SantriDeleteRequest;
 use App\Http\Requests\Santri\SantriUbahKelasRequest;
+use App\Http\Requests\Santri\UbahStatusRequest;
 
 class SantriController extends Controller
 {
@@ -56,8 +56,8 @@ class SantriController extends Controller
             return redirect()->back()->with('toast_error', 'Tidak berhasil menambah data');
         }
     }
-    public function toLulus(SantriLulusRequest $request){
-        $update = $this->SantriInterface->toLulus($request);
+    public function ubahStatus(UbahStatusRequest $request){
+        $update = $this->SantriInterface->ubahStatus($request);
         if (isset($update['error']) && $update['error'] == true) {
             return redirect()->back()->with('toast_error', $update['message']);
         } else if ($update) {
