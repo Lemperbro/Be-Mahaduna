@@ -100,51 +100,52 @@ class TransaksiRepository implements TransaksiInterface
      */
     public function webhooksXendit($request)
     {
-        try {
-            $callbackToken = $request->header('x-callback-token');
-            $verifyCallbackToken = $this->XenditInterface->verifyCallbackToken($callbackToken);
-            if (!$verifyCallbackToken) {
-                $message = 'Token tidak valid';
-                return $this->handleResponseError->ResponseException($message, 403);
-            }
-            // $payload = $request->getContent();
-            // $event = json_decode($payload, true);
+        return true;
+        // try {
+        //     $callbackToken = $request->header('x-callback-token');
+        //     $verifyCallbackToken = $this->XenditInterface->verifyCallbackToken($callbackToken);
+        //     if (!$verifyCallbackToken) {
+        //         $message = 'Token tidak valid';
+        //         return $this->handleResponseError->ResponseException($message, 403);
+        //     }
+        //     // $payload = $request->getContent();
+        //     // $event = json_decode($payload, true);
 
-            // Log::info('Webhook verified successfully', $event);
-            if ($request->status == 'PAID') {
-                $payment_status = 'PAID';
-                $tagihan_status = 'sudah dibayar';
-                $payment_type = 'transfer';
-                $pay = $request->paid_amount;
-            } else if ($request->status == 'EXPIRED') {
-                $payment_status = 'EXPIRED';
-                $tagihan_status = 'belum dibayar';
-                $payment_type = null;
-                $pay = null;
-            }
-            DB::beginTransaction();
-            $transaksi = $this->transaksiModel->where('external_id', $request->external_id)->first();
-            $transaksi->update([
-                'pay' => $pay,
-                'payment_status' => $payment_status
-            ]);
-            $this->tagihanModel->where('tagihan_id', $transaksi->tagihan_id)->update([
-                'status' => $tagihan_status,
-                'payment_type' => $payment_type
-            ]);
-            DB::commit();
+        //     // Log::info('Webhook verified successfully', $event);
+        //     if ($request->status == 'PAID') {
+        //         $payment_status = 'PAID';
+        //         $tagihan_status = 'sudah dibayar';
+        //         $payment_type = 'transfer';
+        //         $pay = $request->paid_amount;
+        //     } else if ($request->status == 'EXPIRED') {
+        //         $payment_status = 'EXPIRED';
+        //         $tagihan_status = 'belum dibayar';
+        //         $payment_type = null;
+        //         $pay = null;
+        //     }
+        //     DB::beginTransaction();
+        //     $transaksi = $this->transaksiModel->where('external_id', $request->external_id)->first();
+        //     $transaksi->update([
+        //         'pay' => $pay,
+        //         'payment_status' => $payment_status
+        //     ]);
+        //     $this->tagihanModel->where('tagihan_id', $transaksi->tagihan_id)->update([
+        //         'status' => $tagihan_status,
+        //         'payment_type' => $payment_type
+        //     ]);
+        //     DB::commit();
 
-            return response()->json([
-                'error' => false,
-                'message' => 'callback success'
-            ], 200);
-        } catch (Exception $e) {
-            DB::rollBack();
+        //     return response()->json([
+        //         'error' => false,
+        //         'message' => 'callback success'
+        //     ], 200);
+        // } catch (Exception $e) {
+        //     DB::rollBack();
 
-            return response()->json([
-                'error' => true,
-                'message' => 'callback failed'
-            ], 400);
-        }
+        //     return response()->json([
+        //         'error' => true,
+        //         'message' => 'callback failed'
+        //     ], 400);
+        // }
     }
 }
