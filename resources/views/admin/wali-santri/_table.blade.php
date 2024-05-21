@@ -94,6 +94,13 @@
                                     </a>
                                 </li>
                                 <li>
+                                    <a href="{{ route('wali.changePassword', ['id' => $item->wali_id]) }}"
+                                        class=" px-4 py-2 hover:bg-gray-100 w-full text-Sidebar flex gap-2 items-center">
+                                        <i class="ri-key-fill text-xl"></i>
+                                        Ubah Password
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="{{ route('wali.show.santri', ['wali_id' => $item->wali_id]) }}"
                                         class="px-4 py-2 hover:bg-gray-100 w-full text-Sidebar flex gap-2 items-center">
                                         <i class="ri-eye-fill text-xl"></i>

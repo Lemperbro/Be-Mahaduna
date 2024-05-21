@@ -12,15 +12,18 @@ use App\Http\Resources\Wali\WaliLoginResource;
 use Illuminate\Validation\ValidationException;
 use App\Http\Resources\Wali\SantriOnWaliResource;
 use App\Http\Resources\Wali\WaliResource;
+use App\Repositories\HandleError\ResponseErrorRepository;
 
 class WaliRepository implements WaliInterface
 {
     private $waliModel, $waliRelasi;
+    private $handleResponseError;
     private $defaultPassword = 'mahaduna12345';
     public function __construct()
     {
         $this->waliModel = new Wali;
         $this->waliRelasi = new WaliRelasi;
+        $this->handleResponseError = new ResponseErrorRepository;
     }
     /**
      * untuk login wali santri
@@ -133,9 +136,11 @@ class WaliRepository implements WaliInterface
      */
     public function showSantri($wali_id, $getId = false)
     {
-        $data = $this->waliModel->with(['waliRelasi.santri.jenjang' => function($query){
-            $query->withTrashed();
-        }])->where('wali_id', $wali_id)->firstOrFail();
+        $data = $this->waliModel->with([
+            'waliRelasi.santri.jenjang' => function ($query) {
+                $query->withTrashed();
+            }
+        ])->where('wali_id', $wali_id)->firstOrFail();
         if ($getId) {
             $data = $data->waliRelasi;
             return $data->pluck('santri_id')->toArray();
@@ -144,6 +149,51 @@ class WaliRepository implements WaliInterface
                 return (SantriOnWaliResource::make($data))->response()->setStatusCode(200);
             } else {
                 return $data;
+            }
+        }
+    }
+    /**
+     * untuk ubah password wali
+     * @param mixed $wali_id
+     * @param mixed $password
+     * 
+     * @return [type]
+     */
+    public function changePassword($wali_id, $password)
+    {
+        try {
+            $findWali = $this->waliModel->where('wali_id', $wali_id)->first();
+            if ($findWali == null) {
+                if (request()->wantsJson()) {
+                    return $this->handleResponseError->ResponseException(message: 'Data tidak ditemukan', statusCode: 404);
+                } else {
+                    return [
+                        'error' => true,
+                        'message' => 'Data tidak ditemukan'
+                    ];
+                }
+            }
+            $password = Hash::make($password);
+            $update = $findWali->update([
+                'password' => $password
+            ]);
+            if ($update) {
+                if (request()->wantsJson()) {
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Password berhasil diubah'
+                    ], 201);
+                } else {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            if (request()->wantsJson()) {
+                return $this->handleResponseError->responseError($e);
+            } else {
+                return false;
             }
         }
     }

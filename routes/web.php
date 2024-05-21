@@ -161,6 +161,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wali/edit/{id}', [WaliController::class, 'edit'])->name('wali.edit');
     Route::post('/wali/update/{id}', [WaliController::class, 'update'])->name('wali.update');
     Route::post('/wali/delete', [WaliController::class, 'delete'])->name('wali.delete');
+    Route::get('/wali/changePassword/{id}', [WaliController::class, 'changePassword'])->name('wali.changePassword');
+    Route::post('/wali/changePassword', [WaliController::class, 'changePasswordSave'])->name('wali.changePasswordSave');
     //santri
     Route::get('/santri', [SantriController::class, 'index'])->name('santri.index');
     Route::get('/santri/create', [SantriController::class, 'create'])->name('santri.create');

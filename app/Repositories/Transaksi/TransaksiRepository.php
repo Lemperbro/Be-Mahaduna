@@ -81,7 +81,7 @@ class TransaksiRepository implements TransaksiInterface
                 'pay' => $invoiceXendit->amount,
                 'payment_type' => 'payment_gateway',
                 'payment_status' => $invoiceXendit->status,
-                'expired' => Carbon::parse($invoiceXendit->expiry_date)->format('Y-m-d H:i:s')
+                'expired' => Carbon::parse($invoiceXendit->expiry_date)->setTimezone('Asia/Jakarta')->format('Y-m-d H:i:s')
             ]);
             DB::commit();
             return (TransaksiResource::make($createTransaksi->fresh()))->response()->setStatusCode(201);

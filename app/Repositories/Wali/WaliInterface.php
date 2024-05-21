@@ -47,6 +47,14 @@ interface WaliInterface
      * @return [type]
      */
     public function update($data, $oldData);
+     /**
+     * untuk ubah password wali
+     * @param mixed $wali_id
+     * @param mixed $password
+     * 
+     * @return [type]
+     */
+    public function changePassword($wali_id, $password);
     /**
      * untuk menghapus data wali , bisa multiple
      * @param array $wali_id

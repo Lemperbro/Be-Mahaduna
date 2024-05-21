@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin\WaliSantri;
 use App\Models\Wali;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Wali\ChangePasswordWaliRequest;
 use App\Repositories\Wali\WaliInterface;
-use App\Http\Requests\WaliWaliCreateRequest;
 use App\Http\Requests\Wali\WaliCreateRequest;
 use App\Http\Requests\Wali\WaliDeleteRequest;
 use App\Http\Requests\Wali\WaliUpdateRequest;
@@ -65,6 +65,23 @@ class WaliController extends Controller
             return redirect(route('wali.index'))->with('toast_success', 'Berhasil memperbarui data');
         } else {
             return redirect()->back()->with('toast_error', 'Tidak berhasil memperbarui data');
+        }
+    }
+    public function changePassword(Wali $id)
+    {
+        $headerTitle = 'Ubah Password Wali Santri';
+        $wali_id = $id->wali_id;
+        return view('admin.wali-santri.changePassword', compact('headerTitle', 'wali_id'));
+    }
+    public function changePasswordSave(ChangePasswordWaliRequest $request)
+    {
+        $change = $this->WaliInterface->changePassword(wali_id: $request->wali_id, password: $request->password);
+        if (isset($change['error']) && $change['error'] == true) {
+            return redirect()->back()->with('toast_error', $change['message']);
+        } else if ($change) {
+            return redirect(route('wali.index'))->with('toast_success', 'Berhasil memperbarui password');
+        } else {
+            return redirect()->back()->with('toast_error', 'Tidak berhasil memperbarui password');
         }
     }
     public function delete(WaliDeleteRequest $request)
