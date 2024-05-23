@@ -27,6 +27,7 @@
                     </button>
                 </div>
             @endif
+            
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                 <div class="bg-Sidebar rounded-md h-36 p-4">
                     <div class="flex justify-between gap-4 items-center h-full my-auto">

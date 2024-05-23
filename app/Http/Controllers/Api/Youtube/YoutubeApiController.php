@@ -11,17 +11,20 @@ use App\Http\Requests\Api\Youtube\ShowVideoRequest;
 use App\Http\Requests\Api\Youtube\ShowAllVideoRequest;
 use App\Http\Requests\Api\Youtube\GetAllPlaylistRequest;
 use App\Http\Requests\Api\Youtube\showAllPlaylistItemsRequest;
+use App\Repositories\HandleError\ResponseErrorRepository;
 
 class YoutubeApiController extends Controller
 {
     //
 
-    private $YoutubeInterface;
+    private $YoutubeInterface, $handelError;
 
     public function __construct(YoutubeInterface $YoutubeInterface)
     {
         $this->YoutubeInterface = $YoutubeInterface;
+        $this->handelError = new ResponseErrorRepository;
     }
+
 
 
     //caching satu jam
@@ -35,6 +38,8 @@ class YoutubeApiController extends Controller
 
         // Buat key cache unik berdasarkan parameter yang diterima
         $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}";
+        // return response()->json(['error' => 'ya', 'message' => Cache::get($cacheKey)]);
+
 
         // Key untuk menyimpan playlistIdData di cache
         $playlistIdCacheKey = 'cached_playlist_ids';
@@ -54,25 +59,33 @@ class YoutubeApiController extends Controller
         }
 
         // Jika playlistId tidak sama atau data playlist tidak ada di cache, ambil data baru dari API
+
         $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
-        // Hapus data cache untuk halaman-halaman berikutnya
-        $currentKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_1";
-        if (Cache::has($currentKey)) {
-            $oldData = Cache::get($currentKey);
-            for ($i = 1; $i <= $oldData->getData()->last_page; $i++) {
-                $nextPageCacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$i}";
-                if (Cache::has($nextPageCacheKey)) {
-                    Cache::forget($nextPageCacheKey);
+        if ($data->getStatusCode() !== 500) {
+            $currentKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_1";
+            if (Cache::has($currentKey)) {
+                $oldData = Cache::get($currentKey);
+                for ($i = 1; $i <= $oldData->getData()->last_page; $i++) {
+                    $nextPageCacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$i}";
+                    if (Cache::has($nextPageCacheKey)) {
+                        Cache::forget($nextPageCacheKey);
+                    }
                 }
             }
-        }
-        // Simpan hasil dalam cache selama 1 jam
-        Cache::put($cacheKey, $data, now()->addHours(2));
-        // Simpan playlistIdData yang baru ke dalam cache
-        Cache::put($playlistIdCacheKey, $newPlaylistIdData, now()->addHours(2));
+            // Simpan hasil dalam cache selama 2 jam
+            Cache::put($cacheKey, $data, now()->addHours(2));
+            // Simpan playlistIdData yang baru ke dalam cache
+            Cache::put($playlistIdCacheKey, $newPlaylistIdData, now()->addHours(2));
 
-        return $data;
+            return $data;
+        } else {
+            return Cache::get($cacheKey);
+        }
+
+
+
     }
+
 
 
 
@@ -88,7 +101,6 @@ class YoutubeApiController extends Controller
 
         // Buat key cache unik berdasarkan parameter yang diterima
         $cacheKey = "youtube_playlist_items_{$playlistId}_{$part}_{$paginate}_{$pageToken}";
-
         // Cek apakah data sudah ada dalam cache
         if (Cache::has($cacheKey)) {
             return Cache::get($cacheKey);

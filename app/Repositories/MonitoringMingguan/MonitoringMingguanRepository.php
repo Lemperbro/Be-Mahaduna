@@ -38,10 +38,12 @@ class MonitoringMingguanRepository implements MonitoringMingguanInterface
                 return $this->handleResponseError->ResponseException($message, 404);
             }
             $data = $this->monitoringMingguanModel->with([
-                'santri' => function($item){
-                    $item->with(['jenjang' => function($jenjang){
-                        $jenjang->withTrashed();
-                    }]);
+                'santri' => function ($item) {
+                    $item->with([
+                        'jenjang' => function ($jenjang) {
+                            $jenjang->withTrashed();
+                        }
+                    ]);
                 }
             ])->where('kategori', $kategori)->latest();
 

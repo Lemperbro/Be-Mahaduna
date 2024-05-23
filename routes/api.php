@@ -22,7 +22,6 @@ use App\Http\Controllers\Api\Transaksi\TransaksiApiController;
 |
 */
 
-
 //playlist
 Route::prefix('playlist')->group(function () {
     Route::get('all', [YoutubeApiController::class, 'getAllPlaylist'])->name('playlist.all');

@@ -35,6 +35,10 @@ return [
     ],
     'youtube' => [
         'apiKey' => env('YOUTUBE_API_KEY'),
+        'apiKey1' => env('YOUTUBE_API_KEY1'),
+        'apiKey2' => env('YOUTUBE_API_KEY2'),
+        'apiKey3' => env('YOUTUBE_API_KEY3'),
+        'apiKey4' => env('YOUTUBE_API_KEY4'),
         'channelId' => env('YOUTUBE_CHANNEL_ID'),
         'urlPlaylist' => env('YOUTUBE_URL_PLAYLIST'),
         'video_item' => env('YOUTUBE_URL_VIDEO_ITEM'),

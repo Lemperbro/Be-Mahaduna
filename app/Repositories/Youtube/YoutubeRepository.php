@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\PlaylistVideo;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Collection;
 use App\Http\Resources\Youtube\VideoResource;
 use App\Repositories\Youtube\YoutubeInterface;
@@ -18,6 +19,15 @@ class YoutubeRepository implements YoutubeInterface
 
     private $apiKey, $channelId, $model, $urlPlaylist, $playlistItems, $videoItem, $urlSearch;
     private $responseError;
+    protected $apiKeyIndex = 0;
+    protected $apiKeys = [
+        config('services.youtube.apiKey1'),
+        config('services.youtube.apiKey2'),
+        config('services.youtube.apiKey3'),
+        config('services.youtube.apiKey4')
+    ];
+
+    private $playlistIdCacheKey;
 
     public function __construct()
     {
@@ -29,6 +39,7 @@ class YoutubeRepository implements YoutubeInterface
         $this->urlSearch = config('services.youtube.url_search');
         $this->responseError = new ResponseErrorRepository;
         $this->model = new PlaylistVideo;
+        $this->playlistIdCacheKey = 'cached_playlist_ids';
     }
 
     public function responseSukses($data)
@@ -41,6 +52,7 @@ class YoutubeRepository implements YoutubeInterface
     {
         return isset($data->json()['error']) && isset($data->json()['error']['code']) ? $data->json()['error']['code'] : 200;
     }
+
 
 
     /**
@@ -61,6 +73,54 @@ class YoutubeRepository implements YoutubeInterface
         $response['items'] = $filter;
         return $response;
     }
+    /**
+     * sorting vide terbaru
+     * @param mixed $data
+     * 
+     * @return [type]
+     */
+    public function sortVideoLatest($data, $sortLokasi)
+    {
+        $response = json_decode(json_encode($data));
+        $videoCollect = collect($response->items);
+        $sortVideo = $videoCollect->sortByDesc($sortLokasi)->values()->all();
+        $response->items = $sortVideo;
+        return $response;
+    }
+    /**
+     * untuk cek apakah ada limit, jika iyh maka akan me return true
+     * @param mixed $response
+     * 
+     * @return [type]
+     */
+    public function isQuotaLimitError($response)
+    {
+        if ($response->status() == 403) {
+            $error = $response->json();
+            return isset($error['error']['errors'][0]['reason']) && $error['error']['errors'][0]['reason'] === 'quotaExceeded';
+        }
+
+        return false;
+    }
+
+    /**
+     * untuk merubah api keys
+     * @return [type]
+     */
+    protected function rotateApiKey()
+    {
+        $this->apiKeyIndex = ($this->apiKeyIndex + 1) % count($this->apiKeys);
+        Log::info('API key rotated', ['apiKey' => $this->apiKeys[$this->apiKeyIndex]]);
+
+        // Cek apakah sudah menggunakan semua API key
+        if ($this->apiKeyIndex === 0) {
+            Log::info('All API keys have been used, stopping the loop');
+            return false; // Mengembalikan false untuk menghentikan loop
+        }
+
+        return true; // Mengembalikan true untuk melanjutkan loop
+    }
+
 
     /**
      * Ambil semua data playlist dari channel youtube
@@ -72,21 +132,28 @@ class YoutubeRepository implements YoutubeInterface
      */
     public function getAllPlaylistFrYoutube($maxResults = 50, $filter = false, $part = 'snippet')
     {
-        $get = Http::get($this->urlPlaylist, [
-            'key' => $this->apiKey,
-            'channelId' => $this->channelId,
-            'type' => 'video',
-            'part' => $part,
-            'maxResults' => $maxResults,
-            'pageToken' => request('ajaxPageToken') ?? null,
-        ]);
-
-        $statusCode = $this->cekStatusCodeApi($get);
-        $responseData = $get->json();
-        if ($filter === true) {
-            $responseData = $this->filterDataYangSudahAda($get->json(), $this->getAllPlaylistId());
-        }
-        return (VideoResource::make($responseData))->response()->setStatusCode($statusCode);
+        do {
+            $get = Http::get($this->urlPlaylist, [
+                'key' => $this->apiKeys[$this->apiKeyIndex],
+                'channelId' => $this->channelId,
+                'type' => 'video',
+                'part' => $part,
+                'maxResults' => $maxResults,
+                'pageToken' => request('ajaxPageToken') ?? null,
+            ]);
+            // Cek apakah terjadi quota limit
+            if ($this->isQuotaLimitError($get)) {
+                if ($this->rotateApiKey()) {
+                    continue; // Melanjutkan loop jika rotasi gagal
+                }
+            }
+            $statusCode = $this->cekStatusCodeApi($get);
+            $responseData = $get->json();
+            if ($filter === true) {
+                $responseData = $this->filterDataYangSudahAda($get->json(), $this->getAllPlaylistId());
+            }
+            return (VideoResource::make($responseData))->response()->setStatusCode($statusCode);
+        } while (true);
     }
 
     /**
@@ -181,20 +248,7 @@ class YoutubeRepository implements YoutubeInterface
     }
 
 
-    /**
-     * sorting vide terbaru
-     * @param mixed $data
-     * 
-     * @return [type]
-     */
-    public function sortVideoLatest($data, $sortLokasi)
-    {
-        $response = json_decode(json_encode($data));
-        $videoCollect = collect($response->items);
-        $sortVideo = $videoCollect->sortByDesc($sortLokasi)->values()->all();
-        $response->items = $sortVideo;
-        return $response;
-    }
+
 
     public function cariPlaylist($data, $keyword)
     {
@@ -218,42 +272,59 @@ class YoutubeRepository implements YoutubeInterface
      * @return [type]
      */
 
-    public function getAllDataPlaylist($part = 'snippet', $keyword = null, $paginate = 10)
+    public function getAllDataPlaylist($part = 'snippet', $keyword = null, $paginate = 10, $page = 1)
     {
-        if (request()->wantsJson()) {
-            $playlistIdData = $this->getAllPlaylistId()->getData()->data;
-            Log::info('dari server');
-            $playlistId = collect($playlistIdData);
-            $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
-            if (count($playlistId) <= 0) {
-                $message = 'playlist tidak tersedia';
-                return $this->responseError->ResponseException($message, 404);
-            }
-        } else {
-            $playlistId = $this->getAllPlaylistId();
-            $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
+        try {
+            do {
+                if (request()->wantsJson()) {
+                    $playlistIdData = $this->getAllPlaylistId()->getData()->data;
+                    $playlistId = collect($playlistIdData);
+                    $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
+                    if (count($playlistId) <= 0) {
+                        $message = 'playlist tidak tersedia';
+                        return $this->responseError->ResponseException($message, 404);
+                    }
+                } else {
+                    $playlistId = $this->getAllPlaylistId();
+                    $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
+                }
+
+                $get = Http::get($this->urlPlaylist, [
+                    'key' => $this->apiKeys[$this->apiKeyIndex],
+                    'id' => $playlistImplode,
+                    'type' => 'video',
+                    'part' => $part,
+                ]);
+                // Cek apakah terjadi quota limit
+                if ($this->isQuotaLimitError($get)) {
+                    if ($this->rotateApiKey()) {
+                        continue; // Melanjutkan loop jika rotasi gagal
+                    }
+                }
+
+                $statusCode = $this->cekStatusCodeApi($get);
+                $responseData = $this->sortVideoLatest($get->json(), 'snippet.publishedAt');
+                if ($keyword !== null) {
+                    $responseData = $this->cariPlaylist($get->json(), $keyword);
+                }
+                $responseWithPaginate = $this->getManualPagination($paginate, $responseData);
+                if (request()->wantsJson()) {
+                    return (VideoResource::make($responseWithPaginate))->response()->setStatusCode($statusCode);
+                } else {
+                    return $responseWithPaginate;
+                }
+            } while (true);
+        } catch (Exception $e) {
+            return $this->responseError->responseError($e);
+
         }
-
-        $get = Http::get($this->urlPlaylist, [
-            'key' => $this->apiKey,
-            'id' => $playlistImplode,
-            'type' => 'video',
-            'part' => $part,
-        ]);
-
-
-            $statusCode = $this->cekStatusCodeApi($get);
-            $responseData = $this->sortVideoLatest($get->json(), 'snippet.publishedAt');
-            if ($keyword !== null) {
-                $responseData = $this->cariPlaylist($get->json(), $keyword);
-            }
-            $responseWithPaginate = $this->getManualPagination($paginate, $responseData);
-            if (request()->wantsJson()) {
-                return (VideoResource::make($responseWithPaginate))->response()->setStatusCode($statusCode);
-            } else {
-                return $responseWithPaginate;
-            }
     }
+
+
+
+
+
+
 
     /**
      * Menampilkan isi playlist
@@ -266,17 +337,24 @@ class YoutubeRepository implements YoutubeInterface
      */
     public function getPlaylistItems($part = 'snippet', $playlistId, $paginate = 10, $pageToken = null)
     {
-        $get = Http::get($this->playlistItems, [
-            'key' => $this->apiKey,
-            'playlistId' => $playlistId,
-            'maxResults' => $paginate,
-            'type' => 'video',
-            'part' => $part,
-            'pageToken' => $pageToken
-        ]);
+        do {
+            $get = Http::get($this->playlistItems, [
+                'key' => $this->apiKey,
+                'playlistId' => $playlistId,
+                'maxResults' => $paginate,
+                'type' => 'video',
+                'part' => $part,
+                'pageToken' => $pageToken
+            ]);
+            // Cek apakah terjadi quota limit
+            if ($this->isQuotaLimitError($get)) {
+                $this->rotateApiKey();
+                continue;
+            }
 
-        $statusCode = $this->cekStatusCodeApi($get);
-        return response()->json($get->json())->setStatusCode($statusCode);
+            $statusCode = $this->cekStatusCodeApi($get);
+            return response()->json($get->json())->setStatusCode($statusCode);
+        } while (true);
     }
     /**
      * untuk menampilkan video dari semua playlist

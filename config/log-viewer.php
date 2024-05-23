@@ -106,6 +106,16 @@ return [
         'local' => [
             'name' => ucfirst(env('APP_ENV', 'local')),
         ],
+          'production' => [
+            'name' => 'Production',
+            'host' => 'https://ryandev.biz.id/log-viewer',
+            'auth' => [      // Example of Bearer token auth
+                'token' => env('LOG_VIEWER_PRODUCTION_TOKEN'),
+            ],
+            'headers' => [
+                'X-Foo' => 'Bar',
+            ],
+        ],
 
         // 'staging' => [
         //     'name' => 'Staging',

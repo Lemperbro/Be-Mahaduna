@@ -25,7 +25,7 @@
                             class="w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 mt-1 @error('password')
                             peer
                         @enderror">
-                            @error('password')
+                        @error('password')
                             <p class="peer-invalid:visible text-red-700 font-light">
                                 {{ $message }}
                             </p>

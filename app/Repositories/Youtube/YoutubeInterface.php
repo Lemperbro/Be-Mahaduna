@@ -4,7 +4,7 @@ namespace App\Repositories\Youtube;
 
 interface YoutubeInterface
 {
-
+    public function isQuotaLimitError($response);
     /**
      * Mendapatkan semua daftar playlist dari channel yang di dapatkan dari api YouTube.
      * @param int $maxResults Jumlah maksimal hasil yang akan diambil (default adalah 50)
@@ -30,7 +30,7 @@ interface YoutubeInterface
      * 
      * @return [type]
      */
-    public function getAllDataPlaylist($part = 'snippet', $keyword = null, $paginate = 10);
+    public function getAllDataPlaylist($part = 'snippet', $keyword = null, $paginate = 10, $page = 1);
     /**
      * Mengambil semua data playlistId yang tersimpan dalam database
      * @return mixed
