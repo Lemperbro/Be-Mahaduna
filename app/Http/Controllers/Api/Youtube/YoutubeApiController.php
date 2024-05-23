@@ -37,39 +37,30 @@ class YoutubeApiController extends Controller
 
         // Key untuk menyimpan playlistIdData di cache
         $playlistIdCacheKey = 'cached_playlist_ids';
-        $a = Cache::get($playlistIdCacheKey);
-        Log::info('playlist id from repo', ['key' => $a]);
 
-        // Cek apakah data sudah ada dalam cache
-        if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
-        } else {
-            // Ambil data dari YoutubeInterface jika data tidak ada dalam cache
-            $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
+        // Ambil playlistIdData yang sudah disimpan di cache
+        $cachedPlaylistIdData = Cache::get($playlistIdCacheKey);
+        $newPlaylistIdData = $this->YoutubeInterface->getAllPlaylistId()->getData()->data;
 
-            // Simpan hasil dalam cache selama 1 jam
-            Cache::put($cacheKey, $data, now()->addHour());
-
-            // Ambil playlistIdData yang sudah disimpan di cache
-            $cachedPlaylistIdData = Cache::get($playlistIdCacheKey);
-            $newPlaylistIdData = $this->YoutubeInterface->getAllPlaylistId()->getData()->data;
-
-            // Jika cachedPlaylistIdData tidak ada di cache, simpan data baru
-            if (!$cachedPlaylistIdData) {
-                Cache::put($playlistIdCacheKey, $newPlaylistIdData, now()->addHour());
-            } else {
-                // Cek apakah playlistIdData di cache berbeda dengan data baru
-                if ($cachedPlaylistIdData !== $newPlaylistIdData) {
-                    // Hapus cache lama jika berbeda
-                    Cache::forget($cacheKey);
-                    Cache::put($cacheKey, $data, now()->addHour());
-                    Cache::put($playlistIdCacheKey, $newPlaylistIdData, now()->addHour());
-                }
+        // Cek apakah playlistIdData di cache sama dengan data baru
+        if ($cachedPlaylistIdData === $newPlaylistIdData) {
+            // Jika playlistId sama, cek apakah data playlist ada di cache
+            if (Cache::has($cacheKey)) {
+                return Cache::get($cacheKey);
             }
-
-            return $data;
         }
+
+        // Jika playlistId tidak sama atau data playlist tidak ada di cache, ambil data baru dari API
+        $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
+
+        // Simpan hasil dalam cache selama 1 jam
+        Cache::put($cacheKey, $data, now()->addHour());
+        // Simpan playlistIdData yang baru ke dalam cache
+        Cache::put($playlistIdCacheKey, $newPlaylistIdData, now()->addHour());
+
+        return $data;
     }
+
 
 
     public function showPlaylistItems(showAllPlaylistItemsRequest $request)
