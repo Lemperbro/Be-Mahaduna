@@ -34,7 +34,7 @@ class YoutubeApiController extends Controller
         $page = $request->page ?? 1;
 
         // Buat key cache unik berdasarkan parameter yang diterima
-        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}";
+        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}";
 
         // Key untuk menyimpan playlistIdData di cache
         $playlistIdCacheKey = 'cached_playlist_ids';
