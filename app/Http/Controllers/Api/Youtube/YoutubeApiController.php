@@ -42,7 +42,7 @@ class YoutubeApiController extends Controller
         // Ambil playlistIdData yang sudah disimpan di cache
         $cachedPlaylistIdData = Cache::get($playlistIdCacheKey);
         $newPlaylistIdData = $this->YoutubeInterface->getAllPlaylistId()->getData()->data;
-        Log::info('playlistId', $cachedPlaylistIdData);
+        // Log::info('playlistId', $cachedPlaylistIdData);
         // Cek apakah playlistIdData di cache sama dengan data baru
         if ($cachedPlaylistIdData === $newPlaylistIdData) {
             // Jika playlistId sama, cek apakah data playlist ada di cache
