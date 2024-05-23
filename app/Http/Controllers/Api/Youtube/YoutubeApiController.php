@@ -56,16 +56,21 @@ class YoutubeApiController extends Controller
         // Jika playlistId tidak sama atau data playlist tidak ada di cache, ambil data baru dari API
         $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
         // Hapus data cache untuk halaman-halaman berikutnya
-        for ($i = 1; $i <= $data->getData()->last_page; $i++) {
-            $nextPageCacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$i}";
-            if (Cache::has($nextPageCacheKey)) {
-                Cache::forget($nextPageCacheKey);
+        $currentKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_1";
+        // dd('asasas');
+        if (Cache::has($currentKey)) {
+            $oldData = Cache::get($currentKey);
+            for ($i = 1; $i <= $oldData->getData()->last_page; $i++) {
+                $nextPageCacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$i}";
+                if (Cache::has($nextPageCacheKey)) {
+                    Cache::forget($nextPageCacheKey);
+                }
             }
         }
         // Simpan hasil dalam cache selama 1 jam
-        Cache::put($cacheKey, $data, now()->addHour());
+        Cache::put($cacheKey, $data, now()->addHours(2));
         // Simpan playlistIdData yang baru ke dalam cache
-        Cache::put($playlistIdCacheKey, $newPlaylistIdData, now()->addHour());
+        Cache::put($playlistIdCacheKey, $newPlaylistIdData, now()->addHours(2));
 
         return $data;
     }
@@ -98,7 +103,7 @@ class YoutubeApiController extends Controller
             );
 
             // Simpan hasil dalam cache selama 1 jam
-            Cache::put($cacheKey, $data, now()->addHour());
+            Cache::put($cacheKey, $data, now()->addHours(2));
 
             return $data;
         }
@@ -125,7 +130,7 @@ class YoutubeApiController extends Controller
             );
 
             // Simpan hasil dalam cache selama 1 jam
-            Cache::put($cacheKey, $data, now()->addHour());
+            Cache::put($cacheKey, $data, now()->addHour2(2));
 
             return $data;
         }
