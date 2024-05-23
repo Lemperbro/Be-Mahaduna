@@ -31,9 +31,10 @@ class YoutubeApiController extends Controller
         $part = $request->part ?? 'snippet'; // Default 'snippet'
         $keyword = $request->keyword ?? null; // Untuk mencari data, default null
         $paginate = $request->paginate ?? 10; // Default 10
+        $page = $request->page ?? 1;
 
         // Buat key cache unik berdasarkan parameter yang diterima
-        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}";
+        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}";
 
         // Key untuk menyimpan playlistIdData di cache
         $playlistIdCacheKey = 'cached_playlist_ids';
@@ -46,6 +47,7 @@ class YoutubeApiController extends Controller
         if ($cachedPlaylistIdData === $newPlaylistIdData) {
             // Jika playlistId sama, cek apakah data playlist ada di cache
             if (Cache::has($cacheKey)) {
+                Log::info('playlist');
                 return Cache::get($cacheKey);
             }
         }
