@@ -38,7 +38,7 @@ class YoutubeApiController extends Controller
 
         // Key untuk menyimpan playlistIdData di cache
         $playlistIdCacheKey = 'cached_playlist_ids';
-
+        Log::info('page', ['page' => $page]);
         // Ambil playlistIdData yang sudah disimpan di cache
         $cachedPlaylistIdData = Cache::get($playlistIdCacheKey);
         $newPlaylistIdData = $this->YoutubeInterface->getAllPlaylistId()->getData()->data;
