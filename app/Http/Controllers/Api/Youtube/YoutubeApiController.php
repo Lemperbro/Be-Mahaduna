@@ -56,7 +56,7 @@ class YoutubeApiController extends Controller
         // Jika playlistId tidak sama atau data playlist tidak ada di cache, ambil data baru dari API
         $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
         // Hapus data cache untuk halaman-halaman berikutnya
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= $data->getData()->last_page; $i++) {
             $nextPageCacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$i}";
             if (Cache::has($nextPageCacheKey)) {
                 Cache::forget($nextPageCacheKey);
