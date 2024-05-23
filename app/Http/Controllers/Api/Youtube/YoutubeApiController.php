@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Youtube;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use App\Repositories\Youtube\YoutubeInterface;
 use App\Http\Requests\Api\Youtube\ShowVideoRequest;
 use App\Http\Requests\Api\Youtube\ShowAllVideoRequest;
@@ -21,33 +22,102 @@ class YoutubeApiController extends Controller
         $this->YoutubeInterface = $YoutubeInterface;
     }
 
+
+    //caching satu jam
     public function getAllPlaylist(GetAllPlaylistRequest $request)
     {
-        // value part 'snippet,contentDetails,id,player,status,localizations'
-        $part = $request->part ?? 'snippet'; //default 'snippet'
-        $keyword = $request->keyword ?? null; //untuk mencari data, default null
-        $paginate = $request->paginate ?? 10; //default 10
-        $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
-        return $data;
+        // Value part 'snippet,contentDetails,id,player,status,localizations'
+        $part = $request->part ?? 'snippet'; // Default 'snippet'
+        $keyword = $request->keyword ?? null; // Untuk mencari data, default null
+        $paginate = $request->paginate ?? 10; // Default 10
+
+        // Buat key cache unik berdasarkan parameter yang diterima
+        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}";
+
+        // Key untuk menyimpan playlistIdData di cache
+        $playlistIdCacheKey = 'cached_playlist_ids';
+
+        // Cek apakah data sudah ada dalam cache
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        } else {
+            // Ambil data dari YoutubeInterface jika data tidak ada dalam cache
+            $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
+
+            // Simpan hasil dalam cache selama 1 jam
+            Cache::put($cacheKey, $data, now()->addHour());
+
+            // Cek apakah playlistIdData di cache berbeda dengan data baru
+            $playlistIdData = Cache::get($playlistIdCacheKey);
+            $newPlaylistIdData = $this->YoutubeInterface->getAllPlaylistId()->getData()->data;
+            if ($playlistIdData !== $newPlaylistIdData) {
+                // Hapus cache lama jika berbeda
+                Cache::forget($cacheKey);
+                Cache::put($cacheKey, $data, now()->addHour());
+                Cache::put($playlistIdCacheKey, $newPlaylistIdData, now()->addHour());
+            }
+
+            return $data;
+        }
     }
-    public function showPlaylistItems(showAllPlaylistItemsRequest $request)  
+
+    public function showPlaylistItems(showAllPlaylistItemsRequest $request)
     {
         $playlistId = $request->playlistId;
-        // value part 'snippet,contentDetails,id,status'
-        $part = $request->part ?? 'snippet'; //default 'snippet'
-        $paginate = $request->paginate ?? 10; //default 10
+        // Value part 'snippet,contentDetails,id,status'
+        $part = $request->part ?? 'snippet'; // Default 'snippet'
+        $paginate = $request->paginate ?? 10; // Default 10
         $pageToken = $request->pageToken ?? null;
-        $data = $this->YoutubeInterface->getPlaylistItems(part: $part, playlistId: $playlistId, paginate: $paginate, pageToken: $pageToken);
-        return $data;
+
+        // Buat key cache unik berdasarkan parameter yang diterima
+        $cacheKey = "youtube_playlist_items_{$playlistId}_{$part}_{$paginate}_{$pageToken}";
+
+        // Cek apakah data sudah ada dalam cache
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        } else {
+            // Ambil data dari YoutubeInterface jika data tidak ada dalam cache
+            $data = $this->YoutubeInterface->getPlaylistItems(
+                part: $part,
+                playlistId: $playlistId,
+                paginate: $paginate,
+                pageToken: $pageToken
+            );
+
+            // Simpan hasil dalam cache selama 1 jam
+            Cache::put($cacheKey, $data, now()->addHour());
+
+            return $data;
+        }
     }
+
     public function showAllVideo(ShowAllVideoRequest $request)
     {
         $evenType = $request->evenType ?? 'completed';
         $paginate = $request->paginate ?? 10;
         $pageToken = $request->pageToken ?? null;
-        $data = $this->YoutubeInterface->getAllVideo(evenType: $evenType, paginate: $paginate, pageToken: $pageToken);
-        return $data;
+
+        // Buat key cache unik berdasarkan parameter yang diterima
+        $cacheKey = "youtube_all_videos_{$evenType}_{$paginate}_{$pageToken}";
+
+        // Cek apakah data sudah ada dalam cache
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        } else {
+            // Ambil data dari YoutubeInterface jika data tidak ada dalam cache
+            $data = $this->YoutubeInterface->getAllVideo(
+                evenType: $evenType,
+                paginate: $paginate,
+                pageToken: $pageToken
+            );
+
+            // Simpan hasil dalam cache selama 1 jam
+            Cache::put($cacheKey, $data, now()->addHour());
+
+            return $data;
+        }
     }
+
     public function showVideo(ShowVideoRequest $request)
     {
         //default 'player' , nilai yang tersedia 'player,snippet,contentDetails,statistics',
