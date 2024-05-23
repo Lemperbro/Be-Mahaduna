@@ -57,7 +57,6 @@ class YoutubeApiController extends Controller
         $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
         // Hapus data cache untuk halaman-halaman berikutnya
         $currentKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_1";
-        // dd('asasas');
         if (Cache::has($currentKey)) {
             $oldData = Cache::get($currentKey);
             for ($i = 1; $i <= $oldData->getData()->last_page; $i++) {
@@ -130,7 +129,7 @@ class YoutubeApiController extends Controller
             );
 
             // Simpan hasil dalam cache selama 1 jam
-            Cache::put($cacheKey, $data, now()->addHour2(2));
+            Cache::put($cacheKey, $data, now()->addHours(2));
 
             return $data;
         }
