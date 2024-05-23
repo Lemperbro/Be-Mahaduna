@@ -55,6 +55,7 @@ class YoutubeApiController extends Controller
                 return Cache::get($cacheKey);
             }
         }
+        Log::info('ambil baru');
 
         // Jika playlistId tidak sama atau data playlist tidak ada di cache, ambil data baru dari API
         $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
