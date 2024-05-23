@@ -28,6 +28,7 @@ class YoutubeRepository implements YoutubeInterface
 
     public function __construct()
     {
+        
         $this->apiKeys = [
             config('services.youtube.apiKey1'),
             config('services.youtube.apiKey2'),
