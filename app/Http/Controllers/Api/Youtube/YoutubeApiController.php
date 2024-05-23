@@ -51,7 +51,9 @@ class YoutubeApiController extends Controller
         if (json_encode($cachedPlaylistIdData) === json_encode($newPlaylistIdData)) {
             // Jika playlistId sama, cek apakah data playlist ada di cache
             if (Cache::has($cacheKey)) {
-                return Cache::get($cacheKey);
+                $a =  Cache::get($cacheKey);
+                Log::info('data_dari cache', ['data' => $a]);
+                return $a; 
             }
         }
         if (Cache::has($cacheKey)) {
