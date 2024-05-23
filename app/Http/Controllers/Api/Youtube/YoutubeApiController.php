@@ -45,7 +45,7 @@ class YoutubeApiController extends Controller
 
         // Logging untuk debug
         // Log::info('playlistId cache', ['data' => $cachedPlaylistIdData]);
-        // Log::info('playlistId baru', ['data' => $newPlaylistIdData]);
+        Log::info('playlistId baru', ['data' => $newPlaylistIdData]);
 
         // Cek apakah playlistIdData di cache sama dengan data baru
         if (json_encode($cachedPlaylistIdData) === json_encode($newPlaylistIdData)) {
@@ -83,7 +83,6 @@ class YoutubeApiController extends Controller
 
         // Cek apakah data sudah ada dalam cache
         if (Cache::has($cacheKey)) {
-            Log::info('items dari server');
             return Cache::get($cacheKey);
         } else {
             // Ambil data dari YoutubeInterface jika data tidak ada dalam cache
