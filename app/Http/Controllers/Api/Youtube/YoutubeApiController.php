@@ -59,7 +59,6 @@ class YoutubeApiController extends Controller
         }
 
         // Jika playlistId tidak sama atau data playlist tidak ada di cache, ambil data baru dari API
-
         $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
         if ($data->getStatusCode() !== 500) {
             $currentKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_1";

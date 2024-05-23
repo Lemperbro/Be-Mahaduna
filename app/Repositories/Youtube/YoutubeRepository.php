@@ -20,18 +20,20 @@ class YoutubeRepository implements YoutubeInterface
     private $apiKey, $channelId, $model, $urlPlaylist, $playlistItems, $videoItem, $urlSearch;
     private $responseError;
     protected $apiKeyIndex = 0;
-    protected $apiKeys = [
-        config('services.youtube.apiKey1'),
-        config('services.youtube.apiKey2'),
-        config('services.youtube.apiKey3'),
-        config('services.youtube.apiKey4')
+    private $apiKeys = [
+
     ];
 
     private $playlistIdCacheKey;
 
     public function __construct()
     {
-        
+        $this->apiKeys = [
+            config('services.youtube.apiKey1'),
+            config('services.youtube.apiKey2'),
+            config('services.youtube.apiKey3'),
+            config('services.youtube.apiKey4')
+        ];
         $this->apiKey = config('services.youtube.apiKey');
         $this->channelId = config('services.youtube.channelId');
         $this->urlPlaylist = config('services.youtube.urlPlaylist');
