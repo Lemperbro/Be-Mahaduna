@@ -222,7 +222,7 @@ class YoutubeRepository implements YoutubeInterface
     {
         if (request()->wantsJson()) {
             $playlistIdData = $this->getAllPlaylistId()->getData()->data;
-            Log::info('playlist id from repo', ['key' => $playlistIdData]);
+            // Log::info('playlist id from repo', ['key' => $playlistIdData]);
             $playlistId = collect($playlistIdData);
             $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
             if (count($playlistId) <= 0) {
