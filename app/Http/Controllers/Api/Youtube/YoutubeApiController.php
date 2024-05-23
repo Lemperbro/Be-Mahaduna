@@ -31,30 +31,25 @@ class YoutubeApiController extends Controller
         $part = $request->part ?? 'snippet'; // Default 'snippet'
         $keyword = $request->keyword ?? null; // Untuk mencari data, default null
         $paginate = $request->paginate ?? 10; // Default 10
-        $page = $request->page ?? 1;
 
         // Buat key cache unik berdasarkan parameter yang diterima
-        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}";
+        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}";
 
         // Key untuk menyimpan playlistIdData di cache
         $playlistIdCacheKey = 'cached_playlist_ids';
-        Log::info('page', ['page' => $page]);
+
         // Ambil playlistIdData yang sudah disimpan di cache
         $cachedPlaylistIdData = Cache::get($playlistIdCacheKey);
         $newPlaylistIdData = $this->YoutubeInterface->getAllPlaylistId()->getData()->data;
 
         // Cek apakah playlistIdData di cache sama dengan data baru
         if ($cachedPlaylistIdData === $newPlaylistIdData) {
-            Log::info('sama');
             // Jika playlistId sama, cek apakah data playlist ada di cache
             if (Cache::has($cacheKey)) {
-                $data = Cache::get($cacheKey);
-                Log::info('playlist', ['data' => $data]);
-                return $data;
+                Log::info('playlist');
+                return Cache::get($cacheKey);
             }
         }
-        Log::info('tidak sama');
-
 
         // Jika playlistId tidak sama atau data playlist tidak ada di cache, ambil data baru dari API
         $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
