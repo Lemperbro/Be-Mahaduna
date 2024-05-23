@@ -34,7 +34,7 @@ class YoutubeApiController extends Controller
         $page = $request->page ?? 1;
 
         // Buat key cache unik berdasarkan parameter yang diterima
-        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}";
+        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}";
 
         // Key untuk menyimpan playlistIdData di cache
         $playlistIdCacheKey = 'cached_playlist_ids';
@@ -43,7 +43,7 @@ class YoutubeApiController extends Controller
         $cachedPlaylistIdData = Cache::get($playlistIdCacheKey);
         $newPlaylistIdData = $this->YoutubeInterface->getAllPlaylistId()->getData()->data;
         Log::info('playlistId', $cachedPlaylistIdData);
-
+        Cache::forget($cacheKey);
         // Cek apakah playlistIdData di cache sama dengan data baru
         if ($cachedPlaylistIdData === $newPlaylistIdData) {
             // Jika playlistId sama, cek apakah data playlist ada di cache
