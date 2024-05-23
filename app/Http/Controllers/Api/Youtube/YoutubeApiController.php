@@ -31,10 +31,10 @@ class YoutubeApiController extends Controller
         $part = $request->part ?? 'snippet'; // Default 'snippet'
         $keyword = $request->keyword ?? null; // Untuk mencari data, default null
         $paginate = $request->paginate ?? 10; // Default 10
-        $page = $request->page ?? 1;
+        // $page = $request->page ?? 1;
 
         // Buat key cache unik berdasarkan parameter yang diterima
-        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}";
+        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}";
 
         // Key untuk menyimpan playlistIdData di cache
         $playlistIdCacheKey = 'cached_playlist_ids';
