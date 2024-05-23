@@ -45,6 +45,7 @@ class YoutubeApiController extends Controller
         // Log::info('playlistId', $cachedPlaylistIdData);
         // Cek apakah playlistIdData di cache sama dengan data baru
         if ($cachedPlaylistIdData === $newPlaylistIdData) {
+            Log::info('tidak sama');
             // Jika playlistId sama, cek apakah data playlist ada di cache
             if (Cache::has($cacheKey)) {
                 $data = Cache::get($cacheKey);
