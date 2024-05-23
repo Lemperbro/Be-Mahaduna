@@ -31,10 +31,10 @@ class YoutubeApiController extends Controller
         $part = $request->part ?? 'snippet'; // Default 'snippet'
         $keyword = $request->keyword ?? null; // Untuk mencari data, default null
         $paginate = $request->paginate ?? 10; // Default 10
-        // $page = $request->page ?? 1;
+        $page = $request->page ?? 1;
 
         // Buat key cache unik berdasarkan parameter yang diterima
-        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}";
+        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}";
 
         // Key untuk menyimpan playlistIdData di cache
         $playlistIdCacheKey = 'cached_playlist_ids';
@@ -43,34 +43,29 @@ class YoutubeApiController extends Controller
         $cachedPlaylistIdData = Cache::get($playlistIdCacheKey);
         $newPlaylistIdData = $this->YoutubeInterface->getAllPlaylistId()->getData()->data;
 
-        // Logging untuk debug
-        // Log::info('playlistId cache', ['data' => $cachedPlaylistIdData]);
-        // Log::info('playlistId baru', ['data' => $newPlaylistIdData]);
-
         // Cek apakah playlistIdData di cache sama dengan data baru
         if (json_encode($cachedPlaylistIdData) === json_encode($newPlaylistIdData)) {
             // Jika playlistId sama, cek apakah data playlist ada di cache
             if (Cache::has($cacheKey)) {
-                $a =  Cache::get($cacheKey);
-                Log::info('data_dari cache', ['data' => $a]);
-                return $a; 
+                $cachedData = Cache::get($cacheKey);
+                Log::info('Data dari cache', ['data' => $cachedData]);
+                return $cachedData;
             }
         }
-        if (Cache::has($cacheKey)) {
-            Cache::forget($cacheKey);
-        }
+
         // Jika playlistId tidak sama atau data playlist tidak ada di cache, ambil data baru dari API
         $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
-        Log::info('data_baru dari server', ['data' => $data]);
+        // Hapus data cache untuk halaman-halaman berikutnya
+        Cache::forgetMatching("youtube_playlist_{$part}*");
 
         // Simpan hasil dalam cache selama 1 jam
-        $new = Cache::put($cacheKey, $data, now()->addHour());
-        Log::info('data baru', ['data' => $new]);
+        Cache::put($cacheKey, $data, now()->addHour());
         // Simpan playlistIdData yang baru ke dalam cache
         Cache::put($playlistIdCacheKey, $newPlaylistIdData, now()->addHour());
 
         return $data;
     }
+
 
 
 
