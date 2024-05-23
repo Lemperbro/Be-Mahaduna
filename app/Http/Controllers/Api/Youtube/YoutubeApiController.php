@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Youtube;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use App\Repositories\Youtube\YoutubeInterface;
@@ -50,6 +51,7 @@ class YoutubeApiController extends Controller
             // Ambil playlistIdData yang sudah disimpan di cache
             $cachedPlaylistIdData = Cache::get($playlistIdCacheKey);
             $newPlaylistIdData = $this->YoutubeInterface->getAllPlaylistId()->getData()->data;
+            Log::info('playlist id from repo', ['key' => $cachedPlaylistIdData]);
 
             // Jika cachedPlaylistIdData tidak ada di cache, simpan data baru
             if (!$cachedPlaylistIdData) {

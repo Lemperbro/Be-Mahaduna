@@ -4,6 +4,7 @@ namespace App\Repositories\Youtube;
 use Exception;
 use Carbon\Carbon;
 use App\Models\PlaylistVideo;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Collection;
 use App\Http\Resources\Youtube\VideoResource;
@@ -221,6 +222,7 @@ class YoutubeRepository implements YoutubeInterface
     {
         if (request()->wantsJson()) {
             $playlistIdData = $this->getAllPlaylistId()->getData()->data;
+            Log::info('playlist id from repo', ['key' => $playlistIdData]);
             $playlistId = collect($playlistIdData);
             $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
             if (count($playlistId) <= 0) {
