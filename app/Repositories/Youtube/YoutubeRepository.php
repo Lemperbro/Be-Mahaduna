@@ -5,7 +5,6 @@ use Exception;
 use Carbon\Carbon;
 use App\Models\PlaylistVideo;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Collection;
 use App\Http\Resources\Youtube\VideoResource;
 use App\Repositories\Youtube\YoutubeInterface;
@@ -220,18 +219,8 @@ class YoutubeRepository implements YoutubeInterface
 
     public function getAllDataPlaylist($part = 'snippet', $keyword = null, $paginate = 10)
     {
-        // Key untuk menyimpan playlistIdData di cache
-        $playlistIdCacheKey = 'cached_playlist_ids';
-
         if (request()->wantsJson()) {
             $playlistIdData = $this->getAllPlaylistId()->getData()->data;
-            $cachedPlaylistIdData = Cache::get($playlistIdCacheKey);
-
-            // Jika data cache tidak ada atau berbeda dengan data baru, perbarui cache
-            if (!$cachedPlaylistIdData || $cachedPlaylistIdData !== $playlistIdData) {
-                Cache::put($playlistIdCacheKey, $playlistIdData, now()->addHour());
-            }
-
             $playlistId = collect($playlistIdData);
             $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
             if (count($playlistId) <= 0) {
@@ -250,17 +239,18 @@ class YoutubeRepository implements YoutubeInterface
             'part' => $part,
         ]);
 
-        $statusCode = $this->cekStatusCodeApi($get);
-        $responseData = $this->sortVideoLatest($get->json(), 'snippet.publishedAt');
-        if ($keyword !== null) {
-            $responseData = $this->cariPlaylist($get->json(), $keyword);
-        }
-        $responseWithPaginate = $this->getManualPagination($paginate, $responseData);
-        if (request()->wantsJson()) {
-            return (VideoResource::make($responseWithPaginate))->response()->setStatusCode($statusCode);
-        } else {
-            return $responseWithPaginate;
-        }
+
+            $statusCode = $this->cekStatusCodeApi($get);
+            $responseData = $this->sortVideoLatest($get->json(), 'snippet.publishedAt');
+            if ($keyword !== null) {
+                $responseData = $this->cariPlaylist($get->json(), $keyword);
+            }
+            $responseWithPaginate = $this->getManualPagination($paginate, $responseData);
+            if (request()->wantsJson()) {
+                return (VideoResource::make($responseWithPaginate))->response()->setStatusCode($statusCode);
+            } else {
+                return $responseWithPaginate;
+            }
     }
 
     /**

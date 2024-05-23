@@ -47,19 +47,27 @@ class YoutubeApiController extends Controller
             // Simpan hasil dalam cache selama 1 jam
             Cache::put($cacheKey, $data, now()->addHour());
 
-            // Cek apakah playlistIdData di cache berbeda dengan data baru
-            $playlistIdData = Cache::get($playlistIdCacheKey);
+            // Ambil playlistIdData yang sudah disimpan di cache
+            $cachedPlaylistIdData = Cache::get($playlistIdCacheKey);
             $newPlaylistIdData = $this->YoutubeInterface->getAllPlaylistId()->getData()->data;
-            if ($playlistIdData !== $newPlaylistIdData) {
-                // Hapus cache lama jika berbeda
-                Cache::forget($cacheKey);
-                Cache::put($cacheKey, $data, now()->addHour());
+
+            // Jika cachedPlaylistIdData tidak ada di cache, simpan data baru
+            if (!$cachedPlaylistIdData) {
                 Cache::put($playlistIdCacheKey, $newPlaylistIdData, now()->addHour());
+            } else {
+                // Cek apakah playlistIdData di cache berbeda dengan data baru
+                if ($cachedPlaylistIdData !== $newPlaylistIdData) {
+                    // Hapus cache lama jika berbeda
+                    Cache::forget($cacheKey);
+                    Cache::put($cacheKey, $data, now()->addHour());
+                    Cache::put($playlistIdCacheKey, $newPlaylistIdData, now()->addHour());
+                }
             }
 
             return $data;
         }
     }
+
 
     public function showPlaylistItems(showAllPlaylistItemsRequest $request)
     {
