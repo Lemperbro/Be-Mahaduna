@@ -61,7 +61,8 @@ class YoutubeApiController extends Controller
         $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
 
         // Simpan hasil dalam cache selama 1 jam
-        Cache::put($cacheKey, $data, now()->addHour());
+        $new = Cache::put($cacheKey, $data, now()->addHour());
+        Log::info('data baru', ['data' => $new]);
         // Simpan playlistIdData yang baru ke dalam cache
         Cache::put($playlistIdCacheKey, $newPlaylistIdData, now()->addHour());
 
