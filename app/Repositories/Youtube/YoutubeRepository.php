@@ -28,7 +28,7 @@ class YoutubeRepository implements YoutubeInterface
 
     public function __construct()
     {
-        
+
         $this->apiKeys = [
             config('services.youtube.apiKey1'),
             config('services.youtube.apiKey2'),
@@ -343,7 +343,7 @@ class YoutubeRepository implements YoutubeInterface
     {
         do {
             $get = Http::get($this->playlistItems, [
-                'key' => $this->apiKey,
+                'key' => $this->apiKeys[$this->apiKeyIndex],
                 'playlistId' => $playlistId,
                 'maxResults' => $paginate,
                 'type' => 'video',
@@ -352,8 +352,9 @@ class YoutubeRepository implements YoutubeInterface
             ]);
             // Cek apakah terjadi quota limit
             if ($this->isQuotaLimitError($get)) {
-                $this->rotateApiKey();
-                continue;
+                if ($this->rotateApiKey()) {
+                    continue; // Melanjutkan loop jika rotasi gagal
+                }
             }
 
             $statusCode = $this->cekStatusCodeApi($get);
@@ -369,21 +370,29 @@ class YoutubeRepository implements YoutubeInterface
      */
     public function getAllVideo($evenType = 'completed', $paginate = 10, $pageToken = null)
     {
-        // 2024-04-10T12:16:06Z
-        $getData = Http::get($this->urlSearch, [
-            'key' => $this->apiKey,
-            'part' => 'snippet',
-            'type' => 'video',
-            'channelId' => $this->channelId,
-            'order' => 'date',
-            'eventType' => $evenType,
-            'maxResults' => $paginate,
-            'pageToken' => $pageToken,
-            'publishedBefore' => Carbon::now()->toRfc3339String(),
-            'publishedAfter' => Carbon::now()->subYears(2)->toRfc3339String()
-        ]);
-        $statusCode = $this->cekStatusCodeApi($getData);
-        return response()->json($getData->json())->setStatusCode($statusCode);
+        do {
+            // 2024-04-10T12:16:06Z
+            $getData = Http::get($this->urlSearch, [
+                'key' => $this->apiKeys[$this->apiKeyIndex],
+                'part' => 'snippet',
+                'type' => 'video',
+                'channelId' => $this->channelId,
+                'order' => 'date',
+                'eventType' => $evenType,
+                'maxResults' => $paginate,
+                'pageToken' => $pageToken,
+                'publishedBefore' => Carbon::now()->toRfc3339String(),
+                'publishedAfter' => Carbon::now()->subYears(2)->toRfc3339String()
+            ]);
+            // Cek apakah terjadi quota limit
+            if ($this->isQuotaLimitError($getData)) {
+                if ($this->rotateApiKey()) {
+                    continue; // Melanjutkan loop jika rotasi gagal
+                }
+            }
+            $statusCode = $this->cekStatusCodeApi($getData);
+            return response()->json($getData->json())->setStatusCode($statusCode);
+        } while (true);
     }
     /**
      * Ambil detail data video dari id video
@@ -394,15 +403,23 @@ class YoutubeRepository implements YoutubeInterface
      */
     public function getVideoItem(string $videoId, string $part = 'player,snippet')
     {
-        $get = Http::get($this->videoItem, [
-            'key' => $this->apiKey,
-            'id' => $videoId,
-            'type' => 'video',
-            'part' => $part
-        ]);
+        do {
+            $get = Http::get($this->videoItem, [
+                'key' => $this->apiKeys[$this->apiKeyIndex],
+                'id' => $videoId,
+                'type' => 'video',
+                'part' => $part
+            ]);
+            // Cek apakah terjadi quota limit
+            if ($this->isQuotaLimitError($get)) {
+                if ($this->rotateApiKey()) {
+                    continue; // Melanjutkan loop jika rotasi gagal
+                }
+            }
 
-        $statusCode = $this->cekStatusCodeApi($get);
-        return response()->json($get->json())->setStatusCode($statusCode);
+            $statusCode = $this->cekStatusCodeApi($get);
+            return response()->json($get->json())->setStatusCode($statusCode);
+        } while (true);
     }
     public function getManualPagination($perPages, $data)
     {

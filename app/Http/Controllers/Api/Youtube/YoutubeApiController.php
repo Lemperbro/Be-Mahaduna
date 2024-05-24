@@ -38,16 +38,11 @@ class YoutubeApiController extends Controller
 
         // Buat key cache unik berdasarkan parameter yang diterima
         $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}";
-        // return response()->json(['error' => 'ya', 'message' => Cache::get($cacheKey)]);
-
-
         // Key untuk menyimpan playlistIdData di cache
         $playlistIdCacheKey = 'cached_playlist_ids';
-
         // Ambil playlistIdData yang sudah disimpan di cache
         $cachedPlaylistIdData = Cache::get($playlistIdCacheKey);
         $newPlaylistIdData = $this->YoutubeInterface->getAllPlaylistId()->getData()->data;
-
         // Cek apakah playlistIdData di cache sama dengan data baru
         if (json_encode($cachedPlaylistIdData) === json_encode($newPlaylistIdData)) {
             // Jika playlistId sama, cek apakah data playlist ada di cache
@@ -57,7 +52,6 @@ class YoutubeApiController extends Controller
                 return $cachedData;
             }
         }
-
         // Jika playlistId tidak sama atau data playlist tidak ada di cache, ambil data baru dari API
         $data = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
         if ($data->getStatusCode() !== 500) {
@@ -81,13 +75,7 @@ class YoutubeApiController extends Controller
             return Cache::get($cacheKey);
         }
 
-
-
     }
-
-
-
-
 
 
     public function showPlaylistItems(showAllPlaylistItemsRequest $request)
@@ -97,7 +85,6 @@ class YoutubeApiController extends Controller
         $part = $request->part ?? 'snippet'; // Default 'snippet'
         $paginate = $request->paginate ?? 10; // Default 10
         $pageToken = $request->pageToken ?? null;
-
         // Buat key cache unik berdasarkan parameter yang diterima
         $cacheKey = "youtube_playlist_items_{$playlistId}_{$part}_{$paginate}_{$pageToken}";
         // Cek apakah data sudah ada dalam cache
@@ -111,7 +98,6 @@ class YoutubeApiController extends Controller
                 paginate: $paginate,
                 pageToken: $pageToken
             );
-
             // Simpan hasil dalam cache selama 1 jam
             Cache::put($cacheKey, $data, now()->addHours(2));
 
