@@ -80,4 +80,50 @@ class CacheService
     }
 
 
+    public function getAllVideoIsReady($cacheKey): bool
+    {
+        if (Cache::has($cacheKey)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getAllVideoNotReady($cacheKey, $data)
+    {
+
+        if ($data->getStatusCode() !== 500) {
+            // Cache::flush();
+            Cache::put($cacheKey, $data, now()->addHours(2));
+        } else {
+            if (Cache::has($cacheKey)) {
+                return Cache::get($cacheKey);
+            }
+        }
+    }
+
+
+    public function getVideoItemIsReady($cacheKey): bool
+    {
+        if (Cache::has($cacheKey)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getVideoItemNotReady($cacheKey, $data)
+    {
+
+        if ($data->getStatusCode() !== 500) {
+            // Cache::flush();
+            Cache::put($cacheKey, $data, now()->addHours(2));
+        } else {
+            if (Cache::has($cacheKey)) {
+                return Cache::get($cacheKey);
+            }
+        }
+    }
+
+
 }

@@ -391,29 +391,42 @@ class YoutubeRepository implements YoutubeInterface
      */
     public function getAllVideo($evenType = 'completed', $paginate = 10, $pageToken = null)
     {
-        do {
-            // 2024-04-10T12:16:06Z
-            $getData = Http::get($this->urlSearch, [
-                'key' => $this->apiKeys[$this->apiKeyIndex],
-                'part' => 'snippet',
-                'type' => 'video',
-                'channelId' => $this->channelId,
-                'order' => 'date',
-                'eventType' => $evenType,
-                'maxResults' => $paginate,
-                'pageToken' => $pageToken,
-                'publishedBefore' => Carbon::now()->toRfc3339String(),
-                'publishedAfter' => Carbon::now()->subYears(2)->toRfc3339String()
-            ]);
-            // Cek apakah terjadi quota limit
-            if ($this->isQuotaLimitError($getData)) {
-                if ($this->rotateApiKey()) {
-                    continue; // Melanjutkan loop jika rotasi gagal
-                }
+        try {
+            $cacheKey = "youtube_all_videos_{$evenType}_{$paginate}_{$pageToken}";
+            $cacheIsReady = $this->cacheService->getAllVideoIsReady($cacheKey);
+            if ($cacheIsReady) {
+                return Cache::get($cacheKey);
             }
-            $statusCode = $this->cekStatusCodeApi($getData);
-            return response()->json($getData->json())->setStatusCode($statusCode);
-        } while (true);
+            do {
+                $getData = Http::get($this->urlSearch, [
+                    'key' => $this->apiKeys[$this->apiKeyIndex],
+                    'part' => 'snippet',
+                    'type' => 'video',
+                    'channelId' => $this->channelId,
+                    'order' => 'date',
+                    'eventType' => $evenType,
+                    'maxResults' => $paginate,
+                    'pageToken' => $pageToken,
+                    'publishedBefore' => Carbon::now()->toRfc3339String(),
+                    'publishedAfter' => Carbon::now()->subYears(2)->toRfc3339String()
+                ]);
+                // Cek apakah terjadi quota limit
+                if ($this->isQuotaLimitError($getData)) {
+                    if ($this->rotateApiKey()) {
+                        continue; // Melanjutkan loop jika rotasi gagal
+                    }
+                }
+                $statusCode = $this->cekStatusCodeApi($getData);
+                $data = response()->json($getData->json())->setStatusCode($statusCode);
+                return $data;
+            } while (true);
+        } catch (Exception $e) {
+            return $this->responseError->responseError($e);
+        } finally {
+            if (!$cacheIsReady) {
+                $this->cacheService->getAllVideoNotReady($cacheKey, $data);
+            }
+        }
     }
     /**
      * Ambil detail data video dari id video
@@ -424,23 +437,38 @@ class YoutubeRepository implements YoutubeInterface
      */
     public function getVideoItem(string $videoId, string $part = 'player,snippet')
     {
-        do {
-            $get = Http::get($this->videoItem, [
-                'key' => $this->apiKeys[$this->apiKeyIndex],
-                'id' => $videoId,
-                'type' => 'video',
-                'part' => $part
-            ]);
-            // Cek apakah terjadi quota limit
-            if ($this->isQuotaLimitError($get)) {
-                if ($this->rotateApiKey()) {
-                    continue; // Melanjutkan loop jika rotasi gagal
-                }
+        try {
+            $cacheKey = "youtube_all_videos_{$part}_{$videoId}";
+            $cacheIsReady = $this->cacheService->getVideoItemIsReady($cacheKey);
+            if ($cacheIsReady) {
+                return Cache::get($cacheKey);
             }
+            do {
+                $get = Http::get($this->videoItem, [
+                    'key' => $this->apiKeys[$this->apiKeyIndex],
+                    'id' => $videoId,
+                    'type' => 'video',
+                    'part' => $part
+                ]);
+                // Cek apakah terjadi quota limit
+                if ($this->isQuotaLimitError($get)) {
+                    if ($this->rotateApiKey()) {
+                        continue; // Melanjutkan loop jika rotasi gagal
+                    }
+                }
 
-            $statusCode = $this->cekStatusCodeApi($get);
-            return response()->json($get->json())->setStatusCode($statusCode);
-        } while (true);
+                $statusCode = $this->cekStatusCodeApi($get);
+                $data = response()->json($get->json())->setStatusCode($statusCode);
+                return $data;
+            } while (true);
+        } catch (Exception $e) {
+            return $this->responseError->responseError($e);
+
+        } finally {
+            if (!$cacheIsReady) {
+                $this->cacheService->getVideoItemNotReady($cacheKey, $data);
+            }
+        }
     }
     public function getManualPagination($perPages, $data)
     {

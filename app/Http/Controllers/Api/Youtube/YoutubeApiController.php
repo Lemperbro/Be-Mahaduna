@@ -63,25 +63,13 @@ class YoutubeApiController extends Controller
         $paginate = $request->paginate ?? 10;
         $pageToken = $request->pageToken ?? null;
 
-        // Buat key cache unik berdasarkan parameter yang diterima
-        $cacheKey = "youtube_all_videos_{$evenType}_{$paginate}_{$pageToken}";
+        $data = $this->YoutubeInterface->getAllVideo(
+            evenType: $evenType,
+            paginate: $paginate,
+            pageToken: $pageToken
+        );
 
-        // Cek apakah data sudah ada dalam cache
-        if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
-        } else {
-            // Ambil data dari YoutubeInterface jika data tidak ada dalam cache
-            $data = $this->YoutubeInterface->getAllVideo(
-                evenType: $evenType,
-                paginate: $paginate,
-                pageToken: $pageToken
-            );
-
-            // Simpan hasil dalam cache selama 1 jam
-            Cache::put($cacheKey, $data, now()->addHours(2));
-
-            return $data;
-        }
+        return $data;
     }
 
     public function showVideo(ShowVideoRequest $request)
