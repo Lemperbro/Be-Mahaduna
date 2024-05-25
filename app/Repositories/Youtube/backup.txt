@@ -12,7 +12,6 @@ use App\Http\Resources\Youtube\VideoResource;
 use App\Repositories\Youtube\YoutubeInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Http\Resources\Youtube\PlaylistResource;
-use App\Repositories\Youtube\CacheService\CacheService;
 use App\Repositories\HandleError\ResponseErrorRepository;
 
 class YoutubeRepository implements YoutubeInterface
@@ -21,7 +20,6 @@ class YoutubeRepository implements YoutubeInterface
     private $apiKey, $channelId, $model, $urlPlaylist, $playlistItems, $videoItem, $urlSearch;
     private $responseError;
     protected $apiKeyIndex = 0;
-    protected $cacheService;
     private $apiKeys = [
 
     ];
@@ -46,7 +44,6 @@ class YoutubeRepository implements YoutubeInterface
         $this->responseError = new ResponseErrorRepository;
         $this->model = new PlaylistVideo;
         $this->playlistIdCacheKey = 'cached_playlist_ids';
-        $this->cacheService = new CacheService;
     }
 
     public function responseSukses($data)
@@ -281,17 +278,20 @@ class YoutubeRepository implements YoutubeInterface
 
     public function getAllDataPlaylist($part = 'snippet', $keyword = null, $paginate = 10, $page = 1)
     {
-
         try {
-            $playlistIdData = request()->wantsJson() ? collect($this->getAllPlaylistId()->getData()->data) : $this->getAllPlaylistId();
-            $cacheIsReady = $this->cacheService->getAllDataPlaylistIsReady($playlistIdData, $page, $part, $keyword, $paginate);
-
-            if ($cacheIsReady) {
-                return Cache::get("youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}");
-            }
-
             do {
-                $playlistImplode = implode(',', $playlistIdData->pluck('playlistId')->toArray());
+                if (request()->wantsJson()) {
+                    $playlistIdData = $this->getAllPlaylistId()->getData()->data;
+                    $playlistId = collect($playlistIdData);
+                    $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
+                    if (count($playlistId) <= 0) {
+                        $message = 'playlist tidak tersedia';
+                        return $this->responseError->ResponseException($message, 404);
+                    }
+                } else {
+                    $playlistId = $this->getAllPlaylistId();
+                    $playlistImplode = implode(',', $playlistId->pluck('playlistId')->toArray());
+                }
 
                 $get = Http::get($this->urlPlaylist, [
                     'key' => $this->apiKeys[$this->apiKeyIndex],
@@ -299,10 +299,10 @@ class YoutubeRepository implements YoutubeInterface
                     'type' => 'video',
                     'part' => $part,
                 ]);
-
+                // Cek apakah terjadi quota limit
                 if ($this->isQuotaLimitError($get)) {
                     if ($this->rotateApiKey()) {
-                        continue;
+                        continue; // Melanjutkan loop jika rotasi gagal
                     }
                 }
 
@@ -312,22 +312,15 @@ class YoutubeRepository implements YoutubeInterface
                     $responseData = $this->cariPlaylist($get->json(), $keyword);
                 }
                 $responseWithPaginate = $this->getManualPagination($paginate, $responseData);
-
                 if (request()->wantsJson()) {
-                    $data = (VideoResource::make($responseWithPaginate))->response()->setStatusCode($statusCode);
+                    return (VideoResource::make($responseWithPaginate))->response()->setStatusCode($statusCode);
                 } else {
-                    $data = $responseWithPaginate;
+                    return $responseWithPaginate;
                 }
-
-                return $data;
             } while (true);
-
         } catch (Exception $e) {
             return $this->responseError->responseError($e);
-        } finally {
-            if (!$cacheIsReady) {
-                $this->cacheService->getAllDataPlaylistNotReady($playlistIdData, $page, $part, $keyword, $paginate, $data);
-            }
+
         }
     }
 
@@ -348,39 +341,25 @@ class YoutubeRepository implements YoutubeInterface
      */
     public function getPlaylistItems($part = 'snippet', $playlistId, $paginate = 10, $pageToken = null)
     {
-        try {
-            $cacheKey = "youtube_playlist_items_{$playlistId}_{$part}_{$paginate}_{$pageToken}";
-            $cacheIsReady = $this->cacheService->getPlaylistItemsIsReady($cacheKey);
-            if ($cacheIsReady) {
-                return Cache::get($cacheKey);
-            }
-            do {
-                $get = Http::get($this->playlistItems, [
-                    'key' => $this->apiKeys[$this->apiKeyIndex],
-                    'playlistId' => $playlistId,
-                    'maxResults' => $paginate,
-                    'type' => 'video',
-                    'part' => $part,
-                    'pageToken' => $pageToken
-                ]);
-                // Cek apakah terjadi quota limit
-                if ($this->isQuotaLimitError($get)) {
-                    if ($this->rotateApiKey()) {
-                        continue;
-                    }
+        do {
+            $get = Http::get($this->playlistItems, [
+                'key' => $this->apiKeys[$this->apiKeyIndex],
+                'playlistId' => $playlistId,
+                'maxResults' => $paginate,
+                'type' => 'video',
+                'part' => $part,
+                'pageToken' => $pageToken
+            ]);
+            // Cek apakah terjadi quota limit
+            if ($this->isQuotaLimitError($get)) {
+                if ($this->rotateApiKey()) {
+                    continue; // Melanjutkan loop jika rotasi gagal
                 }
-
-                $statusCode = $this->cekStatusCodeApi($get);
-                $data = response()->json($get->json())->setStatusCode($statusCode);
-                return $data;
-            } while (true);
-        } catch (Exception $e) {
-            return $this->responseError->responseError($e);
-        } finally {
-            if (!$cacheIsReady) {
-                $this->cacheService->getPlaylistItemsNotReady($cacheKey, $data);
             }
-        }
+
+            $statusCode = $this->cekStatusCodeApi($get);
+            return response()->json($get->json())->setStatusCode($statusCode);
+        } while (true);
     }
     /**
      * untuk menampilkan video dari semua playlist
