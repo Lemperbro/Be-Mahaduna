@@ -375,7 +375,8 @@ class YoutubeRepository implements YoutubeInterface
                 return $data;
             } while (true);
         } catch (Exception $e) {
-            return $this->responseError->responseError($e);
+            $data = $this->responseError->responseError($e);
+            return $data;
         } finally {
             if (!$cacheIsReady) {
                 $this->cacheService->getPlaylistItemsNotReady($cacheKey, $data);
