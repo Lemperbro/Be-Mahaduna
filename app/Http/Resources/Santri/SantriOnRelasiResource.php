@@ -20,7 +20,7 @@ class SantriOnRelasiResource extends JsonResource
             'nisn' => $this->santri->nisn,
             'jenjang' => $this->santri->jenjang->jenjang,
             'tgl_lahir' => $this->santri->tgl_lahir,
-            'tgl_masuk' => $this->santri->tgl_masuk,
+            'tgl_masuk' => $this->santri->tgl_keluar,
             'jenis_kelamin' => $this->santri->jenis_kelamin,
             'status' => $this->santri->status,
             'created_at' => $this->santri->created_at,
