@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Wali\WaliApiController;
 use App\Http\Controllers\Api\Artikel\ArtikelApiController;
 use App\Http\Controllers\Api\Jadwal\JadwalApiController;
 use App\Http\Controllers\Api\Majalah\MajalahApiController;
+use App\Http\Controllers\Api\Monitoring\MonitoringApiController;
 use App\Http\Controllers\Api\Store\StoreApiController;
 use App\Http\Controllers\Api\Tagihan\TagihanApiController;
 use App\Http\Controllers\Api\Youtube\YoutubeApiController;
@@ -72,6 +73,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route::prefix('santri')->group(function(){
 
     // });
+
+    //monitoring
+    Route::prefix('monitoring')->group(function () {
+        Route::get('mingguan', [MonitoringApiController::class, 'monitoring'])->name('monitoring.mingguan');
+        Route::get('hafalan', [MonitoringApiController::class, 'hafalan'])->name('monitoring.hafalan');
+    });
     //tagihan
     Route::prefix('tagihan')->group(function () {
         Route::get('/fromSantri', [TagihanApiController::class, 'getTagihanFromSantri'])->name('tagihan.fromSantri');

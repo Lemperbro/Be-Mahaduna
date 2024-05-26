@@ -1,10 +1,13 @@
 <?php
 namespace App\Repositories\Hafalan;
 
+use App\Http\Resources\Hafalan\HafalanResource;
 use Exception;
 use Carbon\Carbon;
 use App\Models\MonitorBulanan;
+use Illuminate\Support\Collection;
 use App\Repositories\Hafalan\HafalanInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 use App\Repositories\HandleError\ResponseErrorRepository;
 
 class HafalanRepository implements HafalanInterface
@@ -109,6 +112,45 @@ class HafalanRepository implements HafalanInterface
         } catch (Exception $e) {
             return $this->handleResponseError->responseError($e);
         }
+    }
+    /**
+     * ambil semua data monitoring hafalan , berdasarkan santri
+     * @param mixed $santriId
+     * @param int $paginate
+     * 
+     * @return [type]
+     */
+    public function getAllWhereSantri($santriId, $paginate = 10)
+    {
+        try {
+            $data = $this->monitorBulanan->where('santri_id', $santriId)->latest()->get();
+
+            $result = $data->groupBy(function ($item) {
+                return $item->bulan;
+            });
+
+            $result = $this->getManualPagination($paginate, $result);
+            return (HafalanResource::collection($result))->response()->setStatusCode(200);
+
+        } catch (Exception $e) {
+            return $this->handleResponseError->responseError($e);
+
+        }
+    }
+    public function getManualPagination($perPage, $data)
+    {
+        $currentPage = request()->get('page', 1); // Nomor halaman saat ini
+
+        $slicedData = (new Collection($data))->forPage($currentPage, $perPage)->values();
+        $total = $data->count();
+
+        return $dataSemuafix = new LengthAwarePaginator(
+            $slicedData,
+            $total,
+            $perPage,
+            $currentPage,
+            ['path' => request()->url()]
+        );
     }
     /**
      * untuk menghapus data hafalan , bisa multiple

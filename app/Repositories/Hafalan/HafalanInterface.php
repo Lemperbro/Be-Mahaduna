@@ -15,6 +15,14 @@ interface HafalanInterface
      */
     public function getAll($paginate = null, int $bulan = null, int $tahun = null, int $jenjang_id = null, string $keyword = null);
     /**
+     * ambil semua data monitoring hafalan , berdasarkan santri
+     * @param mixed $santriId
+     * @param int $paginate
+     * 
+     * @return [type]
+     */
+    public function getAllWhereSantri($santriId, $paginate = 10);
+    /**
      * untuk menambah data monitoring hafalan
      * @param mixed $data
      * 

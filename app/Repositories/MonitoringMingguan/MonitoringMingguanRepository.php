@@ -2,6 +2,7 @@
 namespace App\Repositories\MonitoringMingguan;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\MonitorMingguan;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -142,19 +143,34 @@ class MonitoringMingguanRepository implements MonitoringMingguanInterface
      */
     public function getAllwhereSantri($kategori, $santriId, $paginate = 10)
     {
-        if (!in_array($kategori, ['ngaji', 'sholat jamaah'])) {
-            $message = 'Mohon maaf, kategori tidak tersedia';
-            return $this->handleResponseError->ResponseException($message, 404);
+        try {
+            if (!in_array($kategori, ['ngaji', 'sholat jamaah'])) {
+                $message = 'Mohon maaf, kategori tidak tersedia';
+                return $this->handleResponseError->ResponseException($message, 404);
+            }
+
+            $data = $this->monitoringMingguanModel
+                ->where('kategori', $kategori)
+                ->where('santri_id', $santriId)
+                ->latest()
+                ->get();
+
+            // Group by week
+            $result = $data->groupBy(function ($item) {
+                return Carbon::parse($item->created_at)->format('oW');
+            });
+
+            $result = $this->getManualPagination($paginate, $result);
+
+            return (MonitorMingguanResource::collection($result))
+                ->response()
+                ->setStatusCode(200);
+        } catch (Exception $e) {
+            return $this->handleResponseError->responseError($e);
+
         }
-        $data = $this->monitoringMingguanModel->with(['santri'])->where('kategori', $kategori)->where('santri_id', $santriId)->latest();
-
-        $result = $data->get()->groupBy(function ($item) {
-            return $item->created_at;
-        });
-        $result = $this->getManualPagination($paginate, $result);
-
-        return (MonitorMingguanResource::collection($result))->response()->setStatusCode(200);
     }
+
     public function getManualPagination($perPage, $data)
     {
         $currentPage = request()->get('page', 1); // Nomor halaman saat ini
