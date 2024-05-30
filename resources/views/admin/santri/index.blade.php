@@ -16,10 +16,11 @@
                     <i class="ri-bar-chart-fill text-white text-[20px]"></i>
                     <p class="mt-[2px] text-white whitespace-nowrap">Kelola Kelas</p>
                 </a>
-                <button class="flex gap-2 items-center justify-center bg-green-600 py-1 px-4 rounded-md w-full sm:w-auto">
+                <a href="{{ route('santri.index', http_build_query(array_merge(request()->all(), ['download' => true]))) }}"
+                    class="flex gap-2 items-center justify-center bg-green-600 py-1 px-4 rounded-md w-full sm:w-auto">
                     <i class="ri-download-2-fill text-white text-[20px]"></i>
                     <p class="text-white mt-[2px] whitespace-nowrap">Download Data</p>
-                </button>
+                </a>
 
             </div>
 

@@ -122,6 +122,9 @@ class TagihanRepository implements TagihanInterface
                 $santri->withTrashed()->with([
                     'jenjang' => function ($jenjang) {
                         $jenjang->withTrashed();
+                    },
+                    'waliRelasi' => function ($wali) {
+                        $wali->with('wali');
                     }
                 ]);
             }
@@ -167,10 +170,11 @@ class TagihanRepository implements TagihanInterface
      * @param int|null $paginate
      * @param string|null $keyword
      * @param int|null $kelas
+     * @param  bool|true $grup
      * 
      * @return [type]
      */
-    public function getAllTunggakan(int $paginate = null, string $keyword = null, int $kelas = null)
+    public function getAllTunggakan(int $paginate = null, string $keyword = null, int $kelas = null, bool $grup = true)
     {
         $data = $this->tagihanModel
             ->with([
@@ -178,6 +182,9 @@ class TagihanRepository implements TagihanInterface
                     $santri->withTrashed()->with([
                         'jenjang' => function ($jenjang) {
                             $jenjang->withTrashed();
+                        },
+                        'waliRelasi' => function ($wali) {
+                            $wali->with('wali');
                         }
                     ]);
                 },
@@ -198,13 +205,16 @@ class TagihanRepository implements TagihanInterface
                 }
             });
         }
+        if ($grup) {
+            $data = $data->get()->groupBy('santri_id');
+        } else {
+            $data = $data->get();
+        }
 
         if ($paginate !== null) {
-            $response = $this->getManualPagination($paginate, $data->get()
-                ->groupBy('santri_id'));
+            $response = $this->getManualPagination($paginate, $data);
         } else {
-            $response = $data->get()
-                ->groupBy('santri_id');
+            $response = $data;
         }
         return $response;
     }

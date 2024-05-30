@@ -34,7 +34,8 @@
                             <input type="text" id="email" name="email" placeholder="Email"
                                 class="pl-9 w-full rounded-lg border-main3 focus:ring-0 focus:outline-none focus:border-main2 @error('email')
                                 perr
-                            @enderror" required>
+                            @enderror"
+                                required>
                         </div>
                         @error('email')
                             <p class="peer-invalid:visible text-red-700 font-light">
@@ -50,7 +51,8 @@
                                 <input type="password" id="password" name="password" placeholder="••••••••••••"
                                     class="pl-9 w-full rounded-lg border-main3 focus:ring-0 focus:outline-none focus:border-main2 pr-10 @error('password')
                                         perr
-                                    @enderror" required>
+                                    @enderror"
+                                    required>
                                 <i class="ri-eye-fill absolute right-4 text-[20px] top-[50%] -translate-y-[50%]"
                                     id="showPassword"></i>
                             </div>
@@ -61,11 +63,15 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="w-full mt-8">
+                    <div class="w-full mt-16">
                         <button type="submit"
                             class="w-full rounded-md bg-Sidebar p-4 text-center inline-block text-white cursor-pointer">Masuk</button>
-                        <a href="" class="text-center inline-block w-full text-Sidebar mt-2">Lupa Password</a>
-
+                        <a href="{{ route('auth.lupaPassword') }}" class="text-center inline-block w-full text-Sidebar mt-2">Lupa Password</a>
+                        @if ($countSuperAdmin <= 0)
+                            <a href="{{ route('auth.adminRegister') }}"
+                                class="w-full rounded-md bg-orange-600 p-4 text-center inline-block text-white cursor-pointer mt-2">Register
+                                Admin</a>
+                        @endif
                     </div>
                 </div>
 

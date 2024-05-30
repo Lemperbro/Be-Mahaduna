@@ -58,6 +58,9 @@ return [
         'Oktober',
         'November',
         'Desember'
+    ],
+    'pondok' => [
+        'email' => env('EMAIL_PONDOK')
     ]
 
 ];

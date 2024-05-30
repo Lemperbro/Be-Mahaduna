@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Admin\Santri;
 
-use App\Models\Santri;
-use Illuminate\Http\Request;
+use App\Exports\SantriExport;
 use App\Http\Controllers\Controller;
-use App\Repositories\Wali\WaliInterface;
-use App\Repositories\Santri\SantriInterface;
-use App\Repositories\Jenjang\JenjangInterface;
 use App\Http\Requests\Santri\SantriCreateRequest;
 use App\Http\Requests\Santri\SantriDeleteRequest;
 use App\Http\Requests\Santri\SantriUbahKelasRequest;
 use App\Http\Requests\Santri\UbahStatusRequest;
+use App\Models\Santri;
+use App\Repositories\Jenjang\JenjangInterface;
+use App\Repositories\Santri\SantriInterface;
+use App\Repositories\Wali\WaliInterface;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SantriController extends Controller
 {
@@ -36,6 +38,10 @@ class SantriController extends Controller
         $jenis_kelamin = request('jenis_kelamin') ?? null;
         $data = $this->SantriInterface->getAll(paginate: $paginate, keyword: $keyword, tahunMasuk: $tahun, jenjang: $jenjang_id, status: $status, jenisKelamin: $jenis_kelamin);
         $dataTotal = $data->total();
+        if (request('download') == true) {
+            $export = $this->SantriInterface->getAll(paginate: null, keyword: $keyword, tahunMasuk: $tahun, jenjang: $jenjang_id, status: $status, jenisKelamin: $jenis_kelamin);
+            return $this->export($export, route('santri.index'));
+        }
         return view('admin.santri.index', compact('headerTitle', 'data', 'dataTotal', 'jenjang'));
     }
     public function create()
@@ -56,7 +62,8 @@ class SantriController extends Controller
             return redirect()->back()->with('toast_error', 'Tidak berhasil menambah data');
         }
     }
-    public function ubahStatus(UbahStatusRequest $request){
+    public function ubahStatus(UbahStatusRequest $request)
+    {
         $update = $this->SantriInterface->ubahStatus($request);
         if (isset($update['error']) && $update['error'] == true) {
             return redirect()->back()->with('toast_error', $update['message']);
@@ -66,7 +73,8 @@ class SantriController extends Controller
             return redirect()->back()->with('toast_error', 'Tidak berhasil merubah status santri');
         }
     }
-    public function ubahKelas(SantriUbahKelasRequest $request){
+    public function ubahKelas(SantriUbahKelasRequest $request)
+    {
         $update = $this->SantriInterface->ubahKelas($request);
         if (isset($update['error']) && $update['error'] == true) {
             return redirect()->back()->with('toast_error', $update['message']);
@@ -86,6 +94,14 @@ class SantriController extends Controller
             return redirect()->back()->with('toast_success', 'Berhasil menghapus data');
         } else {
             return redirect()->back()->with('toast_error', 'Tidak berhasil menghapus data');
+        }
+    }
+    public function export($data, $routeBack)
+    {
+        try {
+            return redirect($routeBack);
+        } finally {
+            return Excel::download(new SantriExport($data), 'data-santri.xlsx');
         }
     }
 }

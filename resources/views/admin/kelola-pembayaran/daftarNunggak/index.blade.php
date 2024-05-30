@@ -6,10 +6,10 @@
         <div class="min-h-screen pt-24">
             <div
                 class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4 flex flex-col sm:flex-row gap-4 items-center">
-                <button class="flex gap-2 items-center justify-center bg-green-600 py-1 px-4 rounded-md w-full sm:w-auto">
+                <a  href="{{ route('kelola-pembayaran.tunggakan', http_build_query(array_merge(request()->all(), ['download' => true]))) }}" class="flex gap-2 items-center justify-center bg-green-600 py-1 px-4 rounded-md w-full sm:w-auto">
                     <i class="ri-download-2-fill text-white text-[20px]"></i>
                     <p class="text-white mt-[2px] whitespace-nowrap">Download Data</p>
-                </button>
+                </a>
             </div>
 
             <div class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4">

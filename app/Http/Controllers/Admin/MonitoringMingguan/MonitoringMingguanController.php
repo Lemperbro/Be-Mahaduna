@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin\MonitoringMingguan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\MonitorMingguan;
+use App\Exports\MonitoringExport;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Repositories\Santri\SantriInterface;
 use App\Repositories\Jenjang\JenjangInterface;
 use App\Http\Requests\MonitoringMingguan\DeleteDataMultipleRequest;
@@ -34,6 +36,10 @@ class MonitoringMingguanController extends Controller
         $data = $this->MonitoringMingguanInterface->getAll(kategori: $kategori, paginate: $paginate, keyword: $keyword, tahun: $tahun, jenjang_id: $jenjang_id);
         $totalShowData = $data->total();
         $dataJenjang = $this->JenjangInterface->getAll();
+        if (request('download') == true) {
+            $export = $this->MonitoringMingguanInterface->getAll(kategori: $kategori, paginate: null, keyword: $keyword, tahun: $tahun, jenjang_id: $jenjang_id);
+            return $this->export($export, route('monitoring.sholat.index', ), 'data-jamaah-santri.xlsx');
+        }
         return view('admin.Monitoring-Sholat.index', compact('headerTitle', 'data', 'totalShowData', 'dataJenjang'));
     }
 
@@ -48,6 +54,11 @@ class MonitoringMingguanController extends Controller
         $data = $this->MonitoringMingguanInterface->getAll(kategori: $kategori, paginate: $paginate, keyword: $keyword, tahun: $tahun, jenjang_id: $jenjang_id);
         $totalShowData = $data->total();
         $dataJenjang = $this->JenjangInterface->getAll();
+        if (request('download') == true) {
+            $export = $this->MonitoringMingguanInterface->getAll(kategori: $kategori, paginate: null, keyword: $keyword, tahun: $tahun, jenjang_id: $jenjang_id);
+            return $this->export($export, route('monitoring.ngaji.index', ), 'data-ngaji-santri.xlsx');
+
+        }
         return view('admin.Monitoring-Ngaji.index', compact('headerTitle', 'data', 'totalShowData', 'dataJenjang'));
     }
     public function create($type)
@@ -93,6 +104,14 @@ class MonitoringMingguanController extends Controller
             return redirect($type === 'sholat' ? route('monitoring.sholat.index') : route('monitoring.ngaji.index'))->with('toast_success', 'Berhasil menghapus data');
         } else {
             return redirect()->back()->with('toast_error', 'Tidak berhasil menghapus data');
+        }
+    }
+    public function export($data, $routeBack, $name)
+    {
+        try {
+            return redirect($routeBack);
+        } finally {
+            return Excel::download(new MonitoringExport($data), $name);
         }
     }
 }

@@ -9,4 +9,6 @@ interface AuthInterface{
      * @return mixed
      */
     public function login($data);
+    public function registerAdmin($data);
+    public function resetPassword($data);
 }

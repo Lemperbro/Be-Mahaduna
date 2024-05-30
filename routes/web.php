@@ -67,9 +67,17 @@ Route::get('/', function () {
     return redirect(route('dashboard'));
 });
 
+Route::middleware('adminRegister')->group(function () {
+    Route::get('register', [AuthController::class, 'adminRegister'])->name('auth.adminRegister');
+    Route::post('register', [AuthController::class, 'adminRegisterSave'])->name('auth.adminRegister.post');
+});
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
     Route::post('/login', [AuthController::class, 'loginProses'])->name('auth.login.proses');
+    Route::get('lupa-password', [AuthController::class, 'lupaPassword'])->name('auth.lupaPassword');
+    Route::post('lupa-password', [AuthController::class, 'createLinkReset'])->name('auth.createLinkReset');
+    Route::get('reset-password/{token}/{email}', [AuthController::class, 'resetPassword'])->name('auth.resetPassword');
+    Route::post('reset-password', [AuthController::class, 'saveResetPassword'])->name('auth.saveResetPassword');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -130,6 +138,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/kelola-pembayaran/edit/{id}', [PembayaranController::class, 'updateTagihan'])->name('kelola-pembayaran.update');
     Route::post('/kelola-pembayaran/tagihan/delete/{id}', [PembayaranController::class, 'deleteTagihan'])->name('kelola-pembayaran.delete.tagihan');
     Route::post('/kelola-pembayaran/delete/multiple', [PembayaranController::class, 'deleteTagihanMultiple'])->name('kelola-pembayaran.delete.tagihan.multiple');
+    Route::get('/kelola-pembayaran/download', [PembayaranController::class, 'export'])->name('kelola-pembayaran.export');
 
     //monitoring mingguan
     Route::get('/monitoring/{type}/create', [MonitoringMingguanController::class, 'create'])->name('monitoring.create');

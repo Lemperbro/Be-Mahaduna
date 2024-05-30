@@ -35,10 +35,11 @@ interface TagihanInterface
      * @param int|null $paginate
      * @param string|null $keyword
      * @param int|null $kelas
+     * @param  bool|true $grup
      * 
      * @return [type]
      */
-    public function getAllTunggakan(int $paginate = null, string $keyword = null, int $kelas = null);
+    public function getAllTunggakan(int $paginate = null, string $keyword = null, int $kelas = null, bool $grup = true);
     /**
      * untuk menghitung semua data tagihan
      * @return [type]

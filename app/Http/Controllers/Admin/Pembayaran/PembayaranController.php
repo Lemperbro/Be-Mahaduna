@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin\Pembayaran;
 
 use App\Models\Tagihan;
+use App\Exports\TagihanExport;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Repositories\Santri\SantriInterface;
 use App\Repositories\Jenjang\JenjangInterface;
 use App\Repositories\Tagihan\TagihanInterface;
@@ -40,6 +42,10 @@ class PembayaranController extends Controller
         $totalTagihanBelumDibayar = $this->TagihanInterface->countTagihanBelumBayar();
         $totalTagihanSudahDibayar = $this->TagihanInterface->countTagihanSudahDibayar();
         $pendapatanTahunIni = $this->TagihanInterface->moneyInYear();
+        if (request('download') == true) {
+            $export = $this->TagihanInterface->getAllTagihan(paginate: null, bulan: $bulan, kelas: $kelas, tahun: $tahun, status: $status, keyword: $keyword);
+            return $this->export($export, route('kelola-pembayaran.index'));
+        }
         return view('admin.kelola-pembayaran.index', compact('headerTitle', 'data', 'totalShowData', 'totalData', 'totalTagihanBelumDibayar', 'totalTagihanSudahDibayar', 'pendapatanTahunIni', 'jenjang'));
     }
 
@@ -51,6 +57,10 @@ class PembayaranController extends Controller
         $data = $this->TagihanInterface->getAllTunggakan(paginate: 20, keyword: $keyword, kelas: $kelas);
         $showTotal = $data->total();
         $jenjang = $this->JenjangInterface->getAll();
+        if (request('download') == true) {
+            $export = $this->TagihanInterface->getAllTunggakan(paginate: null, keyword: $keyword, kelas: $kelas, grup: false);
+            return $this->export($export, route('kelola-pembayaran.tunggakan'));
+        }
         return view('admin.kelola-pembayaran.daftarNunggak.index', compact('headerTitle', 'data', 'showTotal', 'jenjang'));
     }
 
@@ -129,6 +139,16 @@ class PembayaranController extends Controller
             return redirect(route('kelola-pembayaran.index'))->with('toast_success', 'Berhasil menghapus tagihan');
         } else {
             return redirect()->back()->with('toast_error', 'Tidak berhasil menghapus tagihan');
+        }
+    }
+
+    public function export($data, $routeBack)
+    {
+        try {
+            return redirect($routeBack);
+        } finally {
+            return Excel::download(new TagihanExport($data), 'tagihan.xlsx');
+
         }
     }
 }
