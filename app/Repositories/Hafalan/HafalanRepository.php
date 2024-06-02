@@ -125,11 +125,8 @@ class HafalanRepository implements HafalanInterface
         try {
             $data = $this->monitorBulanan->where('santri_id', $santriId)->latest()->get();
 
-            $result = $data->groupBy(function ($item) {
-                return $item->bulan;
-            });
 
-            $result = $this->getManualPagination($paginate, $result);
+            $result = $this->getManualPagination($paginate, $data);
             return (HafalanResource::collection($result))->response()->setStatusCode(200);
 
         } catch (Exception $e) {

@@ -20,7 +20,7 @@
             <div class="bg-white w-full rounded-md border-[1px] border-main3 p-4 mt-4">
                 <div class="flex flex-wrap justify-between gap-4">
                     <div class=" items-center">
-                        <h1 class="font-semibold text-lg md:text-xl xl:text-2xl">Data Monitoring Sholat Jamaah berhasil</h1>
+                        <h1 class="font-semibold text-lg md:text-xl xl:text-2xl">Data Monitoring Sholat Jamaah</h1>
                         <span class="border-[1px] border-main3 rounded-md py-[2px] px-1 text-sm text-gray-600 bg-main">Total
                             Show Data {{ $totalShowData }}</span>
                     </div>
