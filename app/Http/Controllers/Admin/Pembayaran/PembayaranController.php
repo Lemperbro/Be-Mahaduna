@@ -42,6 +42,7 @@ class PembayaranController extends Controller
         $totalTagihanBelumDibayar = $this->TagihanInterface->countTagihanBelumBayar();
         $totalTagihanSudahDibayar = $this->TagihanInterface->countTagihanSudahDibayar();
         $pendapatanTahunIni = $this->TagihanInterface->moneyInYear();
+
         if (request('download') == true) {
             $export = $this->TagihanInterface->getAllTagihan(paginate: null, bulan: $bulan, kelas: $kelas, tahun: $tahun, status: $status, keyword: $keyword);
             return $this->export($export, route('kelola-pembayaran.index'));
@@ -148,7 +149,6 @@ class PembayaranController extends Controller
             return redirect($routeBack);
         } finally {
             return Excel::download(new TagihanExport($data), 'tagihan.xlsx');
-
         }
     }
 }

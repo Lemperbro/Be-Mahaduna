@@ -155,12 +155,9 @@ class MonitoringMingguanRepository implements MonitoringMingguanInterface
                 ->latest()
                 ->get();
 
-            // Group by week
-            $result = $data->groupBy(function ($item) {
-                return Carbon::parse($item->created_at)->format('oW');
-            });
 
-            $result = $this->getManualPagination($paginate, $result);
+
+            $result = $this->getManualPagination($paginate, $data);
 
             return (MonitorMingguanResource::collection($result))
                 ->response()
