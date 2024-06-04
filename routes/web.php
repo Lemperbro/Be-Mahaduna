@@ -129,16 +129,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/jadwal-santri/delete/{id}', [JadwalController::class, 'delete'])->name('jadwal.delete');
 
     //kelola pembayaran
-    Route::get('/kelola-pembayaran', [PembayaranController::class, 'index'])->name('kelola-pembayaran.index');
-    Route::get('/kelola-pembayaran/tunggakan', [PembayaranController::class, 'indexNunggak'])->name('kelola-pembayaran.tunggakan');
-    Route::get('/kelola-pembayaran/buat-tagihan', [PembayaranController::class, 'createTagihan'])->name('kelola-pembayaran.create.tagihan');
-    Route::post('/kelola-pembayaran/buat-tagihan', [PembayaranController::class, 'storeTagihan'])->name('kelola-pembayaran.store.tagihan');
-    Route::post('/kelola-pembayaran/konfirmasi/{id}', [PembayaranController::class, 'konfirmasiTagihan'])->name('kelola-pembayaran.konfirmasi');
-    Route::get('/kelola-pembayaran/edit/{id}', [PembayaranController::class, 'edit'])->name('kelola-pembayaran.edit');
-    Route::post('/kelola-pembayaran/edit/{id}', [PembayaranController::class, 'updateTagihan'])->name('kelola-pembayaran.update');
-    Route::post('/kelola-pembayaran/tagihan/delete/{id}', [PembayaranController::class, 'deleteTagihan'])->name('kelola-pembayaran.delete.tagihan');
-    Route::post('/kelola-pembayaran/delete/multiple', [PembayaranController::class, 'deleteTagihanMultiple'])->name('kelola-pembayaran.delete.tagihan.multiple');
-    Route::get('/kelola-pembayaran/download', [PembayaranController::class, 'export'])->name('kelola-pembayaran.export');
+    Route::prefix('kelola-pembayaran')->group(function () {
+        Route::get('/', [PembayaranController::class, 'index'])->name('kelola-pembayaran.index');
+        Route::get('tunggakan', [PembayaranController::class, 'indexNunggak'])->name('kelola-pembayaran.tunggakan');
+        Route::get('buat-tagihan', [PembayaranController::class, 'createTagihan'])->name('kelola-pembayaran.create.tagihan');
+        Route::post('buat-tagihan', [PembayaranController::class, 'storeTagihan'])->name('kelola-pembayaran.store.tagihan');
+        Route::post('konfirmasi/{id}', [PembayaranController::class, 'konfirmasiTagihan'])->name('kelola-pembayaran.konfirmasi');
+        Route::get('edit/{id}', [PembayaranController::class, 'edit'])->name('kelola-pembayaran.edit');
+        Route::post('edit/{id}', [PembayaranController::class, 'updateTagihan'])->name('kelola-pembayaran.update');
+        Route::post('tagihan/delete/{id}', [PembayaranController::class, 'deleteTagihan'])->name('kelola-pembayaran.delete.tagihan');
+        Route::post('delete/multiple', [PembayaranController::class, 'deleteTagihanMultiple'])->name('kelola-pembayaran.delete.tagihan.multiple');
+        Route::get('download', [PembayaranController::class, 'export'])->name('kelola-pembayaran.export');
+    });
 
     //monitoring mingguan
     Route::get('/monitoring/{type}/create', [MonitoringMingguanController::class, 'create'])->name('monitoring.create');
