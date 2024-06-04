@@ -52,7 +52,7 @@ class HafalanController extends Controller
         if (isset($create['error']) && $create['error'] == true) {
             return redirect()->back()->with('toast_error', $create['message']);
         } else if ($create) {
-            return redirect()->back()->with('toast_success', 'Berhasil menambah data');
+            return redirect(route('monitoring.hafalan'))->with('toast_success', 'Berhasil menambah data');
         } else {
             return redirect()->back()->with('toast_error', 'Tidak berhasil menambah data');
         }
