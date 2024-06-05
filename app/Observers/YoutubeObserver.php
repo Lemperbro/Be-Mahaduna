@@ -7,10 +7,17 @@ use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 use App\Notifications\NewUploadsNotification;
+use Kreait\Firebase\Contract\Messaging;
 
 class YoutubeObserver
 {
 
+    private $messaging;
+    public function __construct(Messaging $messaging)
+    {
+        $this->messaging = $messaging;
+
+    }
 
     private $titleNotif = 'Kajian',
     $messageNotif = 'Playlist Kajian Baru Tersedia';
@@ -25,7 +32,7 @@ class YoutubeObserver
     }
     public function sendNotification($topic, $title, $body)
     {
-        $firebase = app('firebase.messaging');
+        $firebase = $this->messaging;
         $message = CloudMessage::withTarget('topic', $topic)
             ->withNotification(Notification::create($title, $body));
 
