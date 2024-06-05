@@ -46,8 +46,4 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new ResetPasswordEmail($token, $this->email));
-    }
 }

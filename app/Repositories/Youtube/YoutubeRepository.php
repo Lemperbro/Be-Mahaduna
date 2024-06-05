@@ -4,6 +4,8 @@ namespace App\Repositories\Youtube;
 use Exception;
 use Carbon\Carbon;
 use App\Models\PlaylistVideo;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Resources\Youtube\VideoResource;
@@ -80,28 +82,33 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
      */
     public function createPlaylistId($data)
     {
+        DB::beginTransaction();
+        try {
+            foreach ($data->playlistId as $playlistId) {
+                $playlistData = [
+                    'playlistId' => $playlistId,
+                    'user_created' => auth()->user()->user_id,
+                    'created_at' => now()
+                ];
+                PlaylistVideo::create($playlistData);
+            }
+            
+            DB::commit();
 
-        $playlistData = array_map(function ($playlistId) {
-            return [
-                'playlistId' => $playlistId,
-                'user_created' => auth()->user()->user_id,
-                'created_at' => now()
-            ];
-        }, $data->playlistId);
+            $createdPlaylists = PlaylistVideo::whereIn('playlistId', $data->playlistId)->get();
 
-        $create = $this->model->insert($playlistData);
-        if ($create) {
-            $createdPlaylists = $this->model->whereIn('playlistId', $data->playlistId)->get();
             if (request()->wantsJson()) {
                 return (PlaylistResource::collection($createdPlaylists))->response()->setStatusCode(201);
             } else {
                 return true;
             }
-        } else {
+        } catch (Exception $e) {
+            DB::rollBack();
+            // Log::info('error', ['error' => $e->getMessage()]);
             return false;
         }
-
     }
+
 
     /**
      * Update playlist id yang ada di dalam database

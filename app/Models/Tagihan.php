@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasCarbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tagihan extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory,SoftDeletes, HasCarbon;
     protected $table = 'tagihan';
     protected $primaryKey = 'tagihan_id';
 

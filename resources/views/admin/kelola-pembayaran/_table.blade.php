@@ -75,7 +75,7 @@
                         {{ $item->transaksi !== null ? 'Rp. ' . number_format($item->transaksi->pay, 0, ',', '.') : 'Belum ada' }}
                     </td>
                     <td class="px-2  py-2 md:py-4 capitalize">
-                        {{ Carbon::parse($item->date)->locale('id')->isoFormat(' MMMM YYYY') }}
+                        {{ $item->date('date') }}
                     </td>
                     <td class="px-2  py-2 md:py-4 capitalize">
                         {{ $item->payment_type ?? 'Belum ada' }}
