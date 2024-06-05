@@ -14,7 +14,7 @@ use App\Http\Resources\Youtube\PlaylistResource;
 use App\Repositories\Youtube\YoutubeBaseRepository;
 use App\Repositories\Youtube\CacheService\CacheService;
 use App\Repositories\HandleError\ResponseErrorRepository;
-use Kreait\Firebase\Contract\Messaging;
+
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 
@@ -24,9 +24,9 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
     private $channelId, $model, $urlPlaylist, $playlistItems, $videoItem, $urlSearch;
     private $responseError;
     protected $cacheService;
-    private $messaging;
 
-    public function __construct(Messaging $messaging)
+
+    public function __construct()
     {
         $this->apiKeys = [
             config('services.youtube.apiKey1'),
@@ -42,7 +42,7 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
         $this->responseError = new ResponseErrorRepository;
         $this->model = new PlaylistVideo;
         $this->cacheService = new CacheService;
-        $this->messaging = $messaging;
+
     }
 
 
@@ -83,7 +83,7 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
 
     public function sendNotification($topic, $title, $body)
     {
-        $firebase = $this->messaging;
+        $firebase = app('firebase.messaging');
         $message = CloudMessage::withTarget('topic', $topic)
             ->withNotification(Notification::create($title, $body));
 
