@@ -14,6 +14,9 @@ use App\Http\Resources\Youtube\PlaylistResource;
 use App\Repositories\Youtube\YoutubeBaseRepository;
 use App\Repositories\Youtube\CacheService\CacheService;
 use App\Repositories\HandleError\ResponseErrorRepository;
+use Kreait\Firebase\Contract\Messaging;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
 
 class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterface
 {
@@ -21,8 +24,9 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
     private $channelId, $model, $urlPlaylist, $playlistItems, $videoItem, $urlSearch;
     private $responseError;
     protected $cacheService;
+    private $messaging;
 
-    public function __construct()
+    public function __construct(Messaging $messaging)
     {
         $this->apiKeys = [
             config('services.youtube.apiKey1'),
@@ -38,7 +42,10 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
         $this->responseError = new ResponseErrorRepository;
         $this->model = new PlaylistVideo;
         $this->cacheService = new CacheService;
+        $this->messaging = $messaging;
     }
+
+
 
     /**
      * Ambil semua data playlist dari channel youtube
@@ -74,6 +81,14 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
         } while (true);
     }
 
+    public function sendNotification($topic, $title, $body)
+    {
+        $firebase = $this->messaging;
+        $message = CloudMessage::withTarget('topic', $topic)
+            ->withNotification(Notification::create($title, $body));
+
+        $firebase->send($message);
+    }
     /**
      * Simpan playlist id ke database
      * @param mixed $data
@@ -92,10 +107,11 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
                 ];
                 PlaylistVideo::create($playlistData);
             }
-            
+
             DB::commit();
 
             $createdPlaylists = PlaylistVideo::whereIn('playlistId', $data->playlistId)->get();
+            $this->sendNotification('youtube', 'coba', 'halo semua');
 
             if (request()->wantsJson()) {
                 return (PlaylistResource::collection($createdPlaylists))->response()->setStatusCode(201);

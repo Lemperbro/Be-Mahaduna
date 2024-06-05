@@ -12,12 +12,7 @@ use Kreait\Firebase\Contract\Messaging;
 class YoutubeObserver
 {
 
-    private $messaging;
-    public function __construct(Messaging $messaging)
-    {
-        $this->messaging = $messaging;
 
-    }
 
     private $titleNotif = 'Kajian',
     $messageNotif = 'Playlist Kajian Baru Tersedia';
@@ -26,19 +21,9 @@ class YoutubeObserver
      */
     public function created(PlaylistVideo $playlistVideo): void
     {
-
         // $playlistVideo->notify(new NewUploadsNotification(title: $this->titleNotif, message: $this->messageNotif));
-        $this->sendNotification('youtube', 'coba', 'halo semua');
     }
-    public function sendNotification($topic, $title, $body)
-    {
-        $firebase = $this->messaging;
-        $message = CloudMessage::withTarget('topic', $topic)
-            ->withNotification(Notification::create($title, $body));
-
-        $firebase->send($message);
-        Log::info('firebase', ['data' => $firebase]);
-    }
+   
 
     /**
      * Handle the PlaylistVideo "updated" event.
