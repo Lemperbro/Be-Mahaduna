@@ -104,7 +104,7 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
             }
         } catch (Exception $e) {
             DB::rollBack();
-            // Log::info('error', ['error' => $e->getMessage()]);
+            Log::info('error', ['error' => $e->getMessage()]);
             return false;
         }
     }
