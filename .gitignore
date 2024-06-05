@@ -18,5 +18,6 @@ yarn-error.log
 /.idea
 /.vscode
 .vercel
-ma-haduna-c911d-firebase-adminsdk-atr6m-c6da23f266.json
 /vendor/firebase
+firebase-auth.json
+

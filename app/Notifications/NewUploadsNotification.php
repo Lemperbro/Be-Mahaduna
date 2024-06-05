@@ -3,12 +3,11 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 use NotificationChannels\Fcm\FcmChannel;
 use NotificationChannels\Fcm\FcmMessage;
 use NotificationChannels\Fcm\Resources\Notification as FcmNotification;
+use Illuminate\Notifications\Notification;
 
 class NewUploadsNotification extends Notification
 {
@@ -32,11 +31,12 @@ class NewUploadsNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database', FcmChannel::class];
+        return [FcmChannel::class];
     }
 
     public function toFcm($notifiable): FcmMessage
     {
+        Log::info('test', ['data' => 'berhasil']);
         return (
             new FcmMessage(
                 notification: new FcmNotification(
