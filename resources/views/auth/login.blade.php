@@ -65,7 +65,7 @@
                     </div>
                     <div class="w-full mt-16">
                         <button type="submit"
-                            class="w-full rounded-md bg-Sidebar p-4 text-center inline-block text-white cursor-pointer">Masuk berhasil</button>
+                            class="w-full rounded-md bg-Sidebar p-4 text-center inline-block text-white cursor-pointer">Masuk</button>
                         <a href="{{ route('auth.lupaPassword') }}" class="text-center inline-block w-full text-Sidebar mt-2">Lupa Password</a>
                         @if ($countSuperAdmin <= 0)
                             <a href="{{ route('auth.adminRegister') }}"
