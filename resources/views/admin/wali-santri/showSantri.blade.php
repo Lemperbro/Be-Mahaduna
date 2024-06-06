@@ -21,7 +21,7 @@
                                 <div class="mt-2">
                                     <h3>Tanggal Lahir</h3>
                                     <h3 class="font-semibold">
-                                        {{ Carbon::parse($item->santri->tgl_lahir)->locale('id')->isoFormat(' MMMM YYYY') }}
+                                        {{ Carbon::parse($item->santri->tgl_lahir)->locale('id')->isoFormat('DD MMMM YYYY') }}
                                     </h3>
                                 </div>
 
@@ -29,7 +29,7 @@
                                 <div class="mt-2">
                                     <h3>Tanggal Keluar</h3>
                                     <h3 class="font-semibold">
-                                        {{ Carbon::parse($item->santri->tgl_keluar)->locale('id')->isoFormat(' MMMM YYYY') }}
+                                        {{ Carbon::parse($item->santri->tgl_keluar)->locale('id')->isoFormat('DD MMMM YYYY') }}
                                     </h3>
                                 </div>
                                 @endif
