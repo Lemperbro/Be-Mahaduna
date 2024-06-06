@@ -4,7 +4,7 @@
     <section>
         @include('admin.partials._header')
         <div class="py-24">
-          
+
             <div class="flex flex-col lg:flex-row gap-4 justify-between">
                 <a href="{{ route('artikel.kategori.index') }}"
                     class="bg-Sidebar py-2 px-4 rounded-md text-white inline-block  max-w-[1200px] font-medium order-2 lg:order-1 items-center">
@@ -27,7 +27,8 @@
                     </div>
                     <div
                         class="h-16 w-16 flex bg-Sidebar items-center rounded-full absolute right-0 group-hover:border-2 group-hover:border-SidebarActive">
-                        <i class="ri-add-fill text-white text-[30px] w-16 text-center group-hover:rotate-90 transition-all duration-500"></i>
+                        <i
+                            class="ri-add-fill text-white text-[30px] w-16 text-center group-hover:rotate-90 transition-all duration-500"></i>
                     </div>
                 </a>
             </div>
@@ -39,6 +40,12 @@
                 <div class="mt-10">
                     {{ $allArtikel->links('vendor.pagination.tailwind') }}
                 </div>
+                @if ($allArtikel->count() <= 0)
+                    <div class="flex flex-col items-center mx-auto mt-32">
+                        <img src="{{ asset('icon/no_data2.svg') }}" alt="" class="w-48 h-48 object-contain">
+                        <h1 class="text-Sidebar font-semibold mt-2">Tidak Ada Artikel Yang Ditemukan</h1>
+                    </div>
+                @endif
             </section>
         </div>
     </section>

@@ -23,6 +23,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     @include('admin.store._card')
                 </div>
+                <div class="mt-10">
+                    {{ $data->links('vendor.pagination.tailwind') }}
+                </div>
+                @if ($data->count() <= 0)
+                    <div class="flex flex-col items-center mx-auto mt-32">
+                        <img src="{{ asset('icon/no_data2.svg') }}" alt="" class="w-48 h-48 object-contain">
+                        <h1 class="text-Sidebar font-semibold mt-2">Tidak Ada Produk Yang Ditemukan</h1>
+                    </div>
+                @endif
             </section>
         </div>
     </section>
