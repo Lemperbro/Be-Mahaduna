@@ -9,10 +9,12 @@ use ImagickException;
 use Iterator;
 use Intervention\Image\Interfaces\CoreInterface;
 use Intervention\Image\Exceptions\AnimationException;
-use Intervention\Image\Exceptions\RuntimeException;
 use Intervention\Image\Interfaces\CollectionInterface;
 use Intervention\Image\Interfaces\FrameInterface;
 
+/**
+ * @implements Iterator<FrameInterface>
+ */
 class Core implements CoreInterface, Iterator
 {
     protected int $iteratorIndex = 0;
@@ -98,10 +100,6 @@ class Core implements CoreInterface, Iterator
      */
     public function slice(int $offset, ?int $length = null): CollectionInterface
     {
-        if ($offset >= $this->count()) {
-            throw new RuntimeException('Offset exceeds the maximum value.');
-        }
-
         $allowed_indexes = [];
         $length = is_null($length) ? $this->count() : $length;
         for ($i = $offset; $i < $offset + $length; $i++) {
@@ -164,7 +162,7 @@ class Core implements CoreInterface, Iterator
     /**
      * {@inheritdoc}
      *
-     * @see Interator::rewind()
+     * @see Iterator::rewind()
      */
     public function current(): mixed
     {
@@ -176,7 +174,7 @@ class Core implements CoreInterface, Iterator
     /**
      * {@inheritdoc}
      *
-     * @see Interator::rewind()
+     * @see Iterator::rewind()
      */
     public function next(): void
     {
@@ -186,7 +184,7 @@ class Core implements CoreInterface, Iterator
     /**
      * {@inheritdoc}
      *
-     * @see Interator::rewind()
+     * @see Iterator::rewind()
      */
     public function key(): mixed
     {
@@ -196,7 +194,7 @@ class Core implements CoreInterface, Iterator
     /**
      * {@inheritdoc}
      *
-     * @see Interator::rewind()
+     * @see Iterator::rewind()
      */
     public function valid(): bool
     {
@@ -212,7 +210,7 @@ class Core implements CoreInterface, Iterator
     /**
      * {@inheritdoc}
      *
-     * @see Interator::rewind()
+     * @see Iterator::rewind()
      */
     public function rewind(): void
     {

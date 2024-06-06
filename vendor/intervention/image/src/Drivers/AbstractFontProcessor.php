@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Intervention\Image\Drivers;
 
+use Intervention\Image\Exceptions\FontException;
 use Intervention\Image\Geometry\Point;
 use Intervention\Image\Geometry\Rectangle;
 use Intervention\Image\Interfaces\FontInterface;
@@ -90,6 +91,7 @@ abstract class AbstractFontProcessor implements FontProcessorInterface
      *
      * @param TextBlock $block
      * @param FontInterface $font
+     * @throws FontException
      * @return TextBlock
      */
     protected function wrapTextBlock(TextBlock $block, FontInterface $font): TextBlock
@@ -111,7 +113,8 @@ abstract class AbstractFontProcessor implements FontProcessorInterface
      *
      * @param Line $line
      * @param FontInterface $font
-     * @return array
+     * @throws FontException
+     * @return array<Line>
      */
     protected function wrapLine(Line $line, FontInterface $font): array
     {
@@ -121,27 +124,27 @@ abstract class AbstractFontProcessor implements FontProcessorInterface
         }
 
         $wrapped = [];
-        $formatedLine = new Line();
+        $formattedLine = new Line();
 
         foreach ($line as $word) {
-            // calculate width of newly formated line
-            $lineWidth = $this->boxSize(match ($formatedLine->count()) {
+            // calculate width of newly formatted line
+            $lineWidth = $this->boxSize(match ($formattedLine->count()) {
                 0 => $word,
-                default => (string) $formatedLine . ' ' . $word,
+                default => (string) $formattedLine . ' ' . $word,
             }, $font)->width();
 
             // decide if word fits on current line or a new line must be created
             if ($line->count() === 1 || $lineWidth <= $font->wrapWidth()) {
-                $formatedLine->add($word);
+                $formattedLine->add($word);
             } else {
-                if ($formatedLine->count()) {
-                    $wrapped[] = $formatedLine;
+                if ($formattedLine->count()) {
+                    $wrapped[] = $formattedLine;
                 }
-                $formatedLine = new Line($word);
+                $formattedLine = new Line($word);
             }
         }
 
-        $wrapped[] = $formatedLine;
+        $wrapped[] = $formattedLine;
 
         return $wrapped;
     }
@@ -152,6 +155,7 @@ abstract class AbstractFontProcessor implements FontProcessorInterface
      * @param TextBlock $block
      * @param FontInterface $font
      * @param PointInterface $position
+     * @throws FontException
      * @return PointInterface
      */
     protected function buildPivot(TextBlock $block, FontInterface $font, PointInterface $position): PointInterface

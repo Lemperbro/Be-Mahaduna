@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Notifications\NewUploadsNotification;
+use App\Traits\HasNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,7 +11,7 @@ use Illuminate\Notifications\Notifiable;
 
 class PlaylistVideo extends Model
 {
-    use HasFactory, SoftDeletes, Notifiable;
+    use HasFactory, SoftDeletes, Notifiable, HasNotification;
     protected $table = 'playlist_video';
     protected $primaryKey = 'playlist_video_id';
 
@@ -26,7 +27,7 @@ class PlaylistVideo extends Model
      */
     public function routeNotificationForFcm()
     {
-        return $this->fcm_token;
+        return $this->fcm_token();
     }
 
 }

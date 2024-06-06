@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Intervention\Image\Drivers\Gd\Decoders;
 
-use Exception;
 use Intervention\Image\Drivers\Gd\Decoders\Traits\CanDecodeGif;
 use Intervention\Image\Exceptions\DecoderException;
 use Intervention\Image\Interfaces\ColorInterface;
@@ -12,25 +11,13 @@ use Intervention\Image\Interfaces\DecoderInterface;
 use Intervention\Image\Interfaces\ImageInterface;
 use Intervention\Image\Modifiers\AlignRotationModifier;
 
-class FilePathImageDecoder extends GdImageDecoder implements DecoderInterface
+class FilePathImageDecoder extends NativeObjectDecoder implements DecoderInterface
 {
     use CanDecodeGif;
 
     public function decode(mixed $input): ImageInterface|ColorInterface
     {
-        if (!is_string($input)) {
-            throw new DecoderException('Unable to decode input');
-        }
-
-        if (strlen($input) > PHP_MAXPATHLEN) {
-            throw new DecoderException('Unable to decode input');
-        }
-
-        try {
-            if (!@is_file($input)) {
-                throw new DecoderException('Unable to decode input');
-            }
-        } catch (Exception) {
+        if (!$this->isFile($input)) {
             throw new DecoderException('Unable to decode input');
         }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Intervention\Image;
 
+use Intervention\Image\Exceptions\RuntimeException;
 use Traversable;
 use Intervention\Image\Analyzers\ColorspaceAnalyzer;
 use Intervention\Image\Analyzers\HeightAnalyzer;
@@ -43,6 +44,7 @@ use Intervention\Image\Interfaces\DriverInterface;
 use Intervention\Image\Interfaces\EncodedImageInterface;
 use Intervention\Image\Interfaces\EncoderInterface;
 use Intervention\Image\Interfaces\FontInterface;
+use Intervention\Image\Interfaces\FrameInterface;
 use Intervention\Image\Interfaces\ImageInterface;
 use Intervention\Image\Interfaces\ModifierInterface;
 use Intervention\Image\Interfaces\ProfileInterface;
@@ -87,6 +89,7 @@ use Intervention\Image\Modifiers\ScaleModifier;
 use Intervention\Image\Modifiers\SharpenModifier;
 use Intervention\Image\Modifiers\SliceAnimationModifier;
 use Intervention\Image\Modifiers\TextModifier;
+use Intervention\Image\Modifiers\TrimModifier;
 use Intervention\Image\Typography\FontFactory;
 
 final class Image implements ImageInterface
@@ -112,6 +115,7 @@ final class Image implements ImageInterface
      * @param DriverInterface $driver
      * @param CoreInterface $core
      * @param CollectionInterface $exif
+     * @throws RuntimeException
      * @return void
      */
     public function __construct(
@@ -180,7 +184,7 @@ final class Image implements ImageInterface
     /**
      * Implementation of IteratorAggregate
      *
-     * @return Traversable
+     * @return Traversable<FrameInterface>
      */
     public function getIterator(): Traversable
     {
@@ -252,7 +256,7 @@ final class Image implements ImageInterface
     /**
      * {@inheritdoc}
      *
-     * @see ImgageInterface::setExif()
+     * @see ImageInterface::setExif()
      */
     public function setExif(CollectionInterface $exif): ImageInterface
     {
@@ -296,7 +300,7 @@ final class Image implements ImageInterface
      *
      * @see ImageInterface::save()
      */
-    public function save(?string $path = null, ...$options): ImageInterface
+    public function save(?string $path = null, mixed ...$options): ImageInterface
     {
         $path = is_null($path) ? $this->origin()->filePath() : $path;
 
@@ -750,6 +754,16 @@ final class Image implements ImageInterface
     /**
      * {@inheritdoc}
      *
+     * @see ImageInterface::trim()
+     */
+    public function trim(int $tolerance = 0): ImageInterface
+    {
+        return $this->modify(new TrimModifier($tolerance));
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * @see ImageInterface::place()
      */
     public function place(
@@ -829,6 +843,11 @@ final class Image implements ImageInterface
         );
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @see ImageInterface::drawPolygon()
+     */
     public function drawPolygon(callable $init): ImageInterface
     {
         return $this->modify(
@@ -838,6 +857,11 @@ final class Image implements ImageInterface
         );
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @see ImageInterface::drawLine()
+     */
     public function drawLine(callable $init): ImageInterface
     {
         return $this->modify(
@@ -852,7 +876,7 @@ final class Image implements ImageInterface
      *
      * @see ImageInterface::encodeByMediaType()
      */
-    public function encodeByMediaType(?string $type = null, ...$options): EncodedImageInterface
+    public function encodeByMediaType(null|string|MediaType $type = null, mixed ...$options): EncodedImageInterface
     {
         return $this->encode(new MediaTypeEncoder($type, ...$options));
     }
@@ -862,8 +886,10 @@ final class Image implements ImageInterface
      *
      * @see ImageInterface::encodeByExtension()
      */
-    public function encodeByExtension(?string $extension = null, mixed ...$options): EncodedImageInterface
-    {
+    public function encodeByExtension(
+        null|string|FileExtension $extension = null,
+        mixed ...$options
+    ): EncodedImageInterface {
         return $this->encode(new FileExtensionEncoder($extension, ...$options));
     }
 
@@ -891,6 +917,7 @@ final class Image implements ImageInterface
      * Alias of self::toJpeg()
      *
      * @param mixed $options
+     * @throws RuntimeException
      * @return EncodedImageInterface
      */
     public function toJpg(mixed ...$options): EncodedImageInterface
@@ -912,6 +939,7 @@ final class Image implements ImageInterface
      * ALias of self::toJpeg2000()
      *
      * @param mixed $options
+     * @throws RuntimeException
      * @return EncodedImageInterface
      */
     public function toJp2(mixed ...$options): EncodedImageInterface
@@ -962,6 +990,7 @@ final class Image implements ImageInterface
     /**
      * Alias if self::toBitmap()
      *
+     * @throws RuntimeException
      * @return EncodedImageInterface
      */
     public function toBmp(mixed ...$options): EncodedImageInterface
@@ -993,6 +1022,7 @@ final class Image implements ImageInterface
      * Alias of self::toTiff()
      *
      * @param mixed $options
+     * @throws RuntimeException
      * @return EncodedImageInterface
      */
     public function toTif(mixed ...$options): EncodedImageInterface

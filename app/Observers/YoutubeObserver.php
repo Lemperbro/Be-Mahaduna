@@ -3,15 +3,13 @@
 namespace App\Observers;
 
 use App\Models\PlaylistVideo;
-use Illuminate\Support\Facades\Log;
-use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\Notification;
 use App\Notifications\NewUploadsNotification;
-use Kreait\Firebase\Contract\Messaging;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class YoutubeObserver
 {
-
 
 
     private $titleNotif = 'Kajian',
@@ -22,8 +20,9 @@ class YoutubeObserver
     public function created(PlaylistVideo $playlistVideo): void
     {
         // $playlistVideo->notify(new NewUploadsNotification(title: $this->titleNotif, message: $this->messageNotif));
+        $playlistVideo->pushNotifikasi(titleNotif: $this->titleNotif, messageNotif: $this->messageNotif);
     }
-   
+
 
     /**
      * Handle the PlaylistVideo "updated" event.

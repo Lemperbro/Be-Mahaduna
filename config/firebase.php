@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 return [
+    
     /*
      * ------------------------------------------------------------------------
      * Default Firebase project
@@ -215,6 +216,7 @@ return [
                 'timeout' => env('FIREBASE_HTTP_CLIENT_TIMEOUT'),
 
                 'guzzle_middlewares' => [],
+                
             ],
         ],
     ],

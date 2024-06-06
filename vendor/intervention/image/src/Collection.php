@@ -4,15 +4,23 @@ declare(strict_types=1);
 
 namespace Intervention\Image;
 
-use Intervention\Image\Exceptions\RuntimeException;
 use Intervention\Image\Interfaces\CollectionInterface;
 use ArrayIterator;
 use Countable;
 use Traversable;
 use IteratorAggregate;
 
+/**
+ * @implements IteratorAggregate<int|string, mixed>
+ */
 class Collection implements CollectionInterface, IteratorAggregate, Countable
 {
+    /**
+     * Create new collection object
+     *
+     * @param array<int|string, mixed> $items
+     * @return void
+     */
     public function __construct(protected array $items = [])
     {
     }
@@ -20,14 +28,19 @@ class Collection implements CollectionInterface, IteratorAggregate, Countable
     /**
      * Static constructor
      *
-     * @param array $items
-     * @return self
+     * @param array<int|string, mixed> $items
+     * @return self<int|string, mixed>
      */
     public static function create(array $items = []): self
     {
         return new self($items);
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @see CollectionInterface::has()
+     */
     public function has(int|string $key): bool
     {
         return array_key_exists($key, $this->items);
@@ -36,13 +49,18 @@ class Collection implements CollectionInterface, IteratorAggregate, Countable
     /**
      * Returns Iterator
      *
-     * @return Traversable
+     * @return Traversable<int|string, mixed>
      */
     public function getIterator(): Traversable
     {
         return new ArrayIterator($this->items);
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @see CollectionInterface::toArray()
+     */
     public function toArray(): array
     {
         return $this->items;
@@ -62,7 +80,7 @@ class Collection implements CollectionInterface, IteratorAggregate, Countable
      * Append new item to collection
      *
      * @param mixed $item
-     * @return CollectionInterface
+     * @return CollectionInterface<int|string, mixed>
      */
     public function push($item): CollectionInterface
     {
@@ -155,6 +173,12 @@ class Collection implements CollectionInterface, IteratorAggregate, Countable
         return $result;
     }
 
+    /**
+     * Map each item of collection by given callback
+     *
+     * @param callable $callback
+     * @return self
+     */
     public function map(callable $callback): self
     {
         $items = array_map(function ($item) use ($callback) {
@@ -168,7 +192,7 @@ class Collection implements CollectionInterface, IteratorAggregate, Countable
      * Run callback on each item of the collection an remove it if it does not return true
      *
      * @param callable $callback
-     * @return Collection
+     * @return self
      */
     public function filter(callable $callback): self
     {
@@ -198,10 +222,6 @@ class Collection implements CollectionInterface, IteratorAggregate, Countable
      */
     public function slice(int $offset, ?int $length = null): CollectionInterface
     {
-        if ($offset >= count($this->items)) {
-            throw new RuntimeException('Offset exceeds the maximum value.');
-        }
-
         $this->items = array_slice($this->items, $offset, $length);
 
         return $this;

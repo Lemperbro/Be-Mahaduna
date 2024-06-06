@@ -173,6 +173,8 @@ final class TestRunner
                         $test->valueObjectForEvents(),
                         $cce->getMessage(),
                     );
+
+                    $append = false;
                 }
             }
 
@@ -357,22 +359,22 @@ final class TestRunner
      */
     private function hasCoverageMetadata(string $className, string $methodName): bool
     {
-        $metadata = MetadataRegistry::parser()->forClassAndMethod($className, $methodName);
+        foreach (MetadataRegistry::parser()->forClassAndMethod($className, $methodName) as $metadata) {
+            if ($metadata->isCovers()) {
+                return true;
+            }
 
-        if ($metadata->isCovers()->isNotEmpty()) {
-            return true;
-        }
+            if ($metadata->isCoversClass()) {
+                return true;
+            }
 
-        if ($metadata->isCoversClass()->isNotEmpty()) {
-            return true;
-        }
+            if ($metadata->isCoversFunction()) {
+                return true;
+            }
 
-        if ($metadata->isCoversFunction()->isNotEmpty()) {
-            return true;
-        }
-
-        if ($metadata->isCoversNothing()->isNotEmpty()) {
-            return true;
+            if ($metadata->isCoversNothing()) {
+                return true;
+            }
         }
 
         return false;
@@ -418,12 +420,13 @@ final class TestRunner
     private function runTestWithTimeout(TestCase $test): bool
     {
         $_timeout = $this->configuration->defaultTimeLimit();
+        $testSize = $test->size();
 
-        if ($test->size()->isSmall()) {
+        if ($testSize->isSmall()) {
             $_timeout = $this->configuration->timeoutForSmallTests();
-        } elseif ($test->size()->isMedium()) {
+        } elseif ($testSize->isMedium()) {
             $_timeout = $this->configuration->timeoutForMediumTests();
-        } elseif ($test->size()->isLarge()) {
+        } elseif ($testSize->isLarge()) {
             $_timeout = $this->configuration->timeoutForLargeTests();
         }
 

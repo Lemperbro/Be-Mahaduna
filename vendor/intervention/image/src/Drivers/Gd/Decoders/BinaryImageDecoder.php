@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Intervention\Image\Drivers\Gd\Decoders;
 
+use Intervention\Image\Exceptions\RuntimeException;
 use Intervention\Image\Interfaces\ColorInterface;
 use Intervention\Image\Interfaces\DecoderInterface;
 use Intervention\Image\Interfaces\ImageInterface;
@@ -11,7 +12,7 @@ use Intervention\Image\Drivers\Gd\Decoders\Traits\CanDecodeGif;
 use Intervention\Image\Exceptions\DecoderException;
 use Intervention\Image\Modifiers\AlignRotationModifier;
 
-class BinaryImageDecoder extends GdImageDecoder implements DecoderInterface
+class BinaryImageDecoder extends NativeObjectDecoder implements DecoderInterface
 {
     use CanDecodeGif;
 
@@ -36,8 +37,8 @@ class BinaryImageDecoder extends GdImageDecoder implements DecoderInterface
      * Decode image from given binary data
      *
      * @param string $input
+     * @throws RuntimeException
      * @return ImageInterface
-     * @throws DecoderException
      */
     private function decodeBinary(string $input): ImageInterface
     {

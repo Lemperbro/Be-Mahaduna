@@ -4,31 +4,17 @@ declare(strict_types=1);
 
 namespace Intervention\Image\Drivers\Imagick\Decoders;
 
-use Exception;
 use Imagick;
 use ImagickException;
 use Intervention\Image\Exceptions\DecoderException;
 use Intervention\Image\Interfaces\ColorInterface;
-use Intervention\Image\Interfaces\DecoderInterface;
 use Intervention\Image\Interfaces\ImageInterface;
 
-class FilePathImageDecoder extends ImagickImageDecoder implements DecoderInterface
+class FilePathImageDecoder extends NativeObjectDecoder
 {
     public function decode(mixed $input): ImageInterface|ColorInterface
     {
-        if (!is_string($input)) {
-            throw new DecoderException('Unable to decode input');
-        }
-
-        if (strlen($input) > PHP_MAXPATHLEN) {
-            throw new DecoderException('Unable to decode input');
-        }
-
-        try {
-            if (!@is_file($input)) {
-                throw new DecoderException('Unable to decode input');
-            }
-        } catch (Exception) {
+        if (!$this->isFile($input)) {
             throw new DecoderException('Unable to decode input');
         }
 

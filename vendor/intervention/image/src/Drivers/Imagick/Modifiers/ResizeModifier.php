@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace Intervention\Image\Drivers\Imagick\Modifiers;
 
-use Intervention\Image\Drivers\DriverSpecialized;
+use Intervention\Image\Exceptions\RuntimeException;
 use Intervention\Image\Interfaces\ImageInterface;
-use Intervention\Image\Interfaces\ModifierInterface;
 use Intervention\Image\Interfaces\SizeInterface;
+use Intervention\Image\Interfaces\SpecializedInterface;
+use Intervention\Image\Modifiers\ResizeModifier as GenericResizeModifier;
 
-/**
- * @property null|int $width
- * @property null|int $height
- */
-class ResizeModifier extends DriverSpecialized implements ModifierInterface
+class ResizeModifier extends GenericResizeModifier implements SpecializedInterface
 {
     public function apply(ImageInterface $image): ImageInterface
     {
@@ -29,6 +26,9 @@ class ResizeModifier extends DriverSpecialized implements ModifierInterface
         return $image;
     }
 
+    /**
+     * @throws RuntimeException
+     */
     protected function getAdjustedSize(ImageInterface $image): SizeInterface
     {
         return $image->size()->resize($this->width, $this->height);

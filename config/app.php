@@ -173,6 +173,7 @@ return [
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         App\Providers\ViewServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Kreait\Laravel\Firebase\ServiceProvider::class
 
     ])->toArray(),
 

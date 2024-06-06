@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Admin\AdminApiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Wali\WaliApiController;
 use App\Http\Controllers\Api\Artikel\ArtikelApiController;
+use App\Http\Controllers\Api\Fcm\FcmApiController;
 use App\Http\Controllers\Api\Jadwal\JadwalApiController;
 use App\Http\Controllers\Api\Majalah\MajalahApiController;
 use App\Http\Controllers\Api\Monitoring\MonitoringApiController;
@@ -22,6 +23,9 @@ use App\Http\Controllers\Api\Transaksi\TransaksiApiController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+//fcm token save
+Route::post('/fcm/save', [FcmApiController::class, 'save'])->name('fcm.save');
 
 //playlist
 Route::prefix('playlist')->group(function () {
@@ -67,7 +71,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [WaliApiController::class, 'logout'])->name('wali.logout');
         Route::get('/findWali', [WaliApiController::class, 'findWali'])->name('wali.find');
     });
-
 
     //santri in auth
     // Route::prefix('santri')->group(function(){

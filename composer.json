@@ -9,6 +9,7 @@
         "cviebrock/eloquent-sluggable": "^10.0",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^3.4",
+        "kreait/laravel-firebase": "^5.8",
         "laravel-notification-channels/fcm": "^4.3",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",

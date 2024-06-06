@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 namespace Intervention\Image\Interfaces;
 
+use Intervention\Image\Exceptions\DriverException;
+use Intervention\Image\Exceptions\NotSupportedException;
+use Intervention\Image\Exceptions\RuntimeException;
+use Intervention\Image\FileExtension;
+use Intervention\Image\Format;
+use Intervention\Image\MediaType;
+
 interface DriverInterface
 {
     /**
@@ -16,24 +23,28 @@ interface DriverInterface
     /**
      * Resolve given object into a specialized version for the current driver
      *
-     * @param object $object
+     * @param ModifierInterface|AnalyzerInterface|EncoderInterface|DecoderInterface $object
+     * @throws NotSupportedException
      * @return ModifierInterface|AnalyzerInterface|EncoderInterface|DecoderInterface
      */
-    public function specialize(object $object): ModifierInterface|AnalyzerInterface|EncoderInterface|DecoderInterface;
+    public function specialize(
+        ModifierInterface|AnalyzerInterface|EncoderInterface|DecoderInterface $object
+    ): ModifierInterface|AnalyzerInterface|EncoderInterface|DecoderInterface;
 
     /**
      * Resolve array of classnames or objects into their specialized version for the current driver
      *
-     * @param array $specializables
-     * @return array
+     * @param array<string|object> $objects
+     * @return array<object>
      */
-    public function specializeMultiple(array $specializables): array;
+    public function specializeMultiple(array $objects): array;
 
     /**
      * Create new image instance with the current driver in given dimensions
      *
      * @param int $width
      * @param int $height
+     * @throws RuntimeException
      * @return ImageInterface
      */
     public function createImage(int $width, int $height): ImageInterface;
@@ -50,7 +61,8 @@ interface DriverInterface
      * Handle given input by decoding it to ImageInterface or ColorInterface
      *
      * @param mixed $input
-     * @param array $decoders
+     * @param array<string|DecoderInterface> $decoders
+     * @throws RuntimeException
      * @return ImageInterface|ColorInterface
      */
     public function handleInput(mixed $input, array $decoders = []): ImageInterface|ColorInterface;
@@ -74,8 +86,17 @@ interface DriverInterface
      * Check whether all requirements for operating the driver are met and
      * throw exception if the check fails.
      *
-     * @throws \Intervention\Image\Exceptions\RuntimeException
+     * @throws DriverException
      * @return void
      */
     public function checkHealth(): void;
+
+    /**
+     * Check if the current driver supports the given format and if the
+     * underlying PHP extension was built with support for the format.
+     *
+     * @param string|Format|FileExtension|MediaType $identifier
+     * @return bool
+     */
+    public function supports(string|Format|FileExtension|MediaType $identifier): bool;
 }
