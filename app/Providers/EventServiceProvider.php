@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Artikel;
 use App\Models\PlaylistVideo;
+use App\Observers\ArtikelObserver;
 use App\Observers\YoutubeObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -29,6 +31,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         PlaylistVideo::observe(YoutubeObserver::class);
+        Artikel::observe(ArtikelObserver::class);
     }
 
     /**
