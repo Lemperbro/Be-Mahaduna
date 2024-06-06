@@ -49,10 +49,6 @@ class NewUploadsNotification extends Notification
         );
         
         return $send;
-
-
-
-
     }
 
     /**

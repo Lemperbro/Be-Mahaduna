@@ -10,10 +10,11 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
 class Artikel extends Model
 {
-    use HasFactory, Sluggable, SoftDeletes, HasNotification;
+    use HasFactory, Sluggable, SoftDeletes, HasNotification, Notifiable;
     protected $table = 'artikel';
     protected $primaryKey = 'artikel_id';
 
