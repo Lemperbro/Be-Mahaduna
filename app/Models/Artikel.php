@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\ArtikelRelasi;
 use App\Models\ArtikelKategori;
+use App\Traits\HasNotification;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Artikel extends Model
 {
-    use HasFactory, Sluggable, SoftDeletes;
+    use HasFactory, Sluggable, SoftDeletes, HasNotification;
     protected $table = 'artikel';
     protected $primaryKey = 'artikel_id';
 
@@ -43,6 +44,15 @@ class Artikel extends Model
     public function artikel_relasi()
     {
         return $this->hasMany(ArtikelRelasi::class, 'artikel_id');
+    }
+     /**
+     * Specifies the user's FCM token
+     *
+     * @return string|array
+     */
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token();
     }
 
 }

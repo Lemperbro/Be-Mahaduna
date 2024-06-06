@@ -13,7 +13,7 @@ class ArtikelObserver
      */
     public function created(Artikel $artikel): void
     {
-        $artikel->notify(new NewUploadsNotification(title: $this->titleNotif, message: $artikel->judul));
+        $artikel->pushNotifikasi(titleNotif: $this->titleNotif, messageNotif: $artikel->judul);
     }
 
     /**

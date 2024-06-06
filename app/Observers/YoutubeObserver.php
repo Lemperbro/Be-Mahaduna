@@ -19,7 +19,6 @@ class YoutubeObserver
      */
     public function created(PlaylistVideo $playlistVideo): void
     {
-        // $playlistVideo->notify(new NewUploadsNotification(title: $this->titleNotif, message: $this->messageNotif));
         $playlistVideo->pushNotifikasi(titleNotif: $this->titleNotif, messageNotif: $this->messageNotif);
     }
 
