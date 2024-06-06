@@ -185,7 +185,7 @@
             </form>
             <a href="{{ route('admin.profile') }}"
                 class=" max-h-[65px] p-4 h-full w-full border-t-[1px] border-main2 flex gap-x-3 pt-2 {{ request()->routeIs('admin.*') ? 'bg-SidebarActive' : '' }}">
-                <img src="{{ asset('img/myFoto.jpg') }}" alt=""
+                <img src="{{ asset(auth()->user()->image) }}" alt=""
                     class="object-cover w-10 h-10 rounded-full my-auto">
                 <div class="my-auto">
                     <h1 class="text-lg text-white capitalize">{{ auth()->user()->username }}</h1>
