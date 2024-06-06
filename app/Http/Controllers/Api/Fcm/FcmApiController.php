@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api\Fcm;
 
+use Exception;
+use App\Models\FcmToken;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Fcm\FcmRequest;
-use App\Models\FcmToken;
-use Exception;
-use Illuminate\Http\Request;
 
 class FcmApiController extends Controller
 {
@@ -21,6 +22,7 @@ class FcmApiController extends Controller
     {
         try {
             $tokenIsReady = $this->model->where('token', $request->token)->count();
+            Log::info('token', ['data' => $tokenIsReady]);
             if ($tokenIsReady > 0) {
                 $save = $this->model->create([
                     'token' => $request->token
