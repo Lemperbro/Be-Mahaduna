@@ -25,7 +25,7 @@ use App\Http\Controllers\Api\Transaksi\TransaksiApiController;
 */
 
 //fcm token save
-Route::post('/fcm/save', [FcmApiController::class, 'save'])->name('fcm.save');
+Route::post('/fcm/save', [FcmApiController::class, 'saveToken'])->name('fcm.save');
 
 //playlist
 Route::prefix('playlist')->group(function () {
