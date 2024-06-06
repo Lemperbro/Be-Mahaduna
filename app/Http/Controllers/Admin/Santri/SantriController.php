@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Santri\SantriCreateRequest;
 use App\Http\Requests\Santri\SantriDeleteRequest;
 use App\Http\Requests\Santri\SantriUbahKelasRequest;
+use App\Http\Requests\Santri\SantriUpdateRequest;
 use App\Http\Requests\Santri\UbahStatusRequest;
 use App\Models\Santri;
 use App\Repositories\Jenjang\JenjangInterface;
@@ -60,6 +61,24 @@ class SantriController extends Controller
             return redirect(route('santri.index'))->with('toast_success', 'Berhasil menambah data');
         } else {
             return redirect()->back()->with('toast_error', 'Tidak berhasil menambah data');
+        }
+    }
+    public function edit(Santri $id)
+    {
+        $data = $id->load('waliRelasi');
+        $jenjang = $this->JenjangInterface->getAll();
+        $wali = $this->WaliInterface->getAll();
+        return view('admin.santri.edit', compact('data', 'jenjang', 'wali'));
+    }
+    public function update(SantriUpdateRequest $request, Santri $id)
+    {
+        $update = $this->SantriInterface->update($id, $request);
+        if (isset($update['error']) && $update['error'] == true) {
+            return redirect()->back()->with('toast_error', $update['message']);
+        } else if ($update) {
+            return redirect(route('santri.index'))->with('toast_success', 'Berhasil merubah data santri');
+        } else {
+            return redirect()->back()->with('toast_error', 'Tidak berhasil merubah data santri');
         }
     }
     public function ubahStatus(UbahStatusRequest $request)

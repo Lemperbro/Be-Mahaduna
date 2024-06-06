@@ -37,7 +37,6 @@ class NewUploadsNotification extends Notification
 
     public function toFcm($notifiable): FcmMessage
     {
-        Log::info('test', ['data' => $this->for]);
         $send = (
             new FcmMessage(
                 notification: new FcmNotification(

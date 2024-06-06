@@ -102,7 +102,7 @@
                             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                                 aria-labelledby="actionMenuBtn{{ $key }}">
                                 <li>
-                                    <a href=""
+                                    <a href="{{ route('santri.edit', ['id' => $item->santri_id]) }}"
                                         class=" px-4 py-2 hover:bg-gray-100 w-full text-Sidebar flex gap-2 items-center">
                                         <i class="ri-edit-2-fill text-xl"></i>
                                         Edit

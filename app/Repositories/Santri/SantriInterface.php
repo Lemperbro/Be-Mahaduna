@@ -22,7 +22,15 @@ interface SantriInterface
      * @return [type]
      */
     public function create($data);
-        /**
+    /**
+     * untuk memperbarui data santri
+     * @param mixed $oldData
+     * @param mixed $data
+     * 
+     * @return [type]
+     */
+    public function update($oldData, $data);
+    /**
      * ubah kelas
      * @param mixed $data
      * 
@@ -43,5 +51,5 @@ interface SantriInterface
      * @return [type]
      */
     public function delete(array $santri_id);
-   
+
 }

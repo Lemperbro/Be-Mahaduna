@@ -175,12 +175,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wali/changePassword/{id}', [WaliController::class, 'changePassword'])->name('wali.changePassword');
     Route::post('/wali/changePassword', [WaliController::class, 'changePasswordSave'])->name('wali.changePasswordSave');
     //santri
-    Route::get('/santri', [SantriController::class, 'index'])->name('santri.index');
-    Route::get('/santri/create', [SantriController::class, 'create'])->name('santri.create');
-    Route::post('/santri/create', [SantriController::class, 'store'])->name('santri.store');
-    Route::post('/santri/delete', [SantriController::class, 'delete'])->name('santri.delete');
-    Route::post('/santri/ubah-status', [SantriController::class, 'ubahStatus'])->name('santri.ubahStatus');
-    Route::post('/santri/ubah-kelas', [SantriController::class, 'ubahKelas'])->name('santri.ubah-kelas');
+    Route::prefix('santri')->group(function () {
+        Route::get('/', [SantriController::class, 'index'])->name('santri.index');
+        Route::get('create', [SantriController::class, 'create'])->name('santri.create');
+        Route::post('create', [SantriController::class, 'store'])->name('santri.store');
+        Route::get('edit/{id}', [SantriController::class, 'edit'])->name('santri.edit');
+        Route::post('edit/{id}', [SantriController::class, 'update'])->name('santri.update');
+        Route::post('delete', [SantriController::class, 'delete'])->name('santri.delete');
+        Route::post('ubah-status', [SantriController::class, 'ubahStatus'])->name('santri.ubahStatus');
+        Route::post('ubah-kelas', [SantriController::class, 'ubahKelas'])->name('santri.ubah-kelas');
+    });
 
     //kelas
     Route::get('/kelas', [KelasController::class, 'index'])->name('kelas.index');

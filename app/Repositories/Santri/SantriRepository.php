@@ -102,6 +102,33 @@ class SantriRepository implements SantriInterface
         return true;
     }
     /**
+     * untuk memperbarui data santri
+     * @param mixed $oldData
+     * @param mixed $data
+     * 
+     * @return [type]
+     */
+    public function update($oldData, $data)
+    {
+        DB::beginTransaction();
+        $updateSantri = $oldData->update([
+            'nama' => $data->nama,
+            'jenjang_id' => $data->jenjang,
+            'tgl_lahir' => Carbon::parse($data->tgl_lahir)->format('Y-m-d'),
+            'jenis_kelamin' => $data->jenis_kelamin,
+        ]);
+        $updateWali = $this->santriRelasiModel->where('santri_id', $oldData->santri_id)->update([
+            'wali_id' => $data->wali,
+            'santri_id' => $oldData->santri_id
+        ]);
+        DB::commit();
+        if (!$updateSantri || !$updateWali) {
+            DB::rollBack();
+            return false;
+        }
+        return true;
+    }
+    /**
      * ubah kelas
      * @param mixed $data
      * 
