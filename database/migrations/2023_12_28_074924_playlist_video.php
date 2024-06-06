@@ -20,7 +20,6 @@ return new class extends Migration
             $table->softDeletes();
             $table->integer('user_deleted')->nullable();
             $table->integer('deleted')->nullable();
-            $table->text('fcm_token')->nullable();
         });
     }
 
