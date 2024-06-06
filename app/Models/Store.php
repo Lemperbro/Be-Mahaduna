@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\StoreImage;
 use App\Notifications\NewUploadsNotification;
+use App\Traits\HasNotification;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,7 +14,7 @@ use Illuminate\Notifications\Notifiable;
 
 class Store extends Model
 {
-    use HasFactory, Sluggable, SoftDeletes, Notifiable;
+    use HasFactory, Sluggable, SoftDeletes, HasNotification;
     protected $table = 'store';
     protected $primaryKey = 'store_id';
     private $title = 'Kajian';
@@ -46,5 +47,13 @@ class Store extends Model
 
         $this->notify(new NewUploadsNotification(title: $this->title, message: $this->title));
     }
-
+    /**
+     * Specifies the user's FCM token
+     *
+     * @return string|array
+     */
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token();
+    }
 }
