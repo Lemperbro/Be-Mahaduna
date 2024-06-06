@@ -23,7 +23,7 @@ class FcmApiController extends Controller
         try {
             $tokenIsReady = $this->model->where('token', $request->token)->count();
             Log::info('token', ['data' => $tokenIsReady]);
-            if ($tokenIsReady > 0) {
+            if ($tokenIsReady <= 0) {
                 $save = $this->model->create([
                     'token' => $request->token
                 ]);
