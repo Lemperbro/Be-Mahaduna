@@ -37,7 +37,7 @@ class ResetPasswordEmail extends Notification
      */
     public function toMail($notifiable)
     {
-        $resetUrl = route('auth.resetPassword', ['token' => $this->token, 'email' => $this->email]);
+        $resetUrl = route('password.reset', ['token' => $this->token, 'email' => $this->email]);
         $emailPondok = config('services.pondok.email');
 
         return (new MailMessage)

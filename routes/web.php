@@ -76,7 +76,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'loginProses'])->name('auth.login.proses');
     Route::get('lupa-password', [AuthController::class, 'lupaPassword'])->name('auth.lupaPassword');
     Route::post('lupa-password', [AuthController::class, 'createLinkReset'])->name('auth.createLinkReset');
-    Route::get('reset-password/{token}/{email}', [AuthController::class, 'resetPassword'])->name('auth.resetPassword');
+    Route::get('reset-password/{token}/{email}', [AuthController::class, 'resetPassword'])->name('password.reset');
     Route::post('reset-password', [AuthController::class, 'saveResetPassword'])->name('auth.saveResetPassword');
 });
 
