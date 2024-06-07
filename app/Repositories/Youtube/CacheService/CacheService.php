@@ -11,7 +11,7 @@ class CacheService
         // Buat key cache unik berdasarkan parameter yang diterima
         $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}_{$jsonYes}";
         // Key untuk menyimpan playlistIdData di cache
-        $playlistIdCacheKey = 'cached_playlist_ids';
+        $playlistIdCacheKey = "cached_playlist_ids_{$jsonYes}";
         // Ambil playlistIdData yang sudah disimpan di cache
         $cachedPlaylistIdData = Cache::get($playlistIdCacheKey);
 
@@ -28,7 +28,8 @@ class CacheService
         // Buat key cache unik berdasarkan parameter yang diterima
         $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}_{$jsonYes}";
         // Key untuk menyimpan playlistIdData di cache
-        $playlistIdCacheKey = 'cached_playlist_ids';
+        $playlistIdCacheKey = "cached_playlist_ids_{$jsonYes}";
+
 
         if ($statusCode === 200) {
             $currentKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_1_{$jsonYes}";
