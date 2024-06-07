@@ -28,17 +28,20 @@
                 </div>
             @endif --}}
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
                 <div class="grid grid-cols-1 gap-4 ">
-                    <div class="bg-white border-[1px] border-main3 rounded-md h-36 p-4 relative overflow-hidden ">
-                        <div class="pr-80">
+                    <div
+                        class="bg-white border-[1px] border-main3 rounded-md p-4 min-h-36 xl:h-36  relative overflow-hidden flex flex-col md:flex-row lg:flex-col xl:flex-row gap-2">
+                        <div class="">
                             <h1 class="capitalize text-Sidebar2 text-xl font-medium">{{ $greeting }},
                                 {{ auth()->user()->username }}! Terus semangat dan tetap produktif!</h1>
                             <a href="{{ route('kelola-pembayaran.index') }}"
                                 class="inline-block px-2 py-1 mt-5 rounded-md border-Sidebar2 border ">Lihat Data Tagihan</a>
                         </div>
-                        <div class="absolute top-2 right-0 ">
-                            <img src="{{ asset('icon/hello.png') }}" alt="" class="w-80">
+                        <div class="xl:w-80  min-h-36 relative  w-full">
+                            <div class="absolute top-2 right-0 ">
+                                <img src="{{ asset('icon/hello.png') }}" alt="" class="w-80">
+                            </div>
                         </div>
                     </div>
                 </div>
