@@ -53,7 +53,7 @@ interface YoutubeInterface
      * 
      * @return [type]
      */
-    public function getAllVideo($evenType = 'completed', $paginate = 10,$pageToken = null);
+    public function getAllVideo($evenType = 'completed', $paginate = 10, $pageToken = null, string $keyword = null);
 
     /**
      * Ambil detail data video dari id video

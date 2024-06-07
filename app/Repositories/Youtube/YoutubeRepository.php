@@ -92,7 +92,7 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
                 ];
                 PlaylistVideo::create($playlistData);
             }
-            
+
             DB::commit();
 
             $createdPlaylists = PlaylistVideo::whereIn('playlistId', $data->playlistId)->get();
@@ -283,16 +283,17 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
      * 
      * @return [type]
      */
-    public function getAllVideo($evenType = 'completed', $paginate = 10, $pageToken = null)
+    public function getAllVideo($evenType = 'completed', $paginate = 10, $pageToken = null, string $keyword = null)
     {
         try {
-            $cacheKey = "youtube_all_videos_{$evenType}_{$paginate}_{$pageToken}";
+            $cacheKey = "youtube_all_videos_{$evenType}_{$keyword}_{$paginate}_{$pageToken}";
             $cacheIsReady = $this->cacheService->getAllVideoIsReady($cacheKey);
             if ($cacheIsReady) {
                 return Cache::get($cacheKey);
             }
             do {
-                $getData = Http::get($this->urlSearch, [
+
+                $query = [
                     'key' => $this->apiKeys[$this->apiKeyIndex],
                     'part' => 'snippet',
                     'type' => 'video',
@@ -303,7 +304,11 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
                     'pageToken' => $pageToken,
                     'publishedBefore' => Carbon::now()->toRfc3339String(),
                     'publishedAfter' => Carbon::now()->subYears(2)->toRfc3339String()
-                ]);
+                ];
+                if ($keyword !== null) {
+                    $query['q'] = $keyword;
+                }
+                $getData = Http::get($this->urlSearch, $query);
                 // Cek apakah terjadi quota limit
                 if ($this->isQuotaLimitError($getData)) {
                     if ($this->rotateApiKey()) {

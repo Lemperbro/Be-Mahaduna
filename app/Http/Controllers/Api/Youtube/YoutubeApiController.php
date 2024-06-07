@@ -62,11 +62,13 @@ class YoutubeApiController extends Controller
         $evenType = $request->evenType ?? 'completed';
         $paginate = $request->paginate ?? 10;
         $pageToken = $request->pageToken ?? null;
+        $keyword = $request->keyword ?? null;
 
         $data = $this->YoutubeInterface->getAllVideo(
             evenType: $evenType,
             paginate: $paginate,
-            pageToken: $pageToken
+            pageToken: $pageToken,
+            keyword: $keyword
         );
 
         return $data;
