@@ -1,6 +1,6 @@
 @use('Carbon\Carbon')
 
-@foreach ($playlist->data as $key => $item)
+@foreach ($playlist->items() as $key => $item)
     <div class="inline-block bg-white relative rounded-lg shadow-md">
         <div class="bg-gray-400 absolute left-[50%] -translate-x-[50%] w-[95%] h-40 -top-2 rounded-lg -z-[1]"></div>
         <a href="" class="relative rounded-lg overflow-hidden inline-block">

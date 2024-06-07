@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Cache;
 
 class CacheService
 {
-    public function getAllDataPlaylistIsReady($newPlaylistIdData, $page, $part, $keyword, $paginate): bool
+    public function getAllDataPlaylistIsReady($newPlaylistIdData, $page, $part, $keyword, $paginate, $jsonYes): bool
     {
         // Buat key cache unik berdasarkan parameter yang diterima
-        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}";
+        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}_{$jsonYes}";
         // Key untuk menyimpan playlistIdData di cache
         $playlistIdCacheKey = 'cached_playlist_ids';
         // Ambil playlistIdData yang sudah disimpan di cache
@@ -23,15 +23,15 @@ class CacheService
         return false;
     }
 
-    public function getAllDataPlaylistNotReady($newPlaylistIdData, $page, $part, $keyword, $paginate, $data, $statusCode)
+    public function getAllDataPlaylistNotReady($newPlaylistIdData, $page, $part, $keyword, $paginate, $data, $statusCode, $jsonYes)
     {
         // Buat key cache unik berdasarkan parameter yang diterima
-        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}";
+        $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}_{$jsonYes}";
         // Key untuk menyimpan playlistIdData di cache
         $playlistIdCacheKey = 'cached_playlist_ids';
 
         if ($statusCode === 200) {
-            $currentKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_1";
+            $currentKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_1_{$jsonYes}";
             if (Cache::has($currentKey)) {
                 $oldData = Cache::get($currentKey);
                 $last_page = request()->wantsJson() ? $oldData->getData()->last_page : $oldData->lastPage();

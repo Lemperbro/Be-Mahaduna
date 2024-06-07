@@ -183,12 +183,12 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
     public function getAllDataPlaylist($part = 'snippet', $keyword = null, $paginate = 10, $page = 1)
     {
         $statusCode = 200;
+        $jsonYes = request()->wantsJson() ? true : false;
         try {
-            $playlistIdData = request()->wantsJson() ? collect($this->getAllPlaylistId()->getData()->data) : $this->getAllPlaylistId();
-            $cacheIsReady = $this->cacheService->getAllDataPlaylistIsReady($playlistIdData, $page, $part, $keyword, $paginate);
-
+            $playlistIdData = $jsonYes ? collect($this->getAllPlaylistId()->getData()->data) : $this->getAllPlaylistId();
+            $cacheIsReady = $this->cacheService->getAllDataPlaylistIsReady($playlistIdData, $page, $part, $keyword, $paginate, $jsonYes);
             if ($cacheIsReady) {
-                return Cache::get("youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}");
+                return Cache::get("youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}_$jsonYes");
             }
 
             do {
@@ -214,7 +214,7 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
                 }
                 $responseWithPaginate = $this->getManualPagination($paginate, $responseData);
 
-                if (request()->wantsJson()) {
+                if ($jsonYes) {
                     $data = (VideoResource::make($responseWithPaginate))->response()->setStatusCode($statusCode);
                 } else {
                     $data = $responseWithPaginate;
@@ -227,7 +227,7 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
             return $this->responseError->responseError($e);
         } finally {
             if (!$cacheIsReady) {
-                $this->cacheService->getAllDataPlaylistNotReady($playlistIdData, $page, $part, $keyword, $paginate, $data, $statusCode);
+                $this->cacheService->getAllDataPlaylistNotReady($playlistIdData, $page, $part, $keyword, $paginate, $data, $statusCode, $jsonYes);
             }
         }
     }

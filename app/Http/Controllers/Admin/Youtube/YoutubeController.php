@@ -28,7 +28,7 @@ class YoutubeController extends Controller
         $part = 'snippet,contentDetails';
         $keyword = request('keyword') ?? null;
         $paginate = 10;
-        $playlist = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate)->getData();
+        $playlist = $this->YoutubeInterface->getAllDataPlaylist(part: $part, keyword: $keyword, paginate: $paginate);
         if (request('ajaxPageToken')) {
             // remove cache di sini , agar data tidak dobel
             cache()->forget('allPlaylist');
