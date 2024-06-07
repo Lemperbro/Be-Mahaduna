@@ -223,6 +223,7 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
             } while (true);
 
         } catch (Exception $e) {
+            $statusCode = 500;
             return $this->responseError->responseError($e);
         } finally {
             if (!$cacheIsReady) {
