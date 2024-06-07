@@ -55,7 +55,8 @@ class ArtikelController extends Controller
     {
         $data = $id->load('artikel_relasi.artikel_kategori');
         $kategori = $this->ArtikelInterface->getAllKategori(null);
-        return view('admin.artikel.edit', compact('data', 'kategori'));
+        $appUrl = config('app.url');
+        return view('admin.artikel.edit', compact('data', 'kategori', 'appUrl'));
     }
     public function artikelUpdate(ArtikelUpdateRequest $request, Artikel $id)
     {

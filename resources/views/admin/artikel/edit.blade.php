@@ -10,7 +10,7 @@
                 enctype="multipart/form-data">
                 @csrf
                 <div>
-                    <label >Banner Image (JPEG,PNG,JPG) </label>
+                    <label>Banner Image (JPEG,PNG,JPG) </label>
                     <input type="text" name="bannerImage" id="bannerImage" class="hidden">
                     <input type="file" id="bannerImageUploader"
                         class="w-full bg-white border border-main3 focus:ring-0 focus:outline-none focus:border-main2 rounded-md mt-1 @error('bannerImage')
@@ -133,9 +133,18 @@
 
     <script>
         const oldImageData = @json($data->bannerImage);
+        const appUrl = "{{ $appUrl }}";
+
+        function ensureFullUrl(path) {
+            if (path.startsWith('http://') || path.startsWith('https://')) {
+                return path;
+            }
+            return appUrl + '/' + path;
+        }
         $(document).ready(function() {
             // filePond start
-            axios.head(oldImageData)
+            const fullUrl = ensureFullUrl(oldImageData);
+            axios.head(fullUrl)
                 .then(response => {
                     const sizeImage = response.headers['content-length'];
                     $('#bannerImageUploader').filepond({
@@ -164,7 +173,8 @@
                 .catch(error => {
                     console.error('Error fetching image size:', error);
                 });
-            FilePond.registerPlugin(FilePondPluginFileEncode, FilePondPluginImagePreview, FilePondPluginFilePoster,FilePondPluginFileValidateType,FilePondPluginFileValidateSize);
+            FilePond.registerPlugin(FilePondPluginFileEncode, FilePondPluginImagePreview, FilePondPluginFilePoster,
+                FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
             // filePond end
 
             var editor = new FroalaEditor('#isi', {
