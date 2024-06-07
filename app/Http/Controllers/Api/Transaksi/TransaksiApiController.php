@@ -21,6 +21,7 @@ class TransaksiApiController extends Controller
         return $this->TransaksiInterface->createTransaksiByXendit($id);
     }
     public function webhooksXendit(Request $request){
-        return $this->TransaksiInterface->webhooksXendit($request);
+        // return $this->TransaksiInterface->webhooksXendit($request);
+        return true;
     }
 }
