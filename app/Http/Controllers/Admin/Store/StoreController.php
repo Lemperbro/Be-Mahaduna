@@ -46,7 +46,8 @@ class StoreController extends Controller
     {
         $data = $id->load('store_image');
         $headerTitle = 'Ubah Produk';
-        return view('admin.store.edit', compact('data', 'headerTitle'));
+        $appUrl = config('app.url');
+        return view('admin.store.edit', compact('data', 'headerTitle', 'appUrl'));
     }
     public function update(StoreUpdateRequest $request, Store $id)
     {

@@ -12,11 +12,11 @@
                     <p class="text-gray-600 mt-2">Catatan: Jika gambar sisa 1 maka gambar tidak akan bisa di hapus, silahkan
                         tambah gambar dan simpan</p>
                     <input type="text" name="image" id="image" class="hidden">
-                        <input type="file" id="imageUploader"
-                            class="w-full bg-white border border-main3 focus:ring-0 focus:outline-none focus:border-main2 rounded-md mt-1 @error('image')
+                    <input type="file" id="imageUploader"
+                        class="w-full bg-white border border-main3 focus:ring-0 focus:outline-none focus:border-main2 rounded-md mt-1 @error('image')
                         peer
                         @enderror"
-                            required multiple>
+                        required multiple>
 
                     @error('image')
                         <p class="peer-invalid:visible text-red-700 font-light">
@@ -54,7 +54,8 @@
                     <input type="text" name="label" id="label"
                         class="w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 mt-1 @error('label')
                     peer
-                @enderror" value="{{ $data->label }}">
+                @enderror"
+                        value="{{ $data->label }}">
                     @error('label')
                         <p class="peer-invalid:visible text-red-700 font-light">
                             {{ $message }}
@@ -66,7 +67,8 @@
                     <input type="number" name="price" id="price"
                         class="w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 mt-1 @error('price')
                     peer
-                @enderror" value="{{ $data->price }}">
+                @enderror"
+                        value="{{ $data->price }}">
                     @error('price')
                         <p class="peer-invalid:visible text-red-700 font-light">
                             {{ $message }}
@@ -78,7 +80,8 @@
                     <input type="number" name="stock" id="stock"
                         class="w-full p-2 rounded-md  border-main3  focus:ring-0 focus:outline-none focus:border-main2 mt-1 @error('stock')
                     peer
-                @enderror" value="{{ $data->stock }}">
+                @enderror"
+                        value="{{ $data->stock }}">
                     @error('stock')
                         <p class="peer-invalid:visible text-red-700 font-light">
                             {{ $message }}
@@ -122,7 +125,6 @@
         .filepond--root {
             max-height: 50em;
         }
-
     </style>
 @endpush
 @push('scripts')
@@ -145,33 +147,50 @@
     <script>
         $(document).ready(function() {
             let oldImageData = @json($data->store_image->pluck('image'));
+            const appUrl = "{{ $appUrl }}";
+
+            // Fungsi untuk memastikan URL lengkap
+            function ensureFullUrl(path) {
+                if (path.startsWith('http://') || path.startsWith('https://')) {
+                    return path;
+                }
+                return appUrl + '/' + path;
+            }
+
+            // Ubah oldImageData menjadi URL lengkap
+            oldImageData = oldImageData.map(image => ensureFullUrl(image));
             let store_id = @json($data->store_id);
-            // filepond start
+
+            // filePond start
             FilePond.registerPlugin(FilePondPluginFileEncode, FilePondPluginImagePreview, FilePondPluginFilePoster,
                 FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
 
             async function getImagesWithSizes() {
                 const imageDataArray = await Promise.all(oldImageData.map(async (imageURL) => {
                     // Fetch image header and extract size
-                    const response = await axios.head(imageURL);
-                    const size = response.headers['content-length'];
+                    try {
+                        const response = await axios.head(imageURL);
+                        const size = response.headers['content-length'];
 
-                    return {
-                        source: imageURL,
-                        options: {
-                            type: 'local',
-                            file: {
-                                name: 'Data Gambar',
-                                size: size,
-                            },
-                            metadata: {
-                                poster: imageURL,
-                            },
-                        }
-                    };
+                        return {
+                            source: imageURL,
+                            options: {
+                                type: 'local',
+                                file: {
+                                    name: 'Data Gambar',
+                                    size: size,
+                                },
+                                metadata: {
+                                    poster: imageURL,
+                                },
+                            }
+                        };
+                    } catch (error) {
+                        console.error('Error fetching image size:', error);
+                    }
                 }));
 
-                return imageDataArray;
+                return imageDataArray.filter(image => image); // Hapus undefined dari hasil
             }
 
             (async () => {
@@ -229,11 +248,7 @@
                         console.error('Error fetching image size:', error);
                     }
                 }
-
-
             })();
-
-
 
             filePondConfig('storeImage', '{{ csrf_token() }}', '#image', '#submitBtn');
             // filepond end

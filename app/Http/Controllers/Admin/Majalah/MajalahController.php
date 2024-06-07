@@ -43,7 +43,8 @@ class MajalahController extends Controller
     public function edit(Majalah $id){
         $data = $id;
         $headerTitle = 'Ubah Data Majalah';
-        return view('admin.majalah.edit', compact('data', 'headerTitle'));
+        $appUrl = config('app.url');
+        return view('admin.majalah.edit', compact('data', 'headerTitle', 'appUrl'));
     }
     public function update(MajalahUpdateRequest $request, Majalah $id)
     {

@@ -93,7 +93,17 @@
         $(document).ready(function() {
             // filePond start
             const oldImageData = @json($data->bannerImage);
-            axios.head(oldImageData)
+            const appUrl = "{{ $appUrl }}";
+
+            function ensureFullUrl(path) {
+                if (path.startsWith('http://') || path.startsWith('https://')) {
+                    return path;
+                }
+                return appUrl + '/' + path;
+            }
+            const fullUrl = ensureFullUrl(oldImageData);
+
+            axios.head(fullUrl)
                 .then(response => {
                     const sizeImage = response.headers['content-length'];
                     $('#bannerImageUploader').filepond({
@@ -104,7 +114,7 @@
                         maxFileSize: '1MB',
                         labelMaxFileSizeExceeded: 'Ukuran file melebihi batas maksimum (1MB)',
                         files: [{
-                            source: oldImageData,
+                            source: fullUrl,
                             options: {
                                 type: 'local',
                                 file: {
@@ -112,7 +122,7 @@
                                     size: sizeImage
                                 },
                                 metadata: {
-                                    poster: oldImageData,
+                                    poster: fullUrl,
                                 },
                             }
                         }],
