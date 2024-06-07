@@ -144,6 +144,7 @@
         $(document).ready(function() {
             // filePond start
             const fullUrl = ensureFullUrl(oldImageData);
+            console.log(fullUrl);
             axios.head(fullUrl)
                 .then(response => {
                     const sizeImage = response.headers['content-length'];
@@ -155,7 +156,7 @@
                         maxFileSize: '1MB',
                         labelMaxFileSizeExceeded: 'Ukuran file melebihi batas maksimum (1MB)',
                         files: [{
-                            source: oldImageData,
+                            source: fullUrl,
                             options: {
                                 type: 'local',
                                 file: {
@@ -163,7 +164,7 @@
                                     size: sizeImage
                                 },
                                 metadata: {
-                                    poster: oldImageData,
+                                    poster: fullUrl,
                                 },
                             }
                         }],
