@@ -83,7 +83,7 @@
                                 data-dropdown-toggle="actionMenuContent{{ $key }}"></i>
                         </div>
                         <div id="actionMenuContent{{ $key }}"
-                            class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-shadow1 w-44 dark:bg-gray-700 dark:divide-gray-600">
+                            class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-shadow1 w-44 dark:bg-gray-700 dark:divide-gray-600">
                             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                                 aria-labelledby="actionMenuBtn{{ $key }}">
                                 <li>
