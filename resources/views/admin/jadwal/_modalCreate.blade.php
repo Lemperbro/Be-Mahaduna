@@ -23,23 +23,17 @@
             </div>
             <div class="mt-4">
                 <label for="keterangan">Keterangan</label>
-                <input type="text" name="keterangan"
+                <input type="text" id="keterangan" name="keterangan"
                     class="w-full p-2 rounded-md  border-main3 focus:ring-0 focus:outline-none focus:border-main2 mt-1"
                     placeholder="Keterangan">
             </div>
             <div class="flex gap-2 mt-4 justify-end">
-                <label for="closeModalCreateJadwal"
-                    class="btn bg-red-700 text-white border-none hover:bg-red-600">Batal</label>
+                <button type="button" id="closeModalCreateJadwal"
+                    class="btn bg-red-700 text-white border-none hover:bg-red-600">Batal</button>
                 <button type="submit"
                     class="btn bg-Sidebar text-white border-none hover:bg-SidebarActive">Simpan</button>
             </div>
         </form>
-        <div class="modal-action hidden">
-            <form method="dialog">
-                <!-- if there is a button in form, it will close the modal -->
-                <button class="btn" id="closeModalCreateJadwal">Close</button>
-            </form>
-        </div>
     </div>
 </dialog>
 
@@ -51,24 +45,27 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         $(document).ready(function() {
-
             var timepicker = {
                 enableTime: true,
                 static: true,
                 noCalendar: true,
                 dateFormat: "H:i",
-                placeholder: "Pilih Waktu",
                 time_24hr: true,
                 theme: "light"
             }
 
             var endTime = flatpickr('#endTime', timepicker);
             var startTime = flatpickr('#startTime', timepicker);
+
             $('#createJadwalBtn').on('click', function() {
-                startTime.close();
-                endTime.close();
+                startTime.open();
+                endTime.open();
             });
 
+            $('#closeModalCreateJadwal').on('click', function() {
+                const dialog = document.getElementById('createJadwal');
+                dialog.close();
+            });
         });
     </script>
 @endpush
