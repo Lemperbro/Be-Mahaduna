@@ -132,16 +132,16 @@
     <script src="{{ asset('froala/js/froala_editor.pkgd.min.js') }}"></script>
 
     <script>
-        const oldImageData = @json($data->bannerImage);
-        const appUrl = "{{ $appUrl }}";
-
-        function ensureFullUrl(path) {
-            if (path.startsWith('http://') || path.startsWith('https://')) {
-                return path;
-            }
-            return appUrl + '/' + path;
-        }
         $(document).ready(function() {
+            const oldImageData = @json($data->bannerImage);
+            const appUrl = "{{ $appUrl }}";
+
+            function ensureFullUrl(path) {
+                if (path.startsWith('http://') || path.startsWith('https://')) {
+                    return path;
+                }
+                return appUrl + '/' + path;
+            }
             // filePond start
             const fullUrl = ensureFullUrl(oldImageData);
             console.log(fullUrl);
