@@ -114,7 +114,7 @@
                     <span class="ml-3 font-semibold">Pembayaran SPP</span>
                 </a>
             </li> --}}
-            <li>
+            {{-- <li>
                 <a href="/admin"
                     class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white">
                     <i class="ri-information-2-fill text-[20px] transition duration-75"></i>
@@ -127,7 +127,7 @@
                     <i class="ri-gallery-fill text-[20px] transition duration-75 "></i>
                     <span class="ml-3 font-semibold">Gallery</span>
                 </a>
-            </li>
+            </li> --}}
             <h1 class="text-gray-400 text-sm">MONITORING</h1>
             <li>
                 <a href="{{ route('monitoring.sholat.index') }}"
