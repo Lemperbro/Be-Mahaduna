@@ -32,14 +32,18 @@ class CacheService
 
 
         if ($statusCode === 200) {
-            $currentKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_1_{$jsonYes}";
+            $currentKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}_{$jsonYes}";
             if (Cache::has($currentKey)) {
                 $oldData = Cache::get($currentKey);
                 $last_page = request()->wantsJson() ? $oldData->getData()->last_page : $oldData->lastPage();
                 for ($i = 1; $i <= $last_page; $i++) {
-                    $nextPageCacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$i}";
-                    if (Cache::has($nextPageCacheKey)) {
-                        Cache::forget($nextPageCacheKey);
+                    $nextPageCacheKeyTrue = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$i}_1";
+                    $nextPageCacheKeyFalse = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$i}_";
+                    if (Cache::has($nextPageCacheKeyTrue)) {
+                        Cache::forget($nextPageCacheKeyTrue);
+                    }
+                    if (Cache::has($nextPageCacheKeyFalse)) {
+                        Cache::forget($nextPageCacheKeyFalse);
                     }
                 }
             }
