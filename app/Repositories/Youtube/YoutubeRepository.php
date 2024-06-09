@@ -173,7 +173,7 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
     /**
      * ambil semua data playlist dari api youtube, berdasarkan playlistId yang di simpan di db
      * @param int $maxResults
-     * @param string $part ini bertipe string , contoh 'snippet,contentDetails,id,player,status,localizations'
+     * @param string $part ini bertipe string, contoh 'snippet,contentDetails,id,player,status,localizations'
      * @param mixed $keyword untuk mencari data
      * @param int $paginate untuk mempaginate data
      * 
