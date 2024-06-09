@@ -188,7 +188,8 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
             $playlistIdData = $jsonYes ? collect($this->getAllPlaylistId()->getData()->data) : $this->getAllPlaylistId();
             $cacheIsReady = $this->cacheService->getAllDataPlaylistIsReady($playlistIdData, $page, $part, $keyword, $paginate, $jsonYes);
             if ($cacheIsReady) {
-                return Cache::get("youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}_${jsonYes}");
+                $cacheKey = "youtube_playlist_{$part}_{$keyword}_{$paginate}_{$page}_{$jsonYes}";
+                return Cache::get($cacheKey);
             }
 
             do {
