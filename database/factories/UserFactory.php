@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'username' => fake()->name(),
             'password' => Hash::make('12345678'),
             'telp' => '082230736205',
-            'role' => 'admin',
+            'role' => 'media',
         ];
     }
 
