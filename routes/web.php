@@ -87,110 +87,118 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
-    // video kajian
-    Route::get('/video-kajian', [YoutubeController::class, 'index'])->name('playlist.index');
-    Route::get('/video-kajian/create', [YoutubeController::class, 'createPlaylist'])->name('playlist.create');
-    Route::post('/video-kajian/create', [YoutubeController::class, 'create'])->name('playlist.create.post');
-    Route::post('/video-kajian/delete/{id:playlistId}', [YoutubeController::class, 'delete'])->name('playlist.delete');
+    Route::middleware(['isMedia'])->group(function () {
+        // video kajian
+        Route::get('/video-kajian', [YoutubeController::class, 'index'])->name('playlist.index');
+        Route::get('/video-kajian/create', [YoutubeController::class, 'createPlaylist'])->name('playlist.create');
+        Route::post('/video-kajian/create', [YoutubeController::class, 'create'])->name('playlist.create.post');
+        Route::post('/video-kajian/delete/{id:playlistId}', [YoutubeController::class, 'delete'])->name('playlist.delete');
 
-    // artikel
-    Route::get('/artikel', [ArtikelController::class, 'index'])->name('artikel.index');
-    Route::get('/artikel/create', [ArtikelController::class, 'artikelCreateIndex'])->name('artikel.create.index');
-    Route::post('/artikel/create', [ArtikelController::class, 'artikelCreate'])->name('artikel.create');
-    Route::get('/artikel/edit/{id:slug}', [ArtikelController::class, 'artikelEdit'])->name('artikel.edit');
-    Route::post('/artikel/edit/{id:slug}', [ArtikelController::class, 'artikelUpdate'])->name('artikel.update');
-    Route::post('/artikel/delete/{id:slug}', [ArtikelController::class, 'deleteArtikel'])->name('artikle.delete');
-    Route::get('/kategori', [ArtikelController::class, 'kategoriIndex'])->name('artikel.kategori.index');
-    Route::post('/kategori/add', [ArtikelController::class, 'kategoriCreate'])->name('artikel.kategori.create');
-    Route::post('/kategori/edit/{id}', [ArtikelController::class, 'kategoriUpdate'])->name('artikel.kategori.update');
-    Route::post('/kategori/delete/{id}', [ArtikelController::class, 'deleteKategori'])->name('artikel.kategori.delete');
+        // artikel
+        Route::get('/artikel', [ArtikelController::class, 'index'])->name('artikel.index');
+        Route::get('/artikel/create', [ArtikelController::class, 'artikelCreateIndex'])->name('artikel.create.index');
+        Route::post('/artikel/create', [ArtikelController::class, 'artikelCreate'])->name('artikel.create');
+        Route::get('/artikel/edit/{id:slug}', [ArtikelController::class, 'artikelEdit'])->name('artikel.edit');
+        Route::post('/artikel/edit/{id:slug}', [ArtikelController::class, 'artikelUpdate'])->name('artikel.update');
+        Route::post('/artikel/delete/{id:slug}', [ArtikelController::class, 'deleteArtikel'])->name('artikle.delete');
+        Route::get('/kategori', [ArtikelController::class, 'kategoriIndex'])->name('artikel.kategori.index');
+        Route::post('/kategori/add', [ArtikelController::class, 'kategoriCreate'])->name('artikel.kategori.create');
+        Route::post('/kategori/edit/{id}', [ArtikelController::class, 'kategoriUpdate'])->name('artikel.kategori.update');
+        Route::post('/kategori/delete/{id}', [ArtikelController::class, 'deleteKategori'])->name('artikel.kategori.delete');
 
-    // majalah
-    Route::get('/kelola-majalah', [MajalahController::class, 'index'])->name('majalah.index');
-    Route::get('/kelola-majalah/create', [MajalahController::class, 'create'])->name('majalah.create');
-    Route::post('/kelola-majalah/create', [MajalahController::class, 'store'])->name('majalah.store');
-    Route::get('/kelola-majalah/edit/{id:slug}', [MajalahController::class, 'edit'])->name('majalah.edit');
-    Route::post('/kelola-majalah/update/{id:slug}', [MajalahController::class, 'update'])->name('majalah.update');
-    Route::post('/kelola-majalah/delete/{id:slug}', [MajalahController::class, 'delete'])->name('majalah.delete');
-
-    //store
-    Route::get('/store', [StoreController::class, 'index'])->name('store.index');
-    Route::get('/store/create', [StoreController::class, 'create'])->name('store.create');
-    Route::post('/store/create', [StoreController::class, 'store'])->name('store.create.store');
-    Route::get('/store/edit/{id:slug}', [StoreController::class, 'edit'])->name('store.edit');
-    Route::post('/store/edit/{id:slug}', [StoreController::class, 'update'])->name('store.update');
-    Route::post('/store/delete/{id:slug}', [StoreController::class, 'delete'])->name('store.delete');
-    Route::post('/store/image/delete/filepond/{folder}', [StoreController::class, 'filePondImageDelete'])->name('store.image.delete.filepond');
-
-    //jadwal santri
-    Route::get('/jadwal-santri', [JadwalController::class, 'index'])->name('jadwal.index');
-    Route::post('/jadwal-santri/create', [JadwalController::class, 'store'])->name('jadwal.store');
-    Route::post('/jadwa-santri/update/{id}', [JadwalController::class, 'update'])->name('jadwal.update');
-    Route::post('/jadwal-santri/delete/{id}', [JadwalController::class, 'delete'])->name('jadwal.delete');
-
-    //kelola pembayaran
-    Route::prefix('kelola-pembayaran')->group(function () {
-        Route::get('/', [PembayaranController::class, 'index'])->name('kelola-pembayaran.index');
-        Route::get('tunggakan', [PembayaranController::class, 'indexNunggak'])->name('kelola-pembayaran.tunggakan');
-        Route::get('buat-tagihan', [PembayaranController::class, 'createTagihan'])->name('kelola-pembayaran.create.tagihan');
-        Route::post('buat-tagihan', [PembayaranController::class, 'storeTagihan'])->name('kelola-pembayaran.store.tagihan');
-        Route::post('konfirmasi/{id}', [PembayaranController::class, 'konfirmasiTagihan'])->name('kelola-pembayaran.konfirmasi');
-        Route::get('edit/{id}', [PembayaranController::class, 'edit'])->name('kelola-pembayaran.edit');
-        Route::post('edit/{id}', [PembayaranController::class, 'updateTagihan'])->name('kelola-pembayaran.update');
-        Route::post('tagihan/delete/{id}', [PembayaranController::class, 'deleteTagihan'])->name('kelola-pembayaran.delete.tagihan');
-        Route::post('delete/multiple', [PembayaranController::class, 'deleteTagihanMultiple'])->name('kelola-pembayaran.delete.tagihan.multiple');
-        Route::get('download', [PembayaranController::class, 'export'])->name('kelola-pembayaran.export');
+        //store
+        Route::get('/store', [StoreController::class, 'index'])->name('store.index');
+        Route::get('/store/create', [StoreController::class, 'create'])->name('store.create');
+        Route::post('/store/create', [StoreController::class, 'store'])->name('store.create.store');
+        Route::get('/store/edit/{id:slug}', [StoreController::class, 'edit'])->name('store.edit');
+        Route::post('/store/edit/{id:slug}', [StoreController::class, 'update'])->name('store.update');
+        Route::post('/store/delete/{id:slug}', [StoreController::class, 'delete'])->name('store.delete');
+        Route::post('/store/image/delete/filepond/{folder}', [StoreController::class, 'filePondImageDelete'])->name('store.image.delete.filepond');
+    });
+    Route::middleware(['isAddiya'])->group(function () {
+        // majalah
+        Route::get('/kelola-majalah', [MajalahController::class, 'index'])->name('majalah.index');
+        Route::get('/kelola-majalah/create', [MajalahController::class, 'create'])->name('majalah.create');
+        Route::post('/kelola-majalah/create', [MajalahController::class, 'store'])->name('majalah.store');
+        Route::get('/kelola-majalah/edit/{id:slug}', [MajalahController::class, 'edit'])->name('majalah.edit');
+        Route::post('/kelola-majalah/update/{id:slug}', [MajalahController::class, 'update'])->name('majalah.update');
+        Route::post('/kelola-majalah/delete/{id:slug}', [MajalahController::class, 'delete'])->name('majalah.delete');
     });
 
-    //monitoring mingguan
-    Route::get('/monitoring/{type}/create', [MonitoringMingguanController::class, 'create'])->name('monitoring.create');
-    Route::post('/monitoring/{type}/store', [MonitoringMingguanController::class, 'store'])->name('monitoring.store');
-    Route::get('/monitoring/{type}/edit/{id}', [MonitoringMingguanController::class, 'edit'])->name('monitoring.edit');
-    Route::post('/monitoring/{type}/update/{id}', [MonitoringMingguanController::class, 'update'])->name('monitoring.update');
-    Route::post('/monitoring/{type}/delete/multiple', [MonitoringMingguanController::class, 'deleteDataMultiple'])->name('monitoring.delete.multiple');
+    Route::middleware(['isDirosah'])->group(function () {
+        //jadwal santri
+        Route::get('/jadwal-santri', [JadwalController::class, 'index'])->name('jadwal.index');
+        Route::post('/jadwal-santri/create', [JadwalController::class, 'store'])->name('jadwal.store');
+        Route::post('/jadwa-santri/update/{id}', [JadwalController::class, 'update'])->name('jadwal.update');
+        Route::post('/jadwal-santri/delete/{id}', [JadwalController::class, 'delete'])->name('jadwal.delete');
 
-    //monitoring sholat jamaah
-    Route::get('/monitoring/sholat', [MonitoringMingguanController::class, 'monitoringSholatIndex'])->name('monitoring.sholat.index');
+        //monitoring mingguan
+        Route::get('/monitoring/{type}/create', [MonitoringMingguanController::class, 'create'])->name('monitoring.create');
+        Route::post('/monitoring/{type}/store', [MonitoringMingguanController::class, 'store'])->name('monitoring.store');
+        Route::get('/monitoring/{type}/edit/{id}', [MonitoringMingguanController::class, 'edit'])->name('monitoring.edit');
+        Route::post('/monitoring/{type}/update/{id}', [MonitoringMingguanController::class, 'update'])->name('monitoring.update');
+        Route::post('/monitoring/{type}/delete/multiple', [MonitoringMingguanController::class, 'deleteDataMultiple'])->name('monitoring.delete.multiple');
+
+        //monitoring sholat jamaah
+        Route::get('/monitoring/sholat', [MonitoringMingguanController::class, 'monitoringSholatIndex'])->name('monitoring.sholat.index');
 
 
-    //monitoring ngaji
-    Route::get('/monitoting/ngaji', [MonitoringMingguanController::class, 'monitoringNgajiIndex'])->name('monitoring.ngaji.index');
+        //monitoring ngaji
+        Route::get('/monitoting/ngaji', [MonitoringMingguanController::class, 'monitoringNgajiIndex'])->name('monitoring.ngaji.index');
 
-    //monitoring hafalan
-    Route::get('/monitoring/hafalan', [HafalanController::class, 'index'])->name('monitoring.hafalan');
-    Route::get('/monitoring/create/hafalan', [HafalanController::class, 'create'])->name('monitoring.hafalan.create');
-    Route::post('/monitoring/create/hafalan', [HafalanController::class, 'store'])->name('monitoring.hafalan.store');
-    Route::get('/monitoring/update/hafalan/{id}', [HafalanController::class, 'edit'])->name('monitoring.hafalan.edit');
-    Route::post('/monitoring/update/hafalan/{id}', [HafalanController::class, 'update'])->name('monitoring.hafalan.update');
-    Route::post('/monitoring/hafalan/delete', [HafalanController::class, 'delete'])->name('monitoring.hafalan.delete');
+        //monitoring hafalan
+        Route::get('/monitoring/hafalan', [HafalanController::class, 'index'])->name('monitoring.hafalan');
+        Route::get('/monitoring/create/hafalan', [HafalanController::class, 'create'])->name('monitoring.hafalan.create');
+        Route::post('/monitoring/create/hafalan', [HafalanController::class, 'store'])->name('monitoring.hafalan.store');
+        Route::get('/monitoring/update/hafalan/{id}', [HafalanController::class, 'edit'])->name('monitoring.hafalan.edit');
+        Route::post('/monitoring/update/hafalan/{id}', [HafalanController::class, 'update'])->name('monitoring.hafalan.update');
+        Route::post('/monitoring/hafalan/delete', [HafalanController::class, 'delete'])->name('monitoring.hafalan.delete');
 
-    //wali santri
-    Route::get('/wali', [WaliController::class, 'index'])->name('wali.index');
-    Route::get('/wali/show/santri/{wali_id}', [WaliController::class, 'showSantri'])->name('wali.show.santri');
-    Route::get('/wali/create', [WaliController::class, 'create'])->name('wali.create');
-    Route::post('/wali/create', [WaliController::class, 'store'])->name('wali.store');
-    Route::get('/wali/edit/{id}', [WaliController::class, 'edit'])->name('wali.edit');
-    Route::post('/wali/update/{id}', [WaliController::class, 'update'])->name('wali.update');
-    Route::post('/wali/delete', [WaliController::class, 'delete'])->name('wali.delete');
-    Route::get('/wali/changePassword/{id}', [WaliController::class, 'changePassword'])->name('wali.changePassword');
-    Route::post('/wali/changePassword', [WaliController::class, 'changePasswordSave'])->name('wali.changePasswordSave');
-    //santri
-    Route::prefix('santri')->group(function () {
-        Route::get('/', [SantriController::class, 'index'])->name('santri.index');
-        Route::get('create', [SantriController::class, 'create'])->name('santri.create');
-        Route::post('create', [SantriController::class, 'store'])->name('santri.store');
-        Route::get('edit/{id}', [SantriController::class, 'edit'])->name('santri.edit');
-        Route::post('edit/{id}', [SantriController::class, 'update'])->name('santri.update');
-        Route::post('delete', [SantriController::class, 'delete'])->name('santri.delete');
-        Route::post('ubah-status', [SantriController::class, 'ubahStatus'])->name('santri.ubahStatus');
-        Route::post('ubah-kelas', [SantriController::class, 'ubahKelas'])->name('santri.ubah-kelas');
+        //wali santri
+        Route::get('/wali', [WaliController::class, 'index'])->name('wali.index');
+        Route::get('/wali/show/santri/{wali_id}', [WaliController::class, 'showSantri'])->name('wali.show.santri');
+        Route::get('/wali/create', [WaliController::class, 'create'])->name('wali.create');
+        Route::post('/wali/create', [WaliController::class, 'store'])->name('wali.store');
+        Route::get('/wali/edit/{id}', [WaliController::class, 'edit'])->name('wali.edit');
+        Route::post('/wali/update/{id}', [WaliController::class, 'update'])->name('wali.update');
+        Route::post('/wali/delete', [WaliController::class, 'delete'])->name('wali.delete');
+        Route::get('/wali/changePassword/{id}', [WaliController::class, 'changePassword'])->name('wali.changePassword');
+        Route::post('/wali/changePassword', [WaliController::class, 'changePasswordSave'])->name('wali.changePasswordSave');
+        //santri
+        Route::prefix('santri')->group(function () {
+            Route::get('/', [SantriController::class, 'index'])->name('santri.index');
+            Route::get('create', [SantriController::class, 'create'])->name('santri.create');
+            Route::post('create', [SantriController::class, 'store'])->name('santri.store');
+            Route::get('edit/{id}', [SantriController::class, 'edit'])->name('santri.edit');
+            Route::post('edit/{id}', [SantriController::class, 'update'])->name('santri.update');
+            Route::post('delete', [SantriController::class, 'delete'])->name('santri.delete');
+            Route::post('ubah-status', [SantriController::class, 'ubahStatus'])->name('santri.ubahStatus');
+            Route::post('ubah-kelas', [SantriController::class, 'ubahKelas'])->name('santri.ubah-kelas');
+        });
+
+        //kelas
+        Route::get('/kelas', [KelasController::class, 'index'])->name('kelas.index');
+        Route::post('/kelas/create', [KelasController::class, 'create'])->name('kelas.create');
+        Route::post('/kelas/update/{id}', [KelasController::class, 'update'])->name('kelas.update');
+        Route::post('/kelas/delete/{id}', [KelasController::class, 'delete'])->name('kelas.delete');
+
     });
 
-    //kelas
-    Route::get('/kelas', [KelasController::class, 'index'])->name('kelas.index');
-    Route::post('/kelas/create', [KelasController::class, 'create'])->name('kelas.create');
-    Route::post('/kelas/update/{id}', [KelasController::class, 'update'])->name('kelas.update');
-    Route::post('/kelas/delete/{id}', [KelasController::class, 'delete'])->name('kelas.delete');
+    Route::middleware(['isBendahara'])->group(function () {
+        //kelola pembayaran
+        Route::prefix('kelola-pembayaran')->group(function () {
+            Route::get('/', [PembayaranController::class, 'index'])->name('kelola-pembayaran.index');
+            Route::get('tunggakan', [PembayaranController::class, 'indexNunggak'])->name('kelola-pembayaran.tunggakan');
+            Route::get('buat-tagihan', [PembayaranController::class, 'createTagihan'])->name('kelola-pembayaran.create.tagihan');
+            Route::post('buat-tagihan', [PembayaranController::class, 'storeTagihan'])->name('kelola-pembayaran.store.tagihan');
+            Route::post('konfirmasi/{id}', [PembayaranController::class, 'konfirmasiTagihan'])->name('kelola-pembayaran.konfirmasi');
+            Route::get('edit/{id}', [PembayaranController::class, 'edit'])->name('kelola-pembayaran.edit');
+            Route::post('edit/{id}', [PembayaranController::class, 'updateTagihan'])->name('kelola-pembayaran.update');
+            Route::post('tagihan/delete/{id}', [PembayaranController::class, 'deleteTagihan'])->name('kelola-pembayaran.delete.tagihan');
+            Route::post('delete/multiple', [PembayaranController::class, 'deleteTagihanMultiple'])->name('kelola-pembayaran.delete.tagihan.multiple');
+            Route::get('download', [PembayaranController::class, 'export'])->name('kelola-pembayaran.export');
+        });
+    });
 
     //manage-admin
     Route::prefix('admin')->group(function () {
@@ -199,6 +207,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('ubah/password', [ManageAdminController::class, 'changePassword'])->name('admin.ubah.password');
         Route::post('ubah/password', [ManageAdminController::class, 'changePasswordSave'])->name('admin.ubah.password.save');
     });
+
 
     //filepond
     Route::post('/filePond/post/{folder}', [FilePondController::class, 'postImage'])->name('filePond.post');

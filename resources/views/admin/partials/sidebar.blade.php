@@ -31,82 +31,92 @@
 
                 </a>
             </li>
-            <li>
-                <a href="{{ route('playlist.index') }}"
-                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white justify-between {{ request()->routeIs('playlist.*') ? 'bg-SidebarActive text-white active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="ri-folder-video-fill text-[20px] transition duration-75"></i>
-                        <span class="ml-3 font-semibold">Video Kajian</span>
-                    </div>
-                    <span
-                        class="px-[3px] min-w-5 h-5 bg-main2 text-white group-[.active]:bg-Sidebar rounded-[4px] border-[1px] border-main3/60 text-[11px] text-center justify-center flex items-center">{{ $kajianCount > 90 ? '90+' : $kajianCount }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('artikel.index') }}"
-                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white justify-between {{ request()->routeIs('artikel.*') ? 'bg-SidebarActive text-white active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="ri-article-fill text-[20px] transition duration-75"></i>
-                        <span class="ml-3 font-semibold">Artikel</span>
-                    </div>
-                    <span
-                        class="px-[3px] min-w-5 h-5 bg-main2 text-white group-[.active]:bg-Sidebar rounded-[4px] border-[1px] border-main3/60 text-[11px] text-center justify-center flex items-center">{{ $artikelCount > 90 ? '90+' : $artikelCount }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('majalah.index') }}"
-                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white justify-between {{ request()->routeIs('majalah.*') ? 'bg-SidebarActive text-white active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="ri-book-read-fill text-[20px] transition duration-75"></i>
-                        <span class="ml-3 font-semibold">Majalah Addiya</span>
-                    </div>
-                    <span
-                        class="px-[3px] min-w-5 h-5 bg-main2 text-white group-[.active]:bg-Sidebar rounded-[4px] border-[1px] border-main3/60 text-[11px] text-center justify-center flex items-center">{{ $majalahCount > 90 ? '90+' : $majalahCount }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('store.index') }}"
-                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white justify-between {{ request()->routeIs('store.*') ? 'bg-SidebarActive text-white active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="ri-store-3-fill text-[20px] transition duration-75"></i>
-                        <span class="ml-3 font-semibold">Santri Store</span>
-                    </div>
-                    <span
-                        class="px-[3px] min-w-5 h-5 bg-main2 text-white group-[.active]:bg-Sidebar rounded-[4px] border-[1px] border-main3/60 text-[11px] text-center justify-center flex items-center">{{ $storeCount > 90 ? '90+' : $storeCount }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('jadwal.index') }}"
-                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('jadwal.*') ? 'bg-SidebarActive' : '' }}">
-                    <i class="ri-calendar-schedule-fill text-[20px] transition duration-75"></i>
-                    <span class="ml-3 font-semibold">Jadwal Kegiatan</span>
-                </a>
-            </li>
-            <li>
-                <button type="button"
-                    class="flex items-center w-full p-2 text-gray-400 transition-all duration-75 rounded-lg group dropdownSidebar {{ request()->routeIs('kelola-pembayaran.*') ? 'bg-SidebarActive text-white' : '' }}"
-                    aria-controls="tagihan" data-collapse-toggle="tagihan">
-                    <i class="ri-bank-card-fill text-[20px] transition duration-75"></i>
-                    <span class="flex-1 font-semibold ml-3 text-left whitespace-nowrap">Tagihan</span>
-                    <svg class="w-3 h-3 arrowSidebar transition-all duration-300" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 4 4 4-4" />
-                    </svg>
-                </button>
-                <ul id="tagihan" class="hidden py-2 space-y-2 duration-300 transition-all">
-                    <li>
-                        <a href="{{ route('kelola-pembayaran.index') }}"
-                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group {{ request()->routeIs('kelola-pembayaran.*') && !request()->routeIs('kelola-pembayaran.tunggakan') ? 'text-white font-semibold' : '' }}">Semua
-                            Data Tagihan</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('kelola-pembayaran.tunggakan') }}"
-                            class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group {{ request()->routeIs('kelola-pembayaran.tunggakan') ? 'text-white font-semibold' : '' }}">Data
-                            Tunggakan</a>
-                    </li>
-                </ul>
-            </li>
+            @if (Auth()->user()->role === 'media' || Auth()->user()->role === 'super admin')
+                <li>
+                    <a href="{{ route('playlist.index') }}"
+                        class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white justify-between {{ request()->routeIs('playlist.*') ? 'bg-SidebarActive text-white active' : '' }}">
+                        <div class="flex items-center">
+                            <i class="ri-folder-video-fill text-[20px] transition duration-75"></i>
+                            <span class="ml-3 font-semibold">Video Kajian</span>
+                        </div>
+                        <span
+                            class="px-[3px] min-w-5 h-5 bg-main2 text-white group-[.active]:bg-Sidebar rounded-[4px] border-[1px] border-main3/60 text-[11px] text-center justify-center flex items-center">{{ $kajianCount > 90 ? '90+' : $kajianCount }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('artikel.index') }}"
+                        class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white justify-between {{ request()->routeIs('artikel.*') ? 'bg-SidebarActive text-white active' : '' }}">
+                        <div class="flex items-center">
+                            <i class="ri-article-fill text-[20px] transition duration-75"></i>
+                            <span class="ml-3 font-semibold">Artikel</span>
+                        </div>
+                        <span
+                            class="px-[3px] min-w-5 h-5 bg-main2 text-white group-[.active]:bg-Sidebar rounded-[4px] border-[1px] border-main3/60 text-[11px] text-center justify-center flex items-center">{{ $artikelCount > 90 ? '90+' : $artikelCount }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('store.index') }}"
+                        class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white justify-between {{ request()->routeIs('store.*') ? 'bg-SidebarActive text-white active' : '' }}">
+                        <div class="flex items-center">
+                            <i class="ri-store-3-fill text-[20px] transition duration-75"></i>
+                            <span class="ml-3 font-semibold">Santri Store</span>
+                        </div>
+                        <span
+                            class="px-[3px] min-w-5 h-5 bg-main2 text-white group-[.active]:bg-Sidebar rounded-[4px] border-[1px] border-main3/60 text-[11px] text-center justify-center flex items-center">{{ $storeCount > 90 ? '90+' : $storeCount }}</span>
+                    </a>
+                </li>
+            @endif
+            @if (auth()->user()->role === 'addiya' || Auth()->user()->role === 'super admin')
+                <li>
+                    <a href="{{ route('majalah.index') }}"
+                        class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white justify-between {{ request()->routeIs('majalah.*') ? 'bg-SidebarActive text-white active' : '' }}">
+                        <div class="flex items-center">
+                            <i class="ri-book-read-fill text-[20px] transition duration-75"></i>
+                            <span class="ml-3 font-semibold">Majalah Addiya</span>
+                        </div>
+                        <span
+                            class="px-[3px] min-w-5 h-5 bg-main2 text-white group-[.active]:bg-Sidebar rounded-[4px] border-[1px] border-main3/60 text-[11px] text-center justify-center flex items-center">{{ $majalahCount > 90 ? '90+' : $majalahCount }}</span>
+                    </a>
+                </li>
+            @endif
+            @if (Auth()->user()->role === 'dirosah' || Auth()->user()->role === 'super admin')
+                <li>
+                    <a href="{{ route('jadwal.index') }}"
+                        class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('jadwal.*') ? 'bg-SidebarActive' : '' }}">
+                        <i class="ri-calendar-schedule-fill text-[20px] transition duration-75"></i>
+                        <span class="ml-3 font-semibold">Jadwal Kegiatan</span>
+                    </a>
+                </li>
+            @endif
+            @if (Auth()->user()->role === 'bendahara' || Auth()->user()->role === 'super admin')
+                <li>
+                    <button type="button"
+                        class="flex items-center w-full p-2 text-gray-400 transition-all duration-75 rounded-lg group dropdownSidebar {{ request()->routeIs('kelola-pembayaran.*') ? 'bg-SidebarActive text-white' : '' }}"
+                        aria-controls="tagihan" data-collapse-toggle="tagihan">
+                        <i class="ri-bank-card-fill text-[20px] transition duration-75"></i>
+                        <span class="flex-1 font-semibold ml-3 text-left whitespace-nowrap">Tagihan</span>
+                        <svg class="w-3 h-3 arrowSidebar transition-all duration-300" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <ul id="tagihan" class="hidden py-2 space-y-2 duration-300 transition-all">
+                        <li>
+                            <a href="{{ route('kelola-pembayaran.index') }}"
+                                class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group {{ request()->routeIs('kelola-pembayaran.*') && !request()->routeIs('kelola-pembayaran.tunggakan') ? 'text-white font-semibold' : '' }}">Semua
+                                Data Tagihan</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('kelola-pembayaran.tunggakan') }}"
+                                class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group {{ request()->routeIs('kelola-pembayaran.tunggakan') ? 'text-white font-semibold' : '' }}">Data
+                                Tunggakan</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
+
             {{-- <li>
                 <a href="{{ route('kelola-pembayaran.index') }}"
                     class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('kelola-pembayaran.*') ? 'bg-SidebarActive text-white' : '' }}">
@@ -128,43 +138,45 @@
                     <span class="ml-3 font-semibold">Gallery</span>
                 </a>
             </li> --}}
-            <h1 class="text-gray-400 text-sm">MONITORING</h1>
-            <li>
-                <a href="{{ route('monitoring.sholat.index') }}"
-                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('monitoring.sholat.*') || request()->is('monitoring/sholat/*') ? 'bg-SidebarActive text-white' : '' }}">
-                    <i class="ri-school-fill text-[20px] transition duration-75"></i>
-                    <span class="ml-3 font-semibold mt-1">Sholat Jamaah</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('monitoring.ngaji.index') }}"
-                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('monitoring.ngaji.*') || request()->is('monitoring/ngaji/*') ? 'bg-SidebarActive text-white' : '' }}">
-                    <i class="ri-book-open-fill text-[20px] transition duration-75"></i>
-                    <span class="ml-3 font-semibold">Ngaji</span>
-                </a>
-            </li>
+            @if (Auth()->user()->role === 'dirosah' || Auth()->user()->role === 'super admin')
+                <h1 class="text-gray-400 text-sm">MONITORING</h1>
+                <li>
+                    <a href="{{ route('monitoring.sholat.index') }}"
+                        class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('monitoring.sholat.*') || request()->is('monitoring/sholat/*') ? 'bg-SidebarActive text-white' : '' }}">
+                        <i class="ri-school-fill text-[20px] transition duration-75"></i>
+                        <span class="ml-3 font-semibold mt-1">Sholat Jamaah</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('monitoring.ngaji.index') }}"
+                        class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('monitoring.ngaji.*') || request()->is('monitoring/ngaji/*') ? 'bg-SidebarActive text-white' : '' }}">
+                        <i class="ri-book-open-fill text-[20px] transition duration-75"></i>
+                        <span class="ml-3 font-semibold">Ngaji</span>
+                    </a>
+                </li>
 
-            <li>
-                <a href="{{ route('monitoring.hafalan') }}"
-                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('monitoring.hafalan') || request()->routeIs('monitoring.hafalan.*') ? 'bg-SidebarActive text-white' : '' }}">
-                    <i class="ri-brain-fill text-[20px] transition duration-75"></i>
-                    <span class="ml-3 font-semibold">Hafalan</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('wali.index') }}"
-                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('wali.*') ? 'bg-SidebarActive text-white' : '' }}">
-                    <i class="ri-parent-fill text-[20px] transition duration-75"></i>
-                    <span class="ml-3 font-semibold">Wali Santri</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('santri.index') }}"
-                    class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('santri.*') ? 'bg-SidebarActive text-white' : '' }}">
-                    <i class="ri-group-fill text-[20px] transition duration-75"></i>
-                    <span class="ml-3 font-semibold">Santri</span>
-                </a>
-            </li>
+                <li>
+                    <a href="{{ route('monitoring.hafalan') }}"
+                        class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('monitoring.hafalan') || request()->routeIs('monitoring.hafalan.*') ? 'bg-SidebarActive text-white' : '' }}">
+                        <i class="ri-brain-fill text-[20px] transition duration-75"></i>
+                        <span class="ml-3 font-semibold">Hafalan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('wali.index') }}"
+                        class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('wali.*') ? 'bg-SidebarActive text-white' : '' }}">
+                        <i class="ri-parent-fill text-[20px] transition duration-75"></i>
+                        <span class="ml-3 font-semibold">Wali Santri</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('santri.index') }}"
+                        class="flex items-center p-2 text-gray-400 rounded-lg group hover:bg-SidebarActive hover:text-white {{ request()->routeIs('santri.*') ? 'bg-SidebarActive text-white' : '' }}">
+                        <i class="ri-group-fill text-[20px] transition duration-75"></i>
+                        <span class="ml-3 font-semibold">Santri</span>
+                    </a>
+                </li>
+            @endif
         </ul>
 
         {{-- menu bawa --}}
