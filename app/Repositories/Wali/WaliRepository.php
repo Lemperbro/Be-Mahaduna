@@ -274,6 +274,8 @@ class WaliRepository implements WaliInterface
         }
         return true;
     }
+
+    
     /**
      * untuk menghapus data wali , bisa multiple
      * @param array $wali_id

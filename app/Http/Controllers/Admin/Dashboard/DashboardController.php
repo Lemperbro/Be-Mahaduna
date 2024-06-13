@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin\Dashboard;
 
 use App\Models\Wali;
 use App\Models\Santri;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
