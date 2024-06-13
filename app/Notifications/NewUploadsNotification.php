@@ -12,16 +12,17 @@ use Illuminate\Notifications\Notification;
 class NewUploadsNotification extends Notification
 {
     use Queueable;
-    private $title, $message, $for;
+    private $title, $message, $for, $wali_id;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($title, $message, $for = 'all')
+    public function __construct($title, $message, $for = 'all', $wali_id = null)
     {
         $this->title = $title;
         $this->message = $message;
         $this->for = $for;
+        $this->wali_id = $wali_id;
     }
 
     /**
@@ -46,7 +47,7 @@ class NewUploadsNotification extends Notification
 
             )
         );
-        
+
         return $send;
     }
 
@@ -61,6 +62,7 @@ class NewUploadsNotification extends Notification
             'title' => $this->title,
             'body' => $this->message,
             'for' => $this->for,
+            'wali_id' => $this->wali_id,
             'created_at' => now(),
         ];
     }

@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\Fcm\FcmApiController;
 use App\Http\Controllers\Api\Jadwal\JadwalApiController;
 use App\Http\Controllers\Api\Majalah\MajalahApiController;
 use App\Http\Controllers\Api\Monitoring\MonitoringApiController;
+use App\Http\Controllers\Api\Notification\NotificationController;
 use App\Http\Controllers\Api\Store\StoreApiController;
 use App\Http\Controllers\Api\Tagihan\TagihanApiController;
 use App\Http\Controllers\Api\Youtube\YoutubeApiController;
@@ -64,6 +65,10 @@ Route::get('/jadwal/santri', [JadwalApiController::class, 'all'])->name('jadwal.
 //wali
 Route::post('/wali/login', [WaliApiController::class, 'login'])->name('wali.login');
 Route::post('/tagihan/callback/xendit', [TransaksiApiController::class, 'webhooksXendit'])->name('tagihan.xendit.webhooks');
+
+
+//notifikasi without auth login
+Route::get('notifikasi/all', [NotificationController::class, 'allNotifikasi'])->name('notifikasi.all');
 Route::middleware('auth:sanctum')->group(function () {
 
     //wali in auth
@@ -87,4 +92,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/fromSantri', [TagihanApiController::class, 'getTagihanFromSantri'])->name('tagihan.fromSantri');
         Route::post('/create-billing/{id}', [TransaksiApiController::class, 'createTransaksiByXendit'])->name('tagihan.xendit.create');
     });
+
+    //notifikasi with auth login
+    Route::get('notifikasi/wali', [NotificationController::class, 'allNotifikasiWali'])->name('notifikasi.wali');
 });

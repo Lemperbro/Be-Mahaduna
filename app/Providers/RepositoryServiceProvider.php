@@ -35,6 +35,8 @@ use App\Repositories\Transaksi\TransaksiInterface;
 use App\Repositories\Transaksi\TransaksiRepository;
 use App\Repositories\MonitoringMingguan\MonitoringMingguanInterface;
 use App\Repositories\MonitoringMingguan\MonitoringMingguanRepository;
+use App\Repositories\Notifikasi\NotifikasiInterface;
+use App\Repositories\Notifikasi\NotifikasiRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -59,6 +61,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(HafalanInterface::class, HafalanRepository::class);
         $this->app->bind(WaliInterface::class, WaliRepository::class);
         $this->app->bind(ManageAdminInterface::class, ManageAdminRepository::class);
+        $this->app->bind(NotifikasiInterface::class, NotifikasiRepository::class);
     }
 
     /**
