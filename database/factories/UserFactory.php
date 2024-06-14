@@ -27,7 +27,7 @@ class UserFactory extends Factory
             'image' => 'uploads/users/default.png',
             'email' => fake()->unique()->safeEmail(),
             'username' => fake()->name(),
-            'password' => Hash::make('12345678'),
+            'password' => '12345678',
             'telp' => '082230736205',
             'role' => 'media',
         ];

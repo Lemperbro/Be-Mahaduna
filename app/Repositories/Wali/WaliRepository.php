@@ -173,7 +173,6 @@ class WaliRepository implements WaliInterface
                     ];
                 }
             }
-            $password = Hash::make($password);
             $update = $findWali->update([
                 'password' => $password
             ]);
@@ -231,10 +230,9 @@ class WaliRepository implements WaliInterface
         if ($emailSudahAda || $telpSudahAda) {
             return false;
         }
-        $password = Hash::make($this->defaultPassword);
         $create = $this->waliModel->create([
             'email' => $data->email,
-            'password' => $password,
+            'password' => $this->defaultPassword,
             'nama' => $data->nama,
             'alamat' => $data->alamat,
             'telp' => $data->telp,
@@ -259,6 +257,7 @@ class WaliRepository implements WaliInterface
         $emailSudahAda = $this->emailAlreadyExists(data: $data->email, whereNot: true, id: $oldData->wali_id, type: 'email');
         $telpSudahAda = $this->emailAlreadyExists(data: $data->telp, whereNot: true, id: $oldData->wali_id, type: 'telp');
         if ($emailSudahAda || $telpSudahAda) {
+
             return false;
         }
         $update = $oldData->update([
@@ -275,7 +274,7 @@ class WaliRepository implements WaliInterface
         return true;
     }
 
-    
+
     /**
      * untuk menghapus data wali , bisa multiple
      * @param array $wali_id

@@ -34,7 +34,7 @@ class AuthRepository implements AuthInterface
             'username' => $data->username,
             'email' => $data->email,
             'telp' => $data->telp,
-            'password' => Hash::make($data->password),
+            'password' => $data->password,
             'role' => 'super admin'
         ]);
         if (!$save) {

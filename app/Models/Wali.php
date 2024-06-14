@@ -19,6 +19,9 @@ class Wali extends Model
         'wali_id'
     ];
 
+    protected $casts = [
+        'password' => 'hashed'
+    ];
 
     public function waliRelasi()
     {

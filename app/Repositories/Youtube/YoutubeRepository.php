@@ -242,7 +242,7 @@ class YoutubeRepository extends YoutubeBaseRepository implements YoutubeInterfac
      * 
      * @return mixed
      */
-    public function getPlaylistItems($part = 'snippet', $playlistId, $paginate = 10, $pageToken = null)
+    public function getPlaylistItems($playlistId, $part = 'snippet', $paginate = 10, $pageToken = null)
     {
         try {
             $cacheKey = "youtube_playlist_items_{$playlistId}_{$part}_{$paginate}_{$pageToken}";
