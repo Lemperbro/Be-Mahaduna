@@ -75,12 +75,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('wali')->group(function () {
         Route::post('/logout', [WaliApiController::class, 'logout'])->name('wali.logout');
         Route::get('/findWali', [WaliApiController::class, 'findWali'])->name('wali.find');
+        Route::post('/update-profile', [WaliApiController::class, 'updateProfile'])->name('wali.update');
     });
 
-    //santri in auth
-    // Route::prefix('santri')->group(function(){
 
-    // });
 
     //monitoring
     Route::prefix('monitoring')->group(function () {

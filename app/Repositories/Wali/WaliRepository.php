@@ -254,21 +254,53 @@ class WaliRepository implements WaliInterface
         $emailSudahAda = $this->emailAlreadyExists(data: $data->email, whereNot: true, id: $oldData->wali_id, type: 'email');
         $telpSudahAda = $this->emailAlreadyExists(data: $data->telp, whereNot: true, id: $oldData->wali_id, type: 'telp');
         if ($emailSudahAda || $telpSudahAda) {
-
+            if (request()->wantsJson()) {
+                $emailSudahAda ? $message = 'Email Sudah digunakan' : $message = 'Nomor Telphone Sudah digunakan';
+                $this->handleResponseError->responseError($message);
+            }
             return false;
         }
+        $desa = $data->desa ?? $oldData->desa;
         $update = $oldData->update([
             'email' => $data->email,
             'nama' => $data->nama,
             'alamat' => $data->alamat,
             'telp' => $data->telp,
-            'desa' => $data->desa,
+            'desa' => $desa,
             'user_updated' => auth()->user()->user_id,
         ]);
         if (!$update) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * untuk merubah profile dari mobile
+     * @param mixed $data
+     * @param mixed $oldData
+     * 
+     * @return [type]
+     */
+    public function updateProfileViaMobile($data, $oldData)
+    {
+        try {
+            $this->update($data, $oldData);
+            $messageSukses = 'Profile berhasil di ubah';
+            if ($data->password !== null) {
+                $this->changePassword($oldData->wali_id, $data->password);
+                $messageSukses = 'Profile dan password berhasil di ubah';
+            }
+
+            return response()->json([
+                'data' => [
+                    'message' => $messageSukses
+                ],
+                200
+            ]);
+        } catch (Exception $e) {
+            return $this->handleResponseError->ResponseException(message: $e->getMessage());
+        }
     }
 
 

@@ -47,7 +47,7 @@ interface WaliInterface
      * @return [type]
      */
     public function update($data, $oldData);
-     /**
+    /**
      * untuk ubah password wali
      * @param mixed $wali_id
      * @param mixed $password
@@ -55,6 +55,14 @@ interface WaliInterface
      * @return [type]
      */
     public function changePassword($wali_id, $password);
+    /**
+     * untuk merubah profile dari mobile
+     * @param mixed $data
+     * @param mixed $oldData
+     * 
+     * @return [type]
+     */
+    public function updateProfileViaMobile($data, $oldData);
     /**
      * untuk menghapus data wali , bisa multiple
      * @param array $wali_id
