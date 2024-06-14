@@ -240,10 +240,7 @@ class WaliRepository implements WaliInterface
             'user_created' => auth()->user()->user_id,
             'updated_at' => null
         ]);
-        if (!$create) {
-            return false;
-        }
-        return true;
+        return $create;
     }
     /**
      * untuk mengupdate data wali santri
@@ -283,27 +280,30 @@ class WaliRepository implements WaliInterface
      */
     public function delete(array $wali_id)
     {
+        try {
+            DB::beginTransaction();
+            $delete = $this->waliModel->whereIn('wali_id', $wali_id)->update([
+                'deleted_at' => now(),
+                'user_deleted' => auth()->user()->user_id,
+                'deleted' => true,
+                'user_updated' => null,
+                'updated_at' => null
+            ]);
+            $deleteRelasi = $this->waliRelasi->whereIn('wali_id', $wali_id)->update([
+                'deleted_at' => now(),
+                'user_deleted' => auth()->user()->user_id,
+                'deleted' => true,
+                'user_updated' => null,
+                'updated_at' => null
+            ]);
+            DB::commit();
+            return true;
 
-        DB::beginTransaction();
-        $delete = $this->waliModel->whereIn('wali_id', $wali_id)->update([
-            'deleted_at' => now(),
-            'user_deleted' => auth()->user()->user_id,
-            'deleted' => true,
-            'user_updated' => null,
-            'updated_at' => null
-        ]);
-        $deleteRelasi = $this->waliRelasi->whereIn('wali_id', $wali_id)->update([
-            'deleted_at' => now(),
-            'user_deleted' => auth()->user()->user_id,
-            'deleted' => true,
-            'user_updated' => null,
-            'updated_at' => null
-        ]);
-        DB::commit();
-        if (!$delete || !$deleteRelasi) {
+        } catch (Exception $e) {
             DB::rollBack();
             return false;
         }
-        return true;
+
+
     }
 }
