@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tagihan extends Model
 {
-    use HasFactory,SoftDeletes, HasCarbon;
+    use HasFactory, SoftDeletes, HasCarbon;
     protected $table = 'tagihan';
     protected $primaryKey = 'tagihan_id';
 
@@ -17,12 +17,20 @@ class Tagihan extends Model
     protected $guarded = [
         'tagihan_id'
     ];
+    // protected $casts = [
+    //     'date' => 'date:Y-m-d'
+    // ];
+    // protected $dates = [
+    //     'date'
+    // ];
 
-    public function transaksi(){
-        return $this->belongsTo(Transaksi::class,'tagihan_id', 'tagihan_id');
+    public function transaksi()
+    {
+        return $this->belongsTo(Transaksi::class, 'tagihan_id', 'tagihan_id');
     }
 
-    public function santri(){
+    public function santri()
+    {
         return $this->belongsTo(Santri::class, 'santri_id', 'santri_id');
     }
 }

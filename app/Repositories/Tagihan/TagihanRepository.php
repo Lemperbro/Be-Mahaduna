@@ -7,6 +7,8 @@ use App\Models\Santri;
 use App\Models\Tagihan;
 use App\Models\Transaksi;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Repositories\Wali\WaliInterface;
 use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\Tagihan\TagihanInterface;
 use App\Http\Resources\Tagihan\TagihanResource;
@@ -14,7 +16,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use App\Repositories\Transaksi\TransaksiInterface;
 use App\Http\Resources\Transaksi\TransaksiResource;
 use App\Repositories\HandleError\ResponseErrorRepository;
-use App\Repositories\Wali\WaliInterface;
 
 class TagihanRepository implements TagihanInterface
 {
@@ -54,11 +55,8 @@ class TagihanRepository implements TagihanInterface
                 }
             }
 
-            if (request()->wantsJson()) {
-                return (TagihanResource::make($data))->response()->setStatusCode(200);
-            } else {
-                return $data;
-            }
+            return request()->wantsJson() ? (TagihanResource::make($data))->response()->setStatusCode(200) : $data;
+
         } catch (Exception $e) {
             if (request()->wantsJson()) {
                 return $this->handleResponseError->responseError($e);
@@ -277,27 +275,19 @@ class TagihanRepository implements TagihanInterface
             $cekSantriId = $this->santriModel->whereIn('santri_id', $data->santri)->count();
             if ($cekSantriId <= 0) {
                 $message = 'Santri yang dipilih tidak tersimpan di dalam database';
-                if (request()->wantsJson()) {
-                    return $this->handleResponseError->ResponseException($message, 400);
-                } else {
-                    return [
-                        'error' => true,
-                        'message' => $message
-                    ];
-                }
+                return request()->wantsJson() ? $this->handleResponseError->ResponseException($message, 400) : [
+                    'error' => true,
+                    'message' => $message
+                ];
             }
             $date = Carbon::parse($data->date)->format('Y-m-d');
             $cekSudahBayar = $this->tagihanModel->whereIn('santri_id', $data->santri)->where('date', $date)->count();
             if ($cekSudahBayar > 0) {
                 $message = 'Tagihan untuk bulan ' . Carbon::parse($date)->locale('id')->isoFormat(' MMMM YYYY') . ' sudah terdaftar untuk satu atau beberapa santri yang dipilih';
-                if (request()->wantsJson()) {
-                    return $this->handleResponseError->ResponseException($message, 400);
-                } else {
-                    return [
-                        'error' => true,
-                        'message' => $message
-                    ];
-                }
+                return request()->wantsJson() ? $this->handleResponseError->ResponseException($message, 400) : [
+                    'error' => true,
+                    'message' => $message
+                ];
             }
             foreach ($data->santri as $item) {
                 $create = $this->tagihanModel->create([
@@ -330,7 +320,7 @@ class TagihanRepository implements TagihanInterface
             }
 
         } catch (Exception $e) {
-
+            Log::info('error', ['data' => $e->getMessage()]);
             if (request()->wantsJson()) {
                 return $this->handleResponseError->responseError($e);
             } else {

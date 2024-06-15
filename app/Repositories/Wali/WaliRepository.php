@@ -212,10 +212,8 @@ class WaliRepository implements WaliInterface
         if ($whereNot === true && $id !== null) {
             $check->whereNotIn('wali_id', [$id]);
         }
-        if ($check->count() > 0) {
-            return true;
-        }
-        return false;
+        return $check->count() > 0;
+
     }
     /**
      * untuk menambah data wali
@@ -240,7 +238,7 @@ class WaliRepository implements WaliInterface
             'user_created' => auth()->user()->user_id,
             'updated_at' => null
         ]);
-        return $create;
+        return $create ?: false;
     }
     /**
      * untuk mengupdate data wali santri
@@ -269,10 +267,7 @@ class WaliRepository implements WaliInterface
             'desa' => $desa,
             'user_updated' => auth()->user()->user_id,
         ]);
-        if (!$update) {
-            return false;
-        }
-        return true;
+        return $update ?: false;
     }
 
     /**
@@ -295,9 +290,8 @@ class WaliRepository implements WaliInterface
             return response()->json([
                 'data' => [
                     'message' => $messageSukses
-                ],
-                200
-            ]);
+                ]
+            ])->setStatusCode(200);
         } catch (Exception $e) {
             return $this->handleResponseError->ResponseException(message: $e->getMessage());
         }
