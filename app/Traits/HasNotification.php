@@ -14,10 +14,10 @@ trait HasNotification
 
     function fcm_token()
     {
+        //untuk memakai device token dari wali yang ada di db
         // $forWali && $wali_id !== null ? $token = Wali::where('wali_id', $wali_id)->first()->pluck('fcm_token')->toArray() :
         //     $token = FcmToken::get()->pluck('token')->toArray();
         // return $token;
-
         $token = FcmToken::get()->pluck('token')->toArray();
         return $token;
     }
