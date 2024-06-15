@@ -280,6 +280,7 @@ class TagihanRepository implements TagihanInterface
                     'message' => $message
                 ];
             }
+            // dd($data->date);
             $date = Carbon::parse($data->date)->format('Y-m-d');
             $cekSudahBayar = $this->tagihanModel->whereIn('santri_id', $data->santri)->where('date', $date)->count();
             if ($cekSudahBayar > 0) {
@@ -321,11 +322,7 @@ class TagihanRepository implements TagihanInterface
 
         } catch (Exception $e) {
             Log::info('error', ['data' => $e->getMessage()]);
-            if (request()->wantsJson()) {
-                return $this->handleResponseError->responseError($e);
-            } else {
-                return false;
-            }
+            return request()->wantsJson() ? $this->handleResponseError->responseError($e) : false;
         }
     }
     /**
@@ -359,19 +356,9 @@ class TagihanRepository implements TagihanInterface
                 'date' => $date,
                 'user_updated' => auth()->user()->user_id
             ]);
-
-            if (request()->wantsJson()) {
-                return (TagihanResource::make($oldData->fresh()))->response()->setStatusCode(200);
-            } else {
-                return true;
-            }
+            return request()->wantsJson() ? (TagihanResource::make($oldData->fresh()))->response()->setStatusCode(200) : true;
         } catch (Exception $e) {
-
-            if (request()->wantsJson()) {
-                return $this->handleResponseError->responseError($e);
-            } else {
-                return false;
-            }
+            return request()->wantsJson() ? $this->handleResponseError->responseError($e) : false;
         }
     }
     /**
@@ -422,19 +409,10 @@ class TagihanRepository implements TagihanInterface
             }
 
             DB::commit();
-            if (request()->wantsJson()) {
-                return (TransaksiResource::make($transaksi->fresh()))->response()->setStatusCode(201);
-            } else {
-                return true;
-            }
+            return request()->wantsJson() ? (TransaksiResource::make($transaksi->fresh()))->response()->setStatusCode(201) : true;
         } catch (Exception $e) {
             DB::rollBack();
-
-            if (request()->wantsJson()) {
-                return $this->handleResponseError->responseError($e);
-            } else {
-                return false;
-            }
+            return request()->wantsJson() ? $this->handleResponseError->responseError($e) : false;
         }
     }
     /**
@@ -491,12 +469,7 @@ class TagihanRepository implements TagihanInterface
             }
         } catch (Exception $e) {
             DB::rollBack();
-
-            if (request()->wantsJson()) {
-                return $this->handleResponseError->responseError($e);
-            } else {
-                return false;
-            }
+            return request()->wantsJson() ? $this->handleResponseError->responseError($e) : false;
         }
     }
     /**
@@ -539,11 +512,7 @@ class TagihanRepository implements TagihanInterface
             }
         } catch (Exception $e) {
             DB::rollBack();
-            if (request()->wantsJson()) {
-                return $this->handleResponseError->responseError($e);
-            } else {
-                return false;
-            }
+            return request()->wantsJson() ? $this->handleResponseError->responseError($e) : false;
         }
     }
     /**

@@ -61,17 +61,10 @@ class StoreRepository implements StoreInterface
             } else {
                 $response = $data->latest()->paginate($paginate);
             }
-
-            if (request()->wantsJson()) {
-                return (StoreResource::collection($response))->response()->setStatusCode(200);
-            } else {
-                return $response;
-            }
+            return request()->wantsJson() ? (StoreResource::collection($response))->response()->setStatusCode(200) : $response;
         } catch (Exception $e) {
             if (request()->wantsJson()) {
                 return $this->handleResponseError->responseError($e);
-            } else {
-
             }
         }
     }
@@ -149,11 +142,7 @@ class StoreRepository implements StoreInterface
         } catch (Exception $e) {
             Log::error($e);
             DB::rollback();
-            if (request()->wantsJson()) {
-                return $this->handleResponseError->responseError($e);
-            } else {
-                return false;
-            }
+            return request()->wantsJson() ? $this->handleResponseError->responseError($e) : false;
         }
     }
     /**
@@ -222,11 +211,8 @@ class StoreRepository implements StoreInterface
         } catch (Exception $e) {
             DB::rollback();
             // Log::error($e);
-            if (request()->wantsJson()) {
-                return $this->handleResponseError->responseError($e);
-            } else {
-                return false;
-            }
+            return request()->wantsJson() ? $this->handleResponseError->responseError($e) : false;
+
         }
     }
 
@@ -269,11 +255,8 @@ class StoreRepository implements StoreInterface
             }
         } catch (Exception $e) {
             DB::rollback();
-            if (request()->wantsJson()) {
-                return $this->handleResponseError->responseError($e);
-            } else {
-                return false;
-            }
+            return request()->wantsJson() ? $this->handleResponseError->responseError($e) : false;
+
         }
     }
 
@@ -293,11 +276,8 @@ class StoreRepository implements StoreInterface
                 return $data;
             }
         } catch (Exception $e) {
-            if (request()->wantsJson()) {
-                return $this->handleResponseError->responseError($e);
-            } else {
-                return false;
-            }
+            return request()->wantsJson() ? $this->handleResponseError->responseError($e) : false;
+
         }
     }
 

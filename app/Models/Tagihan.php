@@ -17,12 +17,10 @@ class Tagihan extends Model
     protected $guarded = [
         'tagihan_id'
     ];
-    // protected $casts = [
-    //     'date' => 'date:Y-m-d'
-    // ];
-    // protected $dates = [
-    //     'date'
-    // ];
+
+    protected $dates = [
+        'date'
+    ];
 
     public function transaksi()
     {
