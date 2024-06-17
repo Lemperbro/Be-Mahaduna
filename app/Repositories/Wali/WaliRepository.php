@@ -173,7 +173,6 @@ class WaliRepository implements WaliInterface
                     ];
                 }
             }
-            $password = Hash::make($password);
             $update = $findWali->update([
                 'password' => $password
             ]);
@@ -213,10 +212,8 @@ class WaliRepository implements WaliInterface
         if ($whereNot === true && $id !== null) {
             $check->whereNotIn('wali_id', [$id]);
         }
-        if ($check->count() > 0) {
-            return true;
-        }
-        return false;
+        return $check->count() > 0;
+
     }
     /**
      * untuk menambah data wali
@@ -231,10 +228,9 @@ class WaliRepository implements WaliInterface
         if ($emailSudahAda || $telpSudahAda) {
             return false;
         }
-        $password = Hash::make($this->defaultPassword);
         $create = $this->waliModel->create([
             'email' => $data->email,
-            'password' => $password,
+            'password' => $this->defaultPassword,
             'nama' => $data->nama,
             'alamat' => $data->alamat,
             'telp' => $data->telp,
@@ -242,10 +238,7 @@ class WaliRepository implements WaliInterface
             'user_created' => auth()->user()->user_id,
             'updated_at' => null
         ]);
-        if (!$create) {
-            return false;
-        }
-        return true;
+        return $create ?: false;
     }
     /**
      * untuk mengupdate data wali santri
@@ -259,23 +252,52 @@ class WaliRepository implements WaliInterface
         $emailSudahAda = $this->emailAlreadyExists(data: $data->email, whereNot: true, id: $oldData->wali_id, type: 'email');
         $telpSudahAda = $this->emailAlreadyExists(data: $data->telp, whereNot: true, id: $oldData->wali_id, type: 'telp');
         if ($emailSudahAda || $telpSudahAda) {
+            if (request()->wantsJson()) {
+                $emailSudahAda ? $message = 'Email Sudah digunakan' : $message = 'Nomor Telphone Sudah digunakan';
+                $this->handleResponseError->responseError($message);
+            }
             return false;
         }
+        $desa = $data->desa ?? $oldData->desa;
         $update = $oldData->update([
             'email' => $data->email,
             'nama' => $data->nama,
             'alamat' => $data->alamat,
             'telp' => $data->telp,
-            'desa' => $data->desa,
+            'desa' => $desa,
             'user_updated' => auth()->user()->user_id,
         ]);
-        if (!$update) {
-            return false;
-        }
-        return true;
+        return $update ?: false;
     }
 
-    
+    /**
+     * untuk merubah profile dari mobile
+     * @param mixed $data
+     * @param mixed $oldData
+     * 
+     * @return [type]
+     */
+    public function updateProfileViaMobile($data, $oldData)
+    {
+        try {
+            $this->update($data, $oldData);
+            $messageSukses = 'Profile berhasil di ubah';
+            if ($data->password !== null) {
+                $this->changePassword($oldData->wali_id, $data->password);
+                $messageSukses = 'Profile dan password berhasil di ubah';
+            }
+
+            return response()->json([
+                'data' => [
+                    'message' => $messageSukses
+                ]
+            ])->setStatusCode(200);
+        } catch (Exception $e) {
+            return $this->handleResponseError->ResponseException(message: $e->getMessage());
+        }
+    }
+
+
     /**
      * untuk menghapus data wali , bisa multiple
      * @param array $wali_id
@@ -284,27 +306,30 @@ class WaliRepository implements WaliInterface
      */
     public function delete(array $wali_id)
     {
+        try {
+            DB::beginTransaction();
+            $delete = $this->waliModel->whereIn('wali_id', $wali_id)->update([
+                'deleted_at' => now(),
+                'user_deleted' => auth()->user()->user_id,
+                'deleted' => true,
+                'user_updated' => null,
+                'updated_at' => null
+            ]);
+            $deleteRelasi = $this->waliRelasi->whereIn('wali_id', $wali_id)->update([
+                'deleted_at' => now(),
+                'user_deleted' => auth()->user()->user_id,
+                'deleted' => true,
+                'user_updated' => null,
+                'updated_at' => null
+            ]);
+            DB::commit();
+            return true;
 
-        DB::beginTransaction();
-        $delete = $this->waliModel->whereIn('wali_id', $wali_id)->update([
-            'deleted_at' => now(),
-            'user_deleted' => auth()->user()->user_id,
-            'deleted' => true,
-            'user_updated' => null,
-            'updated_at' => null
-        ]);
-        $deleteRelasi = $this->waliRelasi->whereIn('wali_id', $wali_id)->update([
-            'deleted_at' => now(),
-            'user_deleted' => auth()->user()->user_id,
-            'deleted' => true,
-            'user_updated' => null,
-            'updated_at' => null
-        ]);
-        DB::commit();
-        if (!$delete || !$deleteRelasi) {
+        } catch (Exception $e) {
             DB::rollBack();
             return false;
         }
-        return true;
+
+
     }
 }

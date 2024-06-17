@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Wali;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class WaliCreateRequest extends FormRequest
 {
@@ -23,9 +24,20 @@ class WaliCreateRequest extends FormRequest
     {
         return [
             'nama' => 'required|string',
-            'email' => 'required|email|unique:wali,email',
+            'desa' => 'required|string',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('wali', 'email')
+                    ->whereNull('deleted_at')
+            ],
             'alamat' => 'required',
-            'telp' => 'required|numeric|unique:wali,telp'
+            'telp' => [
+                'required',
+                'numeric',
+                Rule::unique('wali', 'telp')
+                    ->whereNull('deleted_at')
+            ],
         ];
     }
     public function messages()

@@ -17,7 +17,7 @@
                     <div class="">
                         <span class="font-semibold">INFO!</span>
                         <p class="capitalize mt-1">Setiap data wali santri yang dibuat akan memiliki password default <span
-                                class="font-semibold">'mahaduna12345'</span>. Mohon informasikan kepada para wali santri
+                                class="font-semibold lowercase">'mahaduna12345'</span>. Mohon informasikan kepada para wali santri
                             untuk segera mengganti password pada halaman profil mereka.</p>
                     </div>
                 </div>

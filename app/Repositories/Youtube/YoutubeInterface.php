@@ -45,7 +45,7 @@ interface YoutubeInterface
      * 
      * @return mixed
      */
-    public function getPlaylistItems($part = 'snippet', $playlistId, $paginate = 10, $pageToken = null);
+    public function getPlaylistItems($playlistId, $part = 'snippet', $paginate = 10, $pageToken = null);
     /**
      * untuk menampilkan video dari semua playlist
      * @param string $evenType default 'completed', nilai yang tersedia 'completed', 'live'

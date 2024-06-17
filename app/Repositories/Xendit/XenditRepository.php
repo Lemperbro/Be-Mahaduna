@@ -41,6 +41,7 @@ class XenditRepository implements XenditInterface
                 'email' => $wali->email,
                 'mobile_number' => $wali->telp,
             ];
+            
         }
     
         $create = Http::withHeaders([
@@ -60,10 +61,8 @@ class XenditRepository implements XenditInterface
      */
     public function verifyCallbackToken($callbackToken)
     {
-        if ($this->callbackToken !== $callbackToken) {
-            return false;
-        }
-        return true;
+        //jika token sama maka return true, kalau tidak maka return false
+        return $this->callbackToken === $callbackToken;
     }
 
 }
