@@ -2,13 +2,16 @@
 namespace App\Repositories\Xendit;
 
 use App\Models\Santri;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Http;
+use App\Repositories\HandleError\ResponseErrorRepository;
 use App\Repositories\Xendit\XenditInterface;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class XenditRepository implements XenditInterface
 {
     private $apiKey, $invoiceUrl, $callbackToken, $santriModel;
+    private $handleResponseError;
+
 
     public function __construct()
     {
@@ -16,6 +19,8 @@ class XenditRepository implements XenditInterface
         $this->invoiceUrl = config('xendit.apiUrl.invoice');
         $this->callbackToken = config('xendit.x-callback-token');
         $this->santriModel = new Santri;
+        $this->handleResponseError = new ResponseErrorRepository;
+
     }
 
     /**
@@ -47,9 +52,12 @@ class XenditRepository implements XenditInterface
         $create = Http::withHeaders([
             'Authorization' => $this->apiKey
         ])->post($this->invoiceUrl, $body);
-    
-        $response = $create->object();
-        return $response;
+        
+        if ($create->successful()) {
+            return $create->object(); 
+        } else {
+            $this->handleResponseError->ResponseException('Failed to create invoice', $create->status());
+        }
     }
     
 
