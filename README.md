@@ -71,7 +71,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 1. Clone repository ini:
 
     ```sh
-    git clone https://github.com/username/repo-name.git
+    git clone --branch development https://github.com/Lemperbro/Be-Mahaduna.git
     cd repo-name
     ```
 
@@ -126,7 +126,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## Penggunaan
 
-Setelah mengikuti langkah-langkah instalasi, Anda dapat mengakses aplikasi di `http://localhost:8000`. Anda dapat melakukan pemesanan tiket kapal, carter mobil, dan menggunakan fitur travel reguler.
+Setelah mengikuti langkah-langkah instalasi, Anda dapat mengakses aplikasi di `http://localhost:8000`.
 
 ## Kontribusi
 
