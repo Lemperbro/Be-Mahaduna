@@ -65,3 +65,79 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 # Be-Mahaduna
+
+### Langkah Instalasi
+
+1. Clone repository ini:
+
+    ```sh
+    git clone https://github.com/username/repo-name.git
+    cd repo-name
+    ```
+
+2. Instal dependensi PHP menggunakan Composer:
+
+    ```sh
+    composer install
+    ```
+
+3. Instal dependensi Node.js menggunakan npm:
+
+    ```sh
+    npm install
+    ```
+
+4. Salin file `.env.example` ke `.env` dan sesuaikan konfigurasi sesuai kebutuhan:
+
+    ```sh
+    cp .env.example .env
+    ```
+
+5. Generate aplikasi key:
+
+    ```sh
+    php artisan key:generate
+    ```
+
+6. Instal paket tambahan untuk notifikasi FCM dan Firebase:
+
+    ```sh
+    composer require laravel-notification-channels/fcm
+    composer require kreait/laravel-firebase
+    ```
+
+7. Jalankan migrasi database dan seeder (jika ada):
+
+    ```sh
+    php artisan migrate --seed
+    ```
+
+8. Build aset front-end:
+
+    ```sh
+    npm run dev
+    ```
+
+9. Jalankan server pengembangan:
+
+    ```sh
+    php artisan serve
+    ```
+
+## Penggunaan
+
+Setelah mengikuti langkah-langkah instalasi, Anda dapat mengakses aplikasi di `http://localhost:8000`. Anda dapat melakukan pemesanan tiket kapal, carter mobil, dan menggunakan fitur travel reguler.
+
+## Kontribusi
+
+Kami sangat menyambut kontribusi dari siapa pun. Untuk berkontribusi, ikuti langkah-langkah berikut:
+
+1. Fork repository ini.
+2. Buat branch baru (`git checkout -b fitur-baru`).
+3. Commit perubahan Anda (`git commit -am 'Menambahkan fitur baru'`).
+4. Push ke branch (`git push origin fitur-baru`).
+5. Buat Pull Request.
+
+## Lisensi
+
+Proyek ini dilisensikan di bawah lisensi MIT. Lihat file [LICENSE](LICENSE) untuk informasi lebih lanjut.
