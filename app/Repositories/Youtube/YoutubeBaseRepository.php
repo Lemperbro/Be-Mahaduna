@@ -39,7 +39,7 @@ class YoutubeBaseRepository
         return $response;
     }
 
-     /**
+    /**
      * sorting vide terbaru
      * @param mixed $data
      * 
@@ -78,13 +78,12 @@ class YoutubeBaseRepository
         $this->apiKeyIndex = ($this->apiKeyIndex + 1) % count($this->apiKeys);
         Log::info('API key rotated', ['apiKey' => $this->apiKeys[$this->apiKeyIndex]]);
 
-        // Cek apakah sudah menggunakan semua API key
         if ($this->apiKeyIndex === 0) {
             Log::info('All API keys have been used, stopping the loop');
-            return false; // Mengembalikan false untuk menghentikan loop
+            return false;
         }
 
-        return true; // Mengembalikan true untuk melanjutkan loop
+        return true;
     }
     public function cariPlaylist($data, $keyword)
     {

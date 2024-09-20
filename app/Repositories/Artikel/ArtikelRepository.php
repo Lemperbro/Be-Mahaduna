@@ -79,12 +79,13 @@ class ArtikelRepository implements ArtikelInterface
             $datas = $data->get();
         }
 
-        $resource = $datas;
-        if (request()->wantsJson()) {
-            return (ArtikelResource::collection($resource))->response()->setStatusCode(200);
-        } else {
-            return $resource;
-        }
+        return $datas;
+        // $resource = $datas;
+        // if (request()->wantsJson()) {
+        //     return (ArtikelResource::collection($resource))->response()->setStatusCode(200);
+        // } else {
+        //     return $resource;
+        // }
     }
     /**
      * untuk menapilkan detail artikel

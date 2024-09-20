@@ -6,6 +6,7 @@ use App\Models\Artikel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\Artikel\ArtikelInterface;
+use App\Http\Resources\Artikel\ArtikelResource;
 use App\Http\Requests\Api\Artikel\AllArtikelRequest;
 
 class ArtikelApiController extends Controller
@@ -23,7 +24,7 @@ class ArtikelApiController extends Controller
         $sortBest = $request->sortBest ?? false;
         $kategori = $request->kategori_id ?? null;
         $data = $this->ArtikelInterface->getAllArtikel(paginate: $paginate, keyword: $keyword, sortBest: $sortBest, kategori: $kategori);
-        return $data;
+        return (ArtikelResource::collection($data))->response()->setStatusCode(200);
     }
     public function show(Request $request)
     {
